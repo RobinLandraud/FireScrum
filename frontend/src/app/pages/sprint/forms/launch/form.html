@@ -1,0 +1,34 @@
+<hlm-dialog-header>
+  <h2 hlmDialogTitle>Nouveau sprint</h2>
+</hlm-dialog-header>
+
+<form class="grid gap-4" (submit)="launch($event)">
+  <input hlmInput placeholder="Nom du sprint" aria-label="Nom du sprint" [formField]="form.name" />
+
+  <div class="grid max-h-96 gap-2 overflow-y-auto">
+    @for (story of stories(); track story.id) {
+      <div hlmCard size="sm">
+        <div hlmCardContent class="flex items-center gap-3">
+          <hlm-checkbox
+            [checked]="selectedIds().includes(story.id)"
+            (checkedChange)="toggle(story.id, $event)"
+            [aria-label]="'Embarquer « ' + story.title + ' »'"
+          />
+          <span class="grid flex-1">
+            <span class="font-medium">{{ story.title }}</span>
+            <span class="text-sm text-muted-foreground">{{ featureTitle()(story) ?? 'Sans feature' }}</span>
+          </span>
+          <span class="text-sm text-muted-foreground">{{ story.velocity }} pts</span>
+        </div>
+      </div>
+    } @empty {
+      <p class="text-sm text-muted-foreground">Aucune US acceptée. Accepte des US depuis le Backlog.</p>
+    }
+  </div>
+
+  <div class="flex justify-end">
+    <button hlmBtn type="submit" [disabled]="form().invalid() || form().submitting() || !selectedIds().length">
+      Lancer le sprint ({{ selectedIds().length }} US, {{ selectedVelocity() }} pts)
+    </button>
+  </div>
+</form>

@@ -1,0 +1,26 @@
+meta {
+  name: Update task status
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{baseUrl}}/tasks/{{taskId}}/status
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "status": "in_progress"
+  }
+}
+
+assert {
+  res.status: eq 204
+}
+
+docs {
+  Statuts : `todo`, `in_progress`, `in_review`, `done`.
+  `done` renvoie 409 tant qu'un point de validation n'est pas coché.
+}

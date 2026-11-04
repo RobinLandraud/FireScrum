@@ -1,0 +1,28 @@
+meta {
+  name: Close sprint
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/sprints/{{sprintId}}/close
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "closed_user_story_ids": [{{userStoryId}}],
+    "carried_user_story_ids": []
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.status: eq closed
+}
+
+docs {
+  `closed_user_story_ids` : US terminées. `carried_user_story_ids` : US reportées (pré-cochées au prochain lancement).
+  Les autres US retournent au backlog. Une US ne peut pas être dans les deux listes (400).
+}

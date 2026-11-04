@@ -1,0 +1,41 @@
+<aside
+  class="fixed inset-y-0 start-0 z-50 flex w-[290px] flex-col border-e border-sidebar-border bg-sidebar px-5 text-sidebar-foreground transition-all duration-300 lg:translate-x-0"
+  [class.-translate-x-full]="!sidebar.mobileOpen()"
+  [class.lg:w-[90px]]="collapsed()"
+  [class.lg:px-4]="collapsed()"
+>
+  <div class="flex items-center gap-3 py-8" [class.lg:justify-center]="collapsed()">
+    <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+      <ng-icon name="matLocalFireDepartmentOutline" size="22" />
+    </span>
+    <span class="grid leading-tight" [class.lg:sr-only]="collapsed()">
+      <span class="text-lg font-semibold text-foreground">FireScrum</span>
+      <span class="text-xs text-muted-foreground">{{ project.value()?.name }}</span>
+    </span>
+  </div>
+
+  <nav aria-label="Navigation principale">
+    <h2 class="mb-4 text-xs uppercase leading-5 text-muted-foreground" [class.lg:sr-only]="collapsed()">Menu</h2>
+    <ul class="flex flex-col gap-1">
+      @for (link of links; track link.path) {
+        <li>
+          <a
+            [routerLink]="link.path"
+            routerLinkActive="bg-sidebar-accent text-sidebar-accent-foreground"
+            [routerLinkActiveOptions]="{ exact: false }"
+            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-muted"
+            [class.lg:justify-center]="collapsed()"
+            [attr.title]="collapsed() ? link.label : null"
+          >
+            <ng-icon [name]="link.icon" size="24" class="shrink-0" />
+            <span [class.lg:sr-only]="collapsed()">{{ link.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+</aside>
+
+@if (sidebar.mobileOpen()) {
+  <div class="fixed inset-0 z-40 bg-gray-900/50 backdrop-blur-xs lg:hidden" aria-hidden="true" (click)="sidebar.closeMobile()"></div>
+}

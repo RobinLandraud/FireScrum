@@ -1,0 +1,26 @@
+meta {
+  name: Create feature
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/features
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Gestion du backlog",
+    "description": "Créer et valider les features, US et tâches"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("featureId", res.body.id);
+}

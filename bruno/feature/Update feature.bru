@@ -1,0 +1,22 @@
+meta {
+  name: Update feature
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/features/{{featureId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Backlog (modifié)",
+    "description": "Titre et description modifiables"
+  }
+}
+
+assert {
+  res.status: eq 204
+}

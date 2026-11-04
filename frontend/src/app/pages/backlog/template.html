@@ -1,0 +1,50 @@
+<hlm-tabs class="gap-6" [tab]="tab()" (tabActivated)="tab.set($event)">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-6">
+      <h1 class="text-2xl font-semibold">Backlog</h1>
+      <hlm-tabs-list aria-label="Statut des US">
+        @for (t of tabs(); track t.id) {
+          <button [hlmTabsTrigger]="t.id">{{ t.label }} ({{ t.stories.length }})</button>
+        }
+      </hlm-tabs-list>
+    </div>
+
+    <hlm-dialog #newStory="hlmDialog">
+      <button hlmDialogTrigger hlmBtn>New Story</button>
+      <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-2xl">
+        <app-user-story [features]="features.value() ?? []" (saved)="newStory.close(); onCreated()" />
+      </hlm-dialog-content>
+    </hlm-dialog>
+  </div>
+
+  @for (t of tabs(); track t.id) {
+    <div [hlmTabsContent]="t.id">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        @for (story of t.stories; track story.id) {
+          <hlm-dialog #detail="hlmDialog">
+            <button hlmDialogTrigger hlmCard size="sm" type="button" class="h-full w-full text-left transition-colors hover:bg-muted/50">
+              <span hlmCardContent class="grid gap-1">
+                <span class="font-medium">{{ story.title }}</span>
+                <span class="text-sm text-muted-foreground">{{ featureTitle(story) ?? 'Sans feature' }}</span>
+                @let p = progress(story);
+                <app-progress class="mt-1" [value]="p.value" [max]="p.max" [label]="'Avancement de « ' + story.title + ' »'" />
+              </span>
+            </button>
+            <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-2xl">
+              <app-user-story
+                [story]="story"
+                [features]="features.value() ?? []"
+                (saved)="detail.close(); stories.reload()"
+                (changed)="stories.reload()"
+              />
+            </hlm-dialog-content>
+          </hlm-dialog>
+        } @empty {
+          @if (stories.hasValue()) {
+            <p class="text-muted-foreground">{{ t.empty }}</p>
+          }
+        }
+      </div>
+    </div>
+  }
+</hlm-tabs>

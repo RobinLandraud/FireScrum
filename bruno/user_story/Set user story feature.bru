@@ -1,0 +1,21 @@
+meta {
+  name: Set user story feature
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/user-stories/{{userStoryId}}/feature
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "feature_id": null
+  }
+}
+
+assert {
+  res.status: eq 204
+}

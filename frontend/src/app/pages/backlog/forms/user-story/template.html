@@ -1,0 +1,67 @@
+<hlm-dialog-header>
+  <h2 hlmDialogTitle class="flex items-center gap-2">
+    @if (story(); as s) {
+      {{ s.title }}
+      @if (state(); as st) {
+        <span hlmBadge [variant]="st.variant">{{ st.label }}</span>
+      }
+    } @else {
+      Nouvelle user story
+    }
+  </h2>
+</hlm-dialog-header>
+
+<hlm-tabs class="gap-4" [tab]="tab()" (tabActivated)="tab.set($event)">
+  <hlm-tabs-list class="w-full" aria-label="Parties de l'US">
+    <button hlmTabsTrigger="details">Details</button>
+    <button hlmTabsTrigger="tasks">Tasks ({{ rows().length }})</button>
+  </hlm-tabs-list>
+
+  <div hlmTabsContent="details">
+    <app-user-story-form [story]="story()" [features]="features()" [tasks]="drafts()" (saved)="saved.emit()" />
+  </div>
+
+  <div hlmTabsContent="tasks" class="grid gap-4">
+    <ul class="divide-y rounded-md border" aria-label="Tâches">
+      @for (row of rows(); track row.key) {
+        <li class="flex items-center gap-2 py-1 ps-3 pe-1 text-sm" [class.bg-muted]="row.key === editingKey()">
+          <span class="flex-1">{{ row.title }}</span>
+          @if (!story()?.done) {
+            <button
+              hlmBtn
+              variant="ghost"
+              size="icon-sm"
+              type="button"
+              [attr.aria-label]="'Modifier « ' + row.title + ' »'"
+              (click)="editingKey.set(row.key)"
+            >
+              <ng-icon name="matEditOutline" size="18" />
+            </button>
+            <button
+              hlmBtn
+              variant="ghost"
+              size="icon-sm"
+              type="button"
+              class="text-destructive"
+              [attr.aria-label]="'Supprimer « ' + row.title + ' »'"
+              (click)="deleteTask(row)"
+            >
+              <ng-icon name="matDeleteOutline" size="18" />
+            </button>
+          }
+        </li>
+      } @empty {
+        <li class="px-3 py-2 text-sm text-muted-foreground">Aucune tâche.</li>
+      }
+    </ul>
+    @if (!story()?.done) {
+      <app-task-form [task]="editingTask()" (submitted)="submitTask($event)" (cancelled)="editingKey.set(null)" />
+    }
+  </div>
+</hlm-tabs>
+
+@if (story() && !story()?.validated) {
+  <hlm-dialog-footer>
+    <button hlmBtn (click)="validate()">Accepter</button>
+  </hlm-dialog-footer>
+}

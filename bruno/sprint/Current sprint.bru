@@ -1,0 +1,15 @@
+meta {
+  name: Current sprint
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/sprints/current
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

@@ -1,0 +1,43 @@
+<hlm-dialog-header>
+  <h2 hlmDialogTitle>Clôturer « {{ sprint().name }} »</h2>
+  <p hlmDialogDescription>Une US sans case cochée retourne dans le backlog (onglet Accepted).</p>
+</hlm-dialog-header>
+
+<table class="w-full text-sm">
+  <thead>
+    <tr class="border-b text-start text-muted-foreground">
+      <th class="py-2 text-start font-medium">User story</th>
+      <th class="w-24 py-2 font-medium">Clore</th>
+      <th class="w-24 py-2 font-medium">Reporter</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (story of sprint().user_stories; track story.id) {
+      <tr class="border-b">
+        <td class="py-2">{{ story.title }}</td>
+        <td class="py-2">
+          <div class="flex justify-center">
+            <hlm-checkbox
+              [checked]="choices()[story.id] === 'closed'"
+              (checkedChange)="set(story.id, 'closed', $event)"
+              [aria-label]="'Clore « ' + story.title + ' »'"
+            />
+          </div>
+        </td>
+        <td class="py-2">
+          <div class="flex justify-center">
+            <hlm-checkbox
+              [checked]="choices()[story.id] === 'carried'"
+              (checkedChange)="set(story.id, 'carried', $event)"
+              [aria-label]="'Reporter « ' + story.title + ' »'"
+            />
+          </div>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<hlm-dialog-footer>
+  <button hlmBtn (click)="close()">Clôturer le sprint</button>
+</hlm-dialog-footer>

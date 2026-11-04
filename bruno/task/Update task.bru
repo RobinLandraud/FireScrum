@@ -1,0 +1,23 @@
+meta {
+  name: Update task
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/tasks/{{taskId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Formulaire de création de feature",
+    "description": "Modal avec titre, description et US à ajouter",
+    "validation_points": ["Le titre est obligatoire", "La feature apparaît dans le backlog"]
+  }
+}
+
+assert {
+  res.status: eq 204
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Check validation point
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{baseUrl}}/validation-points/{{validationPointId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "checked": true
+  }
+}
+
+assert {
+  res.status: eq 204
+}

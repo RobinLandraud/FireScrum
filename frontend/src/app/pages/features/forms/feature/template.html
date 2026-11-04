@@ -1,0 +1,80 @@
+<hlm-dialog-header>
+  <h2 hlmDialogTitle>{{ feature()?.title ?? 'Nouvelle feature' }}</h2>
+</hlm-dialog-header>
+
+<hlm-tabs class="gap-4" [tab]="tab()" (tabActivated)="tab.set($event)">
+  <hlm-tabs-list class="w-full" aria-label="Parties de la feature">
+    <button hlmTabsTrigger="details">Details</button>
+    <button hlmTabsTrigger="stories">User stories ({{ stories().length }})</button>
+  </hlm-tabs-list>
+
+  <div hlmTabsContent="details">
+    <app-feature-form [feature]="feature()" [userStoryIds]="draftIds()" (saved)="saved.emit()" />
+  </div>
+
+  <div hlmTabsContent="stories" class="grid gap-4">
+    <ul class="divide-y rounded-md border" aria-label="User stories de la feature">
+      @for (story of stories(); track story.id) {
+        <li class="flex items-center gap-2 py-1 ps-3 pe-1 text-sm">
+          <span class="flex-1">{{ story.title }}</span>
+          @let p = progress(story);
+          <app-progress class="w-32" [value]="p.value" [max]="p.max" [label]="'Avancement de « ' + story.title + ' »'" />
+          <span hlmBadge class="w-20" [class]="status[story.status].class">{{ status[story.status].label }}</span>
+          @if (story.status !== 'done') {
+            <button
+              hlmBtn
+              variant="ghost"
+              size="icon-sm"
+              type="button"
+              class="text-destructive"
+              [attr.aria-label]="'Retirer « ' + story.title + ' » de la feature'"
+              (click)="remove(story)"
+            >
+              <ng-icon name="matRemoveCircleOutline" size="18" />
+            </button>
+          } @else {
+            <span class="size-8" aria-hidden="true"></span>
+          }
+        </li>
+      } @empty {
+        <li class="px-3 py-2 text-sm text-muted-foreground">Aucune US dans cette feature.</li>
+      }
+    </ul>
+
+    @if (available().length) {
+      <div class="grid gap-2">
+        <input
+          hlmInput
+          type="search"
+          class="w-full"
+          placeholder="Rechercher une US sans feature…"
+          aria-label="Rechercher une US à ajouter"
+          [value]="query()"
+          (input)="query.set($any($event.target).value)"
+          (keydown.enter)="$event.preventDefault(); addFirst()"
+        />
+        <ul class="divide-y rounded-md border" aria-label="US trouvées">
+          @for (story of results(); track story.id) {
+            <li class="flex items-center gap-2 py-1 ps-3 pe-1 text-sm">
+              <span class="flex-1">{{ story.title }}</span>
+              <button
+                hlmBtn
+                variant="ghost"
+                size="icon-sm"
+                type="button"
+                [attr.aria-label]="'Ajouter « ' + story.title + ' » à la feature'"
+                (click)="add(story)"
+              >
+                <ng-icon name="matAddCircleOutline" size="18" />
+              </button>
+            </li>
+          } @empty {
+            <li class="px-3 py-2 text-sm text-muted-foreground">Aucune US ne correspond à « {{ query() }} ».</li>
+          }
+        </ul>
+      </div>
+    } @else {
+      <p class="text-sm text-muted-foreground">Aucune US sans feature. Crée-en depuis le Backlog.</p>
+    }
+  </div>
+</hlm-tabs>
