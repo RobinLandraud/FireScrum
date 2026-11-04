@@ -1,0 +1,27 @@
+<form class="grid gap-2" (submit)="save($event)">
+  <input hlmInput class="w-full" placeholder="Task" aria-label="Nom de la tâche" [formField]="form.title" />
+  <textarea
+    hlmTextarea
+    class="w-full"
+    rows="3"
+    placeholder="Description"
+    aria-label="Description de la tâche"
+    [formField]="form.description"
+  ></textarea>
+  <textarea
+    hlmTextarea
+    class="w-full"
+    rows="2"
+    placeholder="Points de validation (un par ligne)"
+    aria-label="Points de validation, un par ligne"
+    [formField]="form.points"
+  ></textarea>
+  <div class="flex justify-end gap-2">
+    @if (task()) {
+      <button hlmBtn variant="ghost" size="sm" type="button" (click)="cancelled.emit()">Annuler</button>
+    }
+    <button hlmBtn variant="outline" size="sm" type="submit" [disabled]="form().invalid()">
+      {{ task() ? 'Modifier la tâche' : 'Ajouter la tâche' }}
+    </button>
+  </div>
+</form>

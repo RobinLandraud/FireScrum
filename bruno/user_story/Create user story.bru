@@ -1,0 +1,31 @@
+meta {
+  name: Create user story
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/user-stories
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "En tant que PO, je crée une feature",
+    "description": "",
+    "velocity": 3,
+    "feature_id": {{featureId}},
+    "tasks": [
+      { "title": "Formulaire de création", "validation_points": ["Le titre est obligatoire"] }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("userStoryId", res.body.id);
+}

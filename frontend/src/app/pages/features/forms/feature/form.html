@@ -1,0 +1,15 @@
+<form class="grid gap-4" (submit)="save($event)">
+  <div class="grid gap-2">
+    <label hlmLabel [for]="idPrefix() + '-title'">Titre</label>
+    <input hlmInput [id]="idPrefix() + '-title'" [formField]="form.title" />
+  </div>
+  <div class="grid gap-2">
+    <label hlmLabel [for]="idPrefix() + '-description'">Description</label>
+    <textarea hlmTextarea [id]="idPrefix() + '-description'" rows="3" [formField]="form.description"></textarea>
+  </div>
+  <div class="flex justify-end">
+    <button hlmBtn type="submit" [disabled]="form().invalid() || form().submitting()">
+      {{ feature() ? 'Enregistrer' : 'Créer la feature' }}
+    </button>
+  </div>
+</form>

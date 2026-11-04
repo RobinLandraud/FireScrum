@@ -1,0 +1,25 @@
+meta {
+  name: Create task to delete
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/user-stories/{{userStoryId}}/tasks
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Tâche jetable"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("deletedTaskId", res.body.id);
+}

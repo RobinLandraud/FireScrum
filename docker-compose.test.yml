@@ -1,0 +1,12 @@
+# Stack de test : utilisée par scripts/test.sh, jamais par la stack de travail.
+#   docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml up
+# Base en mémoire (perdue à l'arrêt du conteneur), front sur le port 4201.
+services:
+  db:
+    volumes: !reset []
+    tmpfs:
+      - /var/lib/postgresql/data
+
+  frontend:
+    ports: !override
+      - "4201:80"

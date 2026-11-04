@@ -1,0 +1,6 @@
+# Contexte de build du front (racine) : seulement frontend/ et contracts/
+*
+!frontend
+!contracts
+frontend/node_modules
+frontend/dist

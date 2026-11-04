@@ -1,0 +1,58 @@
+<div class="grid gap-6">
+  <div class="flex flex-wrap items-center gap-4">
+    <h1 class="text-2xl font-semibold">Sprint</h1>
+
+    @if (ordered().length) {
+      <select class="select w-64" aria-label="Sprint affiché" (change)="select($event)">
+        @for (s of ordered(); track s.id) {
+          <option [value]="'' + s.id" [selected]="s.id === selectedId()" [class]="s.status === 'active' ? 'text-emerald-700 dark:text-emerald-400' : ''">
+            {{ s.name }}{{ s.status === 'active' ? ' — en cours' : '' }}
+          </option>
+        }
+      </select>
+      @if (detail.value(); as d) {
+        @if (d.status === 'active') {
+          <span hlmBadge class="bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400">en cours</span>
+        }
+        <span class="text-sm text-muted-foreground">{{ d.total_velocity }} pts</span>
+      }
+    }
+
+    <div class="ms-auto">
+      @if (lastActive()) {
+        <hlm-dialog #closeDialog="hlmDialog">
+          <button hlmDialogTrigger hlmBtn variant="outline">Clôturer le sprint</button>
+          <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-xl">
+            @if (detail.value(); as d) {
+              <app-close-sprint-form [sprint]="d" (sprintClosed)="closeDialog.close(); reloadAll()" />
+            }
+          </hlm-dialog-content>
+        </hlm-dialog>
+      } @else if (sprints.hasValue()) {
+        <hlm-dialog #launchDialog="hlmDialog">
+          <button hlmDialogTrigger hlmBtn>Nouveau sprint</button>
+          <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-xl">
+            <app-launch-sprint-form
+              [stories]="accepted()"
+              [carriedIds]="carriedIds()"
+              [featureTitle]="featureTitle"
+              (launched)="launchDialog.close(); reloadAll()"
+            />
+          </hlm-dialog-content>
+        </hlm-dialog>
+      }
+    </div>
+  </div>
+
+  @if (sprints.hasValue() && !ordered().length) {
+    <p class="text-muted-foreground">Aucun sprint pour l'instant.</p>
+  }
+
+  @if (detail.value(); as d) {
+    <div class="grid gap-4">
+      @for (story of d.user_stories; track story.id) {
+        <app-sprint-story [story]="story" [featureTitle]="featureTitle(story)" [readonly]="readonly()" (changed)="refresh()" />
+      }
+    </div>
+  }
+</div>

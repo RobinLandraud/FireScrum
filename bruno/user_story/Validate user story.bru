@@ -1,0 +1,15 @@
+meta {
+  name: Validate user story
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/user-stories/{{userStoryId}}/validate
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 204
+}

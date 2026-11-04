@@ -1,0 +1,39 @@
+<div class="grid gap-6">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <h1 class="text-2xl font-semibold">Features</h1>
+
+    <hlm-dialog #newFeature="hlmDialog">
+      <button hlmDialogTrigger hlmBtn>New Feature</button>
+      <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-2xl">
+        <app-feature [unassigned]="unassigned()" (saved)="newFeature.close(); reload()" />
+      </hlm-dialog-content>
+    </hlm-dialog>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    @for (feature of features.value(); track feature.id) {
+      <hlm-dialog #detail="hlmDialog">
+        <button hlmDialogTrigger hlmCard size="sm" type="button" class="h-full w-full text-left transition-colors hover:bg-muted/50">
+          <span hlmCardContent class="grid gap-1">
+            <span class="font-medium">{{ feature.title }}</span>
+            @if (feature.description) {
+              <span class="text-sm text-muted-foreground">{{ feature.description }}</span>
+            }
+            <span class="text-sm text-muted-foreground">{{ feature.user_stories.length }} US</span>
+            @if (feature.user_stories.length) {
+              @let p = progress(feature);
+              <app-progress class="mt-1" [value]="p.value" [max]="p.max" [label]="'Avancement de « ' + feature.title + ' »'" />
+            }
+          </span>
+        </button>
+        <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-2xl">
+          <app-feature [feature]="feature" [unassigned]="unassigned()" (saved)="detail.close(); reload()" (changed)="reload()" />
+        </hlm-dialog-content>
+      </hlm-dialog>
+    } @empty {
+      @if (features.hasValue()) {
+        <p class="text-muted-foreground">Aucune feature pour l'instant.</p>
+      }
+    }
+  </div>
+</div>

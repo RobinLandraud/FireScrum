@@ -1,0 +1,44 @@
+<form class="grid gap-4" (submit)="save($event)">
+  <!-- US terminée : lecture seule (le back refuse aussi toute modification). -->
+  <fieldset class="grid gap-4" [disabled]="story()?.done">
+    <div class="grid gap-2">
+      <label hlmLabel [for]="idPrefix() + '-title'">Titre</label>
+      <input hlmInput [id]="idPrefix() + '-title'" [formField]="form.title" />
+    </div>
+    <div class="grid gap-2">
+      <label hlmLabel [for]="idPrefix() + '-description'">Description</label>
+      <textarea hlmTextarea [id]="idPrefix() + '-description'" rows="3" [formField]="form.description"></textarea>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="grid gap-2">
+        <label hlmLabel [for]="idPrefix() + '-velocity'">Vélocité</label>
+        <select [id]="idPrefix() + '-velocity'" class="select" [formField]="form.velocity">
+          @for (v of fibonacci; track v) {
+            <option [value]="'' + v">{{ v }}</option>
+          }
+        </select>
+      </div>
+      <div class="grid gap-2">
+        <label hlmLabel [for]="idPrefix() + '-feature'">Feature</label>
+        <select [id]="idPrefix() + '-feature'" class="select" [formField]="form.feature">
+          <option value="">Sans feature</option>
+          @for (f of features(); track f.id) {
+            <option [value]="'' + f.id">{{ f.title }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </fieldset>
+  @if (story()?.done) {
+    <p class="text-sm text-muted-foreground">US terminée : elle ne se modifie plus.</p>
+  } @else {
+    <div class="flex items-center justify-end gap-3">
+      @if (!story() && !tasks().length) {
+        <p class="text-sm text-muted-foreground">Ajoute au moins une tâche dans l'onglet Tasks.</p>
+      }
+      <button hlmBtn type="submit" [disabled]="form().invalid() || form().submitting() || (!story() && !tasks().length)">
+        {{ story() ? 'Enregistrer' : "Créer l'US" }}
+      </button>
+    </div>
+  }
+</form>

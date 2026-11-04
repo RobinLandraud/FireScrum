@@ -1,0 +1,70 @@
+<section class="rounded-2xl border bg-card" [attr.aria-label]="story().title">
+  <header class="flex flex-wrap items-center gap-3 border-b px-4 py-2">
+    <h2 class="font-medium">{{ story().title }}</h2>
+    <span class="text-sm text-muted-foreground">{{ featureTitle() ?? 'Sans feature' }}</span>
+    <span hlmBadge variant="outline">{{ story().velocity }} pts</span>
+    <app-progress class="w-40" [value]="progress().value" [max]="progress().max" [label]="'Avancement de « ' + story().title + ' »'" />
+    @if (outcomeLabel(); as label) {
+      <span hlmBadge variant="secondary" class="ms-auto">{{ label }}</span>
+    }
+  </header>
+
+  <div class="grid grid-cols-4 gap-2 p-2" cdkDropListGroup>
+    @for (col of columns; track col.value) {
+      <div
+        class="flex min-h-20 flex-col gap-2 rounded-xl bg-muted/60 p-2 dark:bg-gray-950/70"
+        cdkDropList
+        [cdkDropListData]="col.value"
+        [cdkDropListDisabled]="readonly()"
+        [cdkDropListSortingDisabled]="true"
+        (cdkDropListDropped)="drop($event)"
+        [attr.aria-label]="col.label"
+      >
+        <span class="text-xs font-medium text-muted-foreground">{{ col.label }}</span>
+        @for (task of tasksByStatus()[col.value]; track task.id) {
+          <button
+            type="button"
+            cdkDrag
+            [cdkDragData]="task"
+            [cdkDragDisabled]="readonly()"
+            class="flex items-center gap-2 rounded-lg border bg-card px-3 py-2 text-left text-sm shadow-xs hover:border-primary/40"
+            (click)="opened.set(task.id)"
+          >
+            <span class="flex-1">{{ task.title }}</span>
+            @if (task.validation_points.length) {
+              <span
+                class="text-xs text-muted-foreground"
+                [attr.aria-label]="checkedCount(task) + ' points cochés sur ' + task.validation_points.length"
+              >
+                {{ checkedCount(task) }}/{{ task.validation_points.length }}
+              </span>
+            }
+          </button>
+        }
+        @if (col.value === 'todo' && !readonly()) {
+          <button
+            type="button"
+            class="flex items-center justify-center rounded-lg border border-dashed py-2 text-muted-foreground hover:bg-muted"
+            [attr.aria-label]="'Ajouter une tâche à « ' + story().title + ' »'"
+            (click)="opened.set('new')"
+          >
+            <ng-icon name="matAddCircleOutline" size="18" />
+          </button>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<hlm-dialog [state]="opened() === null ? 'closed' : 'open'" (closed)="opened.set(null)">
+  <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-lg">
+    <app-sprint-task
+      [task]="openedTask()"
+      [userStoryId]="story().id"
+      [readonly]="readonly()"
+      (saved)="closeTask(true)"
+      (changed)="changed.emit()"
+      (dismissed)="closeTask(false)"
+    />
+  </hlm-dialog-content>
+</hlm-dialog>

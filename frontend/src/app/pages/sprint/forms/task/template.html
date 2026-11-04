@@ -1,0 +1,46 @@
+<hlm-dialog-header>
+  <h2 hlmDialogTitle class="flex items-center gap-2 pe-8">
+    @if (task(); as t) {
+      <span class="flex-1">{{ t.title }}</span>
+      <span class="text-sm font-normal text-muted-foreground">{{ statusLabel[t.status] }}</span>
+      @if (!readonly()) {
+        <button
+          hlmBtn
+          variant="ghost"
+          size="icon-sm"
+          type="button"
+          class="text-destructive"
+          [attr.aria-label]="'Supprimer « ' + t.title + ' »'"
+          (click)="remove()"
+        >
+          <ng-icon name="matDeleteOutline" size="18" />
+        </button>
+      }
+    } @else {
+      Nouvelle tâche
+    }
+  </h2>
+</hlm-dialog-header>
+
+@if (task(); as t) {
+  <section class="grid gap-2" aria-label="Points de validation">
+    <h3 class="text-sm font-medium">Points de validation</h3>
+    @for (p of t.validation_points; track p.id) {
+      <div class="flex items-center gap-2 text-sm">
+        <hlm-checkbox [checked]="p.checked" [disabled]="readonly()" (checkedChange)="check(p.id, $event)" [aria-label]="p.label" />
+        <span>{{ p.label }}</span>
+      </div>
+    } @empty {
+      <p class="text-sm text-muted-foreground">Aucun point de validation.</p>
+    }
+  </section>
+}
+
+@if (readonly()) {
+  <section class="grid gap-1" aria-label="Description">
+    <h3 class="text-sm font-medium">Description</h3>
+    <p class="text-sm text-muted-foreground">{{ task()?.description || 'Pas de description.' }}</p>
+  </section>
+} @else {
+  <app-task-form [task]="formValue()" (submitted)="submit($event)" (cancelled)="dismissed.emit()" />
+}
