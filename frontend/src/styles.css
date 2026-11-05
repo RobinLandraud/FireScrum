@@ -121,4 +121,14 @@
       color: var(--popover-foreground);
     }
   }
+
+  /* Zone de liste d'une modal : remplit la hauteur restante et défile, sur fond gris. */
+  .list-zone {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 0.375rem);
+    background: var(--muted);
+  }
 }

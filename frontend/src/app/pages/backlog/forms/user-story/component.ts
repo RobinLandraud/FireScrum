@@ -29,7 +29,7 @@ interface TaskRow {
  */
 @Component({
   selector: 'app-user-story',
-  host: { class: 'grid gap-4' },
+  host: { class: 'flex min-h-0 flex-1 flex-col gap-4' },
   imports: [HlmBadgeImports, HlmButtonImports, HlmDialogImports, HlmTabsImports, NgIcon, TaskForm, UserStoryForm],
   providers: [provideIcons({ matEditOutline, matDeleteOutline })],
   templateUrl: './template.html',
