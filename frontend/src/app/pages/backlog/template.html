@@ -11,7 +11,7 @@
 
     <hlm-dialog #newStory="hlmDialog">
       <button hlmDialogTrigger hlmBtn>New Story</button>
-      <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-2xl">
+      <hlm-dialog-content *hlmDialogPortal="let ctx">
         <app-user-story [features]="features.value() ?? []" (saved)="newStory.close(); onCreated()" />
       </hlm-dialog-content>
     </hlm-dialog>
@@ -30,7 +30,7 @@
                 <app-progress class="mt-1" [value]="p.value" [max]="p.max" [label]="'Avancement de « ' + story.title + ' »'" />
               </span>
             </button>
-            <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-2xl">
+            <hlm-dialog-content *hlmDialogPortal="let ctx">
               <app-user-story
                 [story]="story"
                 [features]="features.value() ?? []"
