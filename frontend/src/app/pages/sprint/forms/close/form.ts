@@ -20,7 +20,7 @@ function initialChoice(story: SprintUserStoryOut): Choice {
 /** Modal de clôture : pour chaque US, « Clore » ou « Reporter » (exclusifs) ; sans case, l'US retourne au backlog. */
 @Component({
   selector: 'app-close-sprint-form',
-  host: { class: 'grid gap-4' },
+  host: { class: 'flex min-h-0 flex-1 flex-col gap-4' },
   imports: [HlmButtonImports, HlmCheckboxImports, HlmDialogImports],
   templateUrl: './form.html',
   styleUrl: './form.scss',

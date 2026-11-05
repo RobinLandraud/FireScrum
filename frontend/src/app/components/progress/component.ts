@@ -9,12 +9,8 @@ import { HlmProgressImports } from '@spartan-ng/helm/progress';
   selector: 'app-progress',
   host: { class: 'flex items-center gap-2' },
   imports: [HlmProgressImports],
-  template: `
-    <hlm-progress class="flex-1" [value]="percent()" [attr.aria-label]="label()">
-      <hlm-progress-indicator [class.bg-emerald-500]="percent() === 100" />
-    </hlm-progress>
-    <span class="w-10 text-end text-xs tabular-nums text-muted-foreground">{{ percent() }} %</span>
-  `,
+  templateUrl: './template.html',
+  styleUrl: './template.scss',
 })
 export class AppProgress {
   readonly value = input.required<number>();

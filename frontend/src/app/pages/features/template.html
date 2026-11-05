@@ -4,7 +4,7 @@
 
     <hlm-dialog #newFeature="hlmDialog">
       <button hlmDialogTrigger hlmBtn>New Feature</button>
-      <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-2xl">
+      <hlm-dialog-content *hlmDialogPortal="let ctx">
         <app-feature [unassigned]="unassigned()" (saved)="newFeature.close(); reload()" />
       </hlm-dialog-content>
     </hlm-dialog>
@@ -26,7 +26,7 @@
             }
           </span>
         </button>
-        <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-2xl">
+        <hlm-dialog-content *hlmDialogPortal="let ctx">
           <app-feature [feature]="feature" [unassigned]="unassigned()" (saved)="detail.close(); reload()" (changed)="reload()" />
         </hlm-dialog-content>
       </hlm-dialog>

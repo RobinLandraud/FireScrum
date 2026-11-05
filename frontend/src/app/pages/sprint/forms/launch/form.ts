@@ -14,7 +14,7 @@ import { SprintApi } from '../../../../services/sprint.api';
 /** Modal de lancement : un nom et les US acceptées à embarquer (les US reportées sont déjà cochées). */
 @Component({
   selector: 'app-launch-sprint-form',
-  host: { class: 'grid gap-4' },
+  host: { class: 'flex min-h-0 flex-1 flex-col gap-4' },
   imports: [FormField, HlmButtonImports, HlmCardImports, HlmCheckboxImports, HlmDialogImports, HlmInputImports],
   templateUrl: './form.html',
   styleUrl: './form.scss',
