@@ -1,0 +1,4 @@
+<hlm-progress class="flex-1" [value]="percent()" [attr.aria-label]="label()">
+  <hlm-progress-indicator [class.bg-emerald-500]="percent() === 100" />
+</hlm-progress>
+<span class="w-10 text-end text-xs tabular-nums text-muted-foreground">{{ percent() }} %</span>
