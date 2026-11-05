@@ -37,7 +37,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T3 — Onglet User stories de la feature** : deux zones moitié-moitié (US de la feature, résultats de recherche) ; la liste de la feature prend tout quand il n'y a aucune US sans feature (`features/forms/feature/`).
   → vérif : lint + build + parcours navigateur.
   → à regarder : Features › une feature › User stories, avec et sans US sans feature.
-- [ ] **T4 — Lancer et clôturer un sprint** : liste des US acceptées dans la zone (`sprint/forms/launch/`) ; tableau dans la zone, en-tête figé (`sticky`), message « Aucune US dans ce sprint. » (`sprint/forms/close/`).
+- [x] **T4 — Lancer et clôturer un sprint** : liste des US acceptées dans la zone (`sprint/forms/launch/`) ; tableau dans la zone, en-tête figé (`sticky`), message « Aucune US dans ce sprint. » (`sprint/forms/close/`).
   → vérif : lint + build + parcours navigateur.
   → à regarder : Sprint › « Nouveau sprint » et « Clôturer le sprint » avec beaucoup d'US : défilement, en-tête et bouton visibles.
 - [ ] **T5 — Onglets de la tâche du sprint** : onglets « Points de validation (n) » (par défaut) et « Details » (description dans la zone en lecture seule, formulaire sinon) ; à la création, pas d'onglets, zone « Pas encore de points de validation » et formulaire en dessous (`sprint/forms/task/`).
