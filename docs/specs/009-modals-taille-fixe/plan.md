@@ -31,7 +31,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T1 — Taille commune des modals** : défaut de `HlmDialogContent` (1024 px × 85vh, colonne flex, défilement de secours) ; retrait des `sm:max-w-*` dans `features/template.html`, `backlog/template.html`, `sprint/template.html`, `sprint/forms/user-story/template.html`.
   → vérif : lint + build + `scripts/test.sh` (parcours navigateur).
   → à regarder : ouvrir chaque modal, elles ont toutes la même taille ; en largeur téléphone (DevTools), la modal tient dans l'écran.
-- [ ] **T2 — Zone grise et onglet Tasks de l'US** : classe `.list-zone` dans `styles.css` ; chaîne flex et zone sur la liste des tâches dans `backlog/forms/user-story/` (template + hôte du composant), formulaire en dessous.
+- [x] **T2 — Zone grise et onglet Tasks de l'US** : classe `.list-zone` dans `styles.css` ; chaîne flex et zone sur la liste des tâches dans `backlog/forms/user-story/` (template + hôte du composant), formulaire en dessous.
   → vérif : lint + build + parcours navigateur.
   → à regarder : Backlog › une US › Tasks, ajouter une dizaine de tâches : la liste défile, le formulaire reste visible, la modal ne bouge pas.
 - [ ] **T3 — Onglet User stories de la feature** : deux zones moitié-moitié (US de la feature, résultats de recherche) ; la liste de la feature prend tout quand il n'y a aucune US sans feature (`features/forms/feature/`).
