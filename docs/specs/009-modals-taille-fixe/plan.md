@@ -34,7 +34,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T2 — Zone grise et onglet Tasks de l'US** : classe `.list-zone` dans `styles.css` ; chaîne flex et zone sur la liste des tâches dans `backlog/forms/user-story/` (template + hôte du composant), formulaire en dessous.
   → vérif : lint + build + parcours navigateur.
   → à regarder : Backlog › une US › Tasks, ajouter une dizaine de tâches : la liste défile, le formulaire reste visible, la modal ne bouge pas.
-- [ ] **T3 — Onglet User stories de la feature** : deux zones moitié-moitié (US de la feature, résultats de recherche) ; la liste de la feature prend tout quand il n'y a aucune US sans feature (`features/forms/feature/`).
+- [x] **T3 — Onglet User stories de la feature** : deux zones moitié-moitié (US de la feature, résultats de recherche) ; la liste de la feature prend tout quand il n'y a aucune US sans feature (`features/forms/feature/`).
   → vérif : lint + build + parcours navigateur.
   → à regarder : Features › une feature › User stories, avec et sans US sans feature.
 - [ ] **T4 — Lancer et clôturer un sprint** : liste des US acceptées dans la zone (`sprint/forms/launch/`) ; tableau dans la zone, en-tête figé (`sticky`), message « Aucune US dans ce sprint. » (`sprint/forms/close/`).
