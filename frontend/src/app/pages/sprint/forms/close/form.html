@@ -3,40 +3,47 @@
   <p hlmDialogDescription>Une US sans case cochée retourne dans le backlog (onglet Accepted).</p>
 </hlm-dialog-header>
 
-<table class="w-full text-sm">
-  <thead>
-    <tr class="border-b text-start text-muted-foreground">
-      <th class="py-2 text-start font-medium">User story</th>
-      <th class="w-24 py-2 font-medium">Clore</th>
-      <th class="w-24 py-2 font-medium">Reporter</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (story of sprint().user_stories; track story.id) {
-      <tr class="border-b">
-        <td class="py-2">{{ story.title }}</td>
-        <td class="py-2">
-          <div class="flex justify-center">
-            <hlm-checkbox
-              [checked]="choices()[story.id] === 'closed'"
-              (checkedChange)="set(story.id, 'closed', $event)"
-              [aria-label]="'Clore « ' + story.title + ' »'"
-            />
-          </div>
-        </td>
-        <td class="py-2">
-          <div class="flex justify-center">
-            <hlm-checkbox
-              [checked]="choices()[story.id] === 'carried'"
-              (checkedChange)="set(story.id, 'carried', $event)"
-              [aria-label]="'Reporter « ' + story.title + ' »'"
-            />
-          </div>
-        </td>
+<div class="list-zone">
+  <table class="w-full text-sm">
+    <!-- En-tête figé : le trait est une ombre, car une bordure ne suit pas une cellule sticky. -->
+    <thead class="text-muted-foreground [&_th]:sticky [&_th]:top-0 [&_th]:bg-muted [&_th]:shadow-[inset_0_-1px_0_var(--input)]">
+      <tr>
+        <th class="px-3 py-2 text-start font-medium">User story</th>
+        <th class="w-24 py-2 font-medium">Clore</th>
+        <th class="w-24 py-2 font-medium">Reporter</th>
       </tr>
-    }
-  </tbody>
-</table>
+    </thead>
+    <tbody class="divide-y divide-input">
+      @for (story of sprint().user_stories; track story.id) {
+        <tr>
+          <td class="px-3 py-2">{{ story.title }}</td>
+          <td class="py-2">
+            <div class="flex justify-center">
+              <hlm-checkbox
+                [checked]="choices()[story.id] === 'closed'"
+                (checkedChange)="set(story.id, 'closed', $event)"
+                [aria-label]="'Clore « ' + story.title + ' »'"
+              />
+            </div>
+          </td>
+          <td class="py-2">
+            <div class="flex justify-center">
+              <hlm-checkbox
+                [checked]="choices()[story.id] === 'carried'"
+                (checkedChange)="set(story.id, 'carried', $event)"
+                [aria-label]="'Reporter « ' + story.title + ' »'"
+              />
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="3" class="px-3 py-2 text-muted-foreground">Aucune US dans ce sprint.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
 
 <hlm-dialog-footer>
   <button hlmBtn (click)="close()">Clôturer le sprint</button>
