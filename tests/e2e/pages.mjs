@@ -44,10 +44,16 @@ const dialog = () => page.getByRole('dialog');
 const card = (title) => page.getByRole('button', { name: new RegExp(`^${title}`) });
 const nav = (name) => page.getByRole('navigation').getByRole('link', { name }).click();
 const shot = (name) => page.screenshot({ path: `${SHOTS}${name}.png`, fullPage: true });
-/** Toutes les modals ont la même taille : 1024 × 85 % de la hauteur (680 px avec la fenêtre de 1280 × 800). */
+/** All modals have the same size: 1024 × 85% of the height (680 px in the 1280 × 800 window).
+ *  Waits for the opening zoom animation to end, otherwise the box is measured mid-zoom. */
 async function expectModalSize(name) {
-  const box = await dialog().boundingBox();
-  if (Math.round(box.width) !== 1024 || Math.round(box.height) !== 680) throw new Error(`${name} : ${box.width} × ${box.height}`);
+  let box;
+  for (let i = 0; i < 50; i++) {
+    box = await dialog().boundingBox();
+    if (Math.round(box.width) === 1024 && Math.round(box.height) === 680) return;
+    await page.waitForTimeout(100);
+  }
+  throw new Error(`${name} : ${box.width} × ${box.height}`);
 }
 
 async function addTask(name) {
