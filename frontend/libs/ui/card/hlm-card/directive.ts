@@ -15,6 +15,15 @@ export class HlmCard {
 	public readonly size = input<HlmCardConfig['size']>(this._defaultConfig.size);
 
 	constructor() {
-		classes(() => 'border border-border bg-card text-card-foreground gap-(--card-spacing) overflow-hidden rounded-2xl py-(--card-spacing) text-sm [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl group/card flex flex-col');
+		classes(() => [
+			// frame
+			'group/card flex flex-col overflow-hidden rounded-2xl border border-border bg-card text-sm',
+			'text-card-foreground',
+			// spacing, smaller with size="sm"
+			'[--card-spacing:--spacing(6)] data-[size=sm]:[--card-spacing:--spacing(4)] gap-(--card-spacing)',
+			'py-(--card-spacing)',
+			// image at the top or bottom
+			'has-[>img:first-child]:pt-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl',
+		]);
 	}
 }

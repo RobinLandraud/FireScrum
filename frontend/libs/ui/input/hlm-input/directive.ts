@@ -13,7 +13,25 @@ export class HlmInput {
 	constructor() {
 		classes(
 			() =>
-				'dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-primary/10 data-[matches-spartan-invalid=true]:ring-destructive/20 dark:data-[matches-spartan-invalid=true]:ring-destructive/40 data-[matches-spartan-invalid=true]:border-destructive dark:data-[matches-spartan-invalid=true]:border-destructive/50 h-11 rounded-lg border bg-transparent px-4 py-1 text-base shadow-xs transition-[color,box-shadow] file:h-7 file:text-sm file:font-medium focus-visible:ring-3 data-[matches-spartan-invalid=true]:ring-3 md:text-sm file:text-foreground placeholder:text-muted-foreground w-full min-w-0 outline-none file:inline-flex file:border-0 file:bg-transparent disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+				[
+					// size and frame
+					'h-11 w-full min-w-0 rounded-lg border border-input bg-transparent px-4 py-1 shadow-xs outline-none',
+					'transition-[color,box-shadow] dark:bg-input/30',
+					// text
+					'text-base md:text-sm placeholder:text-muted-foreground',
+					// file input
+					'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium',
+					'file:text-foreground',
+					// focus
+					'focus-visible:border-ring focus-visible:ring-primary/10 focus-visible:ring-3',
+					// invalid
+					'data-[matches-spartan-invalid=true]:border-destructive data-[matches-spartan-invalid=true]:ring-3',
+					'data-[matches-spartan-invalid=true]:ring-destructive/20',
+					'dark:data-[matches-spartan-invalid=true]:border-destructive/50',
+					'dark:data-[matches-spartan-invalid=true]:ring-destructive/40',
+					// disabled
+					'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+				],
 		);
 	}
 }
