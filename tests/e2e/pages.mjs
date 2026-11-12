@@ -369,6 +369,7 @@ await check('R12b', 'carte « + » : créer une tâche dans À faire', async () 
 });
 await check('R12c', 'modifier puis supprimer une tâche depuis le tableau', async () => {
   await taskCard('Tâche du sprint').click();
+  await dialog().getByRole('tab', { name: 'Details' }).click();
   await hasValue(dialog().getByLabel('Nom de la tâche'), 'Tâche du sprint');
   await dialog().getByLabel('Nom de la tâche').fill('Tâche du sprint 2');
   await dialog().getByRole('button', { name: 'Modifier la tâche' }).click();
@@ -404,6 +405,7 @@ await check('R17', 'clôturer : sprint clos en lecture seule, US « Reportée »
   await visible(row().getByText('Reportée'));
   if (await row().getByRole('button', { name: /Ajouter une tâche/ }).count()) throw new Error('carte « + » sur un sprint clos');
   await taskCard('Formulaire de connexion').click();
+  await dialog().getByRole('tab', { name: 'Details' }).click();
   await visible(dialog().getByText('Via le fournisseur').or(dialog().getByText('Email et mot de passe')));
   if (await dialog().getByRole('button', { name: 'Modifier la tâche' }).count()) throw new Error('modification possible sur un sprint clos');
   await page.keyboard.press('Escape');

@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import type { NewTask } from '@contracts/NewTask';
 import type { TaskOut } from '@contracts/TaskOut';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -7,6 +7,7 @@ import { toast } from '@spartan-ng/brain/sonner';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
 import { HlmDialogImports } from '@spartan-ng/helm/dialog';
+import { HlmTabsImports } from '@spartan-ng/helm/tabs';
 import { firstValueFrom } from 'rxjs';
 import { toastApiError } from '../../../../services/error';
 import { TaskApi } from '../../../../services/task.api';
@@ -21,8 +22,8 @@ import { TaskForm } from '../../../backlog/forms/task/form';
  */
 @Component({
   selector: 'app-sprint-task',
-  host: { class: 'grid gap-4' },
-  imports: [HlmButtonImports, HlmCheckboxImports, HlmDialogImports, NgIcon, TaskForm],
+  host: { class: 'flex min-h-0 flex-1 flex-col gap-4' },
+  imports: [HlmButtonImports, HlmCheckboxImports, HlmDialogImports, HlmTabsImports, NgIcon, TaskForm],
   providers: [provideIcons({ matDeleteOutline })],
   templateUrl: './template.html',
   styleUrl: './template.scss',
@@ -41,6 +42,8 @@ export class SprintTask {
   readonly dismissed = output();
 
   protected statusLabel = TASK_STATUS_LABEL;
+  /** Onglet ouvert : les points de validation d'abord, c'est surtout pour eux qu'on ouvre une tâche en sprint. */
+  protected tab = signal('points');
   protected formValue = computed<NewTask | null>(() => {
     const t = this.task();
     return t ? { title: t.title, description: t.description, validation_points: t.validation_points.map((p) => p.label) } : null;
