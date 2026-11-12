@@ -46,6 +46,6 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T6 — Parcours navigateur** : `tests/e2e/pages.mjs`, ouvrir l'onglet Details avant de modifier une tâche du sprint (R12c, R19) ; nouvelles vérifications R49 (même taille pour toutes les modals), R54 (onglets de la tâche, création sans onglets).
   → vérif : `scripts/test.sh` entièrement vert.
   → à regarder : la sortie OK/KO et les captures dans `tests/e2e/screenshots/`.
-- [ ] **T7 — Cahier de recettes** : ajout de R49 à R55 (nouvelle section « Modals » du lot 1), R15 modifiée (onglet « Points de validation »).
+- [x] **T7 — Cahier de recettes** : ajout de R49 à R55 (nouvelle section « Modals » du lot 1), R15 modifiée (onglet « Points de validation »).
   → vérif : relecture.
   → à regarder : `docs/cahier-de-recettes.md`.
