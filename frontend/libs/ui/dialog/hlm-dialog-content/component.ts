@@ -49,7 +49,8 @@ export class HlmDialogContent {
 			// colors and frame
 			'bg-popover text-popover-foreground border border-border shadow-xl rounded-3xl outline-none',
 			// open / close animation
-			'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 duration-100',
+			'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 duration-100',
+			'data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
 			// layout
 			'relative flex flex-col p-6 sm:p-8 text-sm',
 			// size: same for every modal
