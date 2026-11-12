@@ -2,7 +2,7 @@
   <h2 hlmDialogTitle>{{ feature()?.title ?? 'Nouvelle feature' }}</h2>
 </hlm-dialog-header>
 
-<hlm-tabs class="min-h-0 flex-1 gap-4" [tab]="tab()" (tabActivated)="tab.set($event)">
+<hlm-tabs class="flex-1 gap-4" [tab]="tab()" (tabActivated)="tab.set($event)">
   <hlm-tabs-list class="w-full" aria-label="Parties de la feature">
     <button hlmTabsTrigger="details">Details</button>
     <button hlmTabsTrigger="stories">User stories ({{ stories().length }})</button>
@@ -12,7 +12,7 @@
     <app-feature-form [feature]="feature()" [userStoryIds]="draftIds()" (saved)="saved.emit()" />
   </div>
 
-  <div hlmTabsContent="stories" class="flex min-h-0 flex-col gap-4">
+  <div hlmTabsContent="stories" class="flex flex-col gap-4">
     <ul class="list-zone divide-y divide-input" aria-label="User stories de la feature">
       @for (story of stories(); track story.id) {
         <li class="flex items-center gap-2 py-1 ps-3 pe-1 text-sm">
@@ -42,7 +42,8 @@
     </ul>
 
     @if (available().length) {
-      <div class="flex min-h-0 flex-1 flex-col gap-2">
+      <!-- `contents`: the search field and the 2nd zone are laid out like the 1st zone, so both zones get the same height. -->
+      <div class="contents">
         <input
           hlmInput
           type="search"

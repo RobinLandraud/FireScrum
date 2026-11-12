@@ -11,7 +11,7 @@
   </h2>
 </hlm-dialog-header>
 
-<hlm-tabs class="min-h-0 flex-1 gap-4" [tab]="tab()" (tabActivated)="tab.set($event)">
+<hlm-tabs class="flex-1 gap-4" [tab]="tab()" (tabActivated)="tab.set($event)">
   <hlm-tabs-list class="w-full" aria-label="Parties de l'US">
     <button hlmTabsTrigger="details">Details</button>
     <button hlmTabsTrigger="tasks">Tasks ({{ rows().length }})</button>
@@ -21,10 +21,10 @@
     <app-user-story-form [story]="story()" [features]="features()" [tasks]="drafts()" (saved)="saved.emit()" />
   </div>
 
-  <div hlmTabsContent="tasks" class="flex min-h-0 flex-col gap-4">
+  <div hlmTabsContent="tasks" class="flex flex-col gap-4">
     <ul class="list-zone divide-y divide-input" aria-label="Tâches">
       @for (row of rows(); track row.key) {
-        <li class="flex items-center gap-2 py-1 ps-3 pe-1 text-sm" [class.bg-muted]="row.key === editingKey()">
+        <li class="flex items-center gap-2 py-1 ps-3 pe-1 text-sm" [class.bg-primary/10]="row.key === editingKey()">
           <span class="flex-1">{{ row.title }}</span>
           @if (!story()?.done) {
             <button

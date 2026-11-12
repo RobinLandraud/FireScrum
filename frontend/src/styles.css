@@ -122,10 +122,13 @@
     }
   }
 
-  /* Zone de liste d'une modal : remplit la hauteur restante et défile, sur fond gris. */
+  /* List zone in a modal: fills the remaining height and scrolls, on a grey background.
+     `contain: size`: the zone does not claim the height of its rows, it takes the space it is given.
+     `min-height`: on a short screen, the modal scrolls instead of crushing the zone. */
   .list-zone {
     flex: 1;
-    min-height: 0;
+    min-height: 6rem;
+    contain: size;
     overflow-y: auto;
     border: 1px solid var(--border);
     border-radius: var(--radius-md, 0.375rem);
