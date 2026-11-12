@@ -44,6 +44,11 @@ const dialog = () => page.getByRole('dialog');
 const card = (title) => page.getByRole('button', { name: new RegExp(`^${title}`) });
 const nav = (name) => page.getByRole('navigation').getByRole('link', { name }).click();
 const shot = (name) => page.screenshot({ path: `${SHOTS}${name}.png`, fullPage: true });
+/** Toutes les modals ont la même taille : 1024 × 85 % de la hauteur (680 px avec la fenêtre de 1280 × 800). */
+async function expectModalSize(name) {
+  const box = await dialog().boundingBox();
+  if (Math.round(box.width) !== 1024 || Math.round(box.height) !== 680) throw new Error(`${name} : ${box.width} × ${box.height}`);
+}
 
 async function addTask(name) {
   await dialog().getByLabel('Nom de la tâche').fill(name);
@@ -258,6 +263,7 @@ await check('R08', 'sprint : aucun sprint, modal de lancement avec seulement les
   await visible(dialog().getByRole('checkbox', { name: /Se connecter/ }));
   if (await dialog().getByText('Se déconnecter').count()) throw new Error('US en Sandbox proposée');
   if (!(await dialog().getByRole('button', { name: /Lancer le sprint/ }).isDisabled())) throw new Error('lancement possible sans US');
+  await expectModalSize('lancement');
 });
 await check('R09', 'lancer un sprint depuis la page Sprint', async () => {
   await dialog().getByRole('checkbox', { name: /Se connecter/ }).click();
@@ -382,6 +388,46 @@ await check('R12c', 'modifier puis supprimer une tâche depuis le tableau', asyn
   if (await taskCard('Tâche du sprint 2').count()) throw new Error('tâche encore affichée');
 });
 await shot('sprint');
+
+await check('R54', 'tâche du sprint : onglets Points de validation / Details ; création sans onglets', async () => {
+  await taskCard('Formulaire de connexion').click();
+  await visible(dialog().getByRole('tab', { name: /^Points de validation \(\d+\)$/, selected: true }));
+  await visible(dialog().getByRole('list', { name: 'Points de validation' }).getByRole('checkbox', { name: 'Champs requis' }));
+  await dialog().getByRole('tab', { name: 'Details' }).click();
+  await hasValue(dialog().getByLabel('Nom de la tâche'), 'Formulaire de connexion');
+  await page.keyboard.press('Escape');
+  await hidden(dialog());
+  await row().getByRole('button', { name: `Ajouter une tâche à « ${US} »` }).click();
+  await visible(dialog().getByText('Pas encore de points de validation'));
+  if (await dialog().getByRole('tab').count()) throw new Error('onglets à la création');
+  await visible(dialog().getByLabel('Nom de la tâche'));
+  await page.keyboard.press('Escape');
+  await hidden(dialog());
+});
+await check('R49', 'toutes les modals ont la même taille, quel que soit l’onglet', async () => {
+  const open = async (name, trigger, tabs = []) => {
+    await trigger.click();
+    await expectModalSize(name);
+    for (const tab of tabs) {
+      await dialog().getByRole('tab', { name: tab }).click();
+      await expectModalSize(`${name} › ${tab}`);
+    }
+    await page.keyboard.press('Escape');
+    await hidden(dialog());
+  };
+  await open('tâche du sprint', taskCard('Formulaire de connexion'), ['Details']);
+  await open('nouvelle tâche', row().getByRole('button', { name: `Ajouter une tâche à « ${US} »` }));
+  await open('clôture', page.getByRole('button', { name: 'Clôturer le sprint' }));
+  await nav('Backlog');
+  await open('nouvelle US', page.getByRole('button', { name: 'New Story' }), [/Tasks/]);
+  await page.getByRole('tab', { name: /Accepted/ }).click();
+  await open('détail US', card(US), [/Tasks/]);
+  await nav('Features');
+  await open('nouvelle feature', page.getByRole('button', { name: 'New Feature' }), [/User stories/]);
+  await open('détail feature', page.getByRole('main').getByRole('button').filter({ hasText: / US$/ }).first(), [/User stories/]);
+  await nav('Sprint');
+  await visible(row());
+});
 
 await check('R16b', 'clôture : pré-cochage « Reporter » (une tâche n’est pas Terminé), cases exclusives', async () => {
   await drag('Tâche initiale', 'En cours');
