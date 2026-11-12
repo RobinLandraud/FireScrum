@@ -23,13 +23,13 @@
 </hlm-dialog-header>
 
 @if (task(); as t) {
-  <hlm-tabs class="min-h-0 flex-1 gap-4" [tab]="tab()" (tabActivated)="tab.set($event)">
+  <hlm-tabs class="flex-1 gap-4" [tab]="tab()" (tabActivated)="tab.set($event)">
     <hlm-tabs-list class="w-full" aria-label="Parties de la tâche">
       <button hlmTabsTrigger="points">Points de validation ({{ t.validation_points.length }})</button>
       <button hlmTabsTrigger="details">Details</button>
     </hlm-tabs-list>
 
-    <div hlmTabsContent="points" class="flex min-h-0 flex-col">
+    <div hlmTabsContent="points" class="flex flex-col">
       <ul class="list-zone divide-y divide-input" aria-label="Points de validation">
         @for (p of t.validation_points; track p.id) {
           <li class="flex items-center gap-2 px-3 py-2 text-sm">
@@ -42,15 +42,17 @@
       </ul>
     </div>
 
-    <div hlmTabsContent="details" class="flex min-h-0 flex-col">
+    <div hlmTabsContent="details" class="flex flex-col">
       @if (readonly()) {
-        <p class="list-zone px-3 py-2 text-sm text-muted-foreground" aria-label="Description">{{ t.description || 'Pas de description.' }}</p>
+        <section class="list-zone px-3 py-2" aria-label="Description">
+          <p class="text-sm text-muted-foreground">{{ t.description || 'Pas de description.' }}</p>
+        </section>
       } @else {
         <app-task-form [task]="formValue()" (submitted)="submit($event)" (cancelled)="dismissed.emit()" />
       }
     </div>
   </hlm-tabs>
-} @else {
+} @else if (!readonly()) {
   <p class="list-zone px-3 py-2 text-sm text-muted-foreground">Pas encore de points de validation</p>
   <app-task-form [task]="null" (submitted)="submit($event)" (cancelled)="dismissed.emit()" />
 }

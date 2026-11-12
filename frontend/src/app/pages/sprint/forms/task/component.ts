@@ -22,7 +22,7 @@ import { TaskForm } from '../../../backlog/forms/task/form';
  */
 @Component({
   selector: 'app-sprint-task',
-  host: { class: 'flex min-h-0 flex-1 flex-col gap-4' },
+  host: { class: 'flex flex-1 flex-col gap-4' },
   imports: [HlmButtonImports, HlmCheckboxImports, HlmDialogImports, HlmTabsImports, NgIcon, TaskForm],
   providers: [provideIcons({ matDeleteOutline })],
   templateUrl: './template.html',
@@ -42,7 +42,7 @@ export class SprintTask {
   readonly dismissed = output();
 
   protected statusLabel = TASK_STATUS_LABEL;
-  /** Onglet ouvert : les points de validation d'abord, c'est surtout pour eux qu'on ouvre une tâche en sprint. */
+  /** Open tab: validation points first, since that is mostly why a task is opened during a sprint. */
   protected tab = signal('points');
   protected formValue = computed<NewTask | null>(() => {
     const t = this.task();
