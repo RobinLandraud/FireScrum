@@ -10,16 +10,8 @@ import { ThemeService } from './services/theme';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, HlmToasterImports, AppHeader, AppSidebar],
-  template: `
-    <app-sidebar />
-    <div class="min-h-screen transition-[margin] duration-300" [class]="sidebar.collapsed() ? 'lg:ms-[90px]' : 'lg:ms-[290px]'">
-      <app-header />
-      <main class="mx-auto max-w-7xl p-4 md:p-6">
-        <router-outlet />
-      </main>
-    </div>
-    <hlm-toaster />
-  `,
+  templateUrl: './app.html',
+  styleUrl: './app.scss',
 })
 export class App {
   protected sidebar = inject(SidebarService);

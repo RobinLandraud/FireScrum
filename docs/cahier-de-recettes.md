@@ -52,7 +52,7 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 | R12c | Tâche | Cliquer sur une tâche du tableau, changer son nom, « Modifier la tâche », puis la rouvrir et cliquer sur la corbeille | Le nom est mis à jour sur la carte ; après suppression, un toast confirme et la carte disparaît |  | À tester |
 | R13 | Ligne US | Déplacer une tâche | La tâche reste sur la ligne de son US |  | À tester |
 | R14 | Points de validation | Déplacer en `Terminé` une tâche dont un point de validation n'est pas coché | Le déplacement est refusé, la tâche reste dans sa colonne |  | À tester |
-| R15 | Points de validation | Cocher tous les points de validation dans la modal de la tâche puis déplacer la tâche en `Terminé` | La tâche est dans la colonne `Terminé` |  | À tester |
+| R15 | Points de validation | Dans l'onglet « Points de validation » de la modal de la tâche, cocher tous les points, puis déplacer la tâche en `Terminé` | La tâche est dans la colonne `Terminé` |  | À tester |
 | R15b | Points de validation | Décocher un point d'une tâche `Terminé` | Refusé avec le message « Sors d'abord la tâche de Terminé. », le point reste coché |  | À tester |
 | R16 | Clôturer un sprint | Clôturer le sprint actuel en cochant « Clore » pour toutes les US | Le sprint est clos, ses US sont « Close » et passent dans l'onglet Done du Backlog ; le bouton devient « Nouveau sprint » |  | À tester |
 | R16b | Pré-cochage | Ouvrir la clôture d'un sprint avec une US dont toutes les tâches sont `Terminé`, une US avec une tâche `En cours` et une US sans tâche commencée | « Clore » pré-coché pour la 1re, « Reporter » pour la 2e et la 3e ; cocher l'une des deux cases décoche l'autre |  | À tester |
@@ -74,6 +74,18 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 | R43 | Mode sombre | Passer en mode sombre puis recharger | Toutes les pages et les modals sont sombres et lisibles, le choix est conservé |  | À tester |
 | R44 | Mode sombre | Premier lancement avec le système en thème sombre | L'app s'ouvre en mode sombre |  | À tester |
 | R45 | Non-régression | Rejouer les recettes R01 à R19 | Toutes passent, sans changement de comportement |  | À tester |
+
+## Modals
+
+| ID | Fonctionnalité | Scénario | Résultat attendu | Résultat obtenu | Statut |
+|----|----------------|----------|------------------|-----------------|--------|
+| R49 | Taille | Sur grand écran, ouvrir chaque modal (nouvelle feature, détail feature, nouvelle US, détail US, tâche du sprint, lancer et clôturer un sprint) et changer d'onglet | Toutes ont la même taille (1024 px × 85 % de l'écran), quel que soit l'onglet |  | À tester |
+| R50 | Tâches de l'US | Dans l'onglet Tasks d'une US, ajouter des tâches jusqu'à dépasser la zone grise | La modal garde sa taille, la liste défile à la molette et avec la barre de droite, le formulaire reste visible en dessous |  | À tester |
+| R51 | US de la feature | Ouvrir une feature avec beaucoup d'US alors qu'il reste beaucoup d'US sans feature, onglet User stories ; puis sans aucune US sans feature | Deux zones grises de même hauteur qui défilent chacune ; sans US sans feature, la liste de la feature prend toute la hauteur |  | À tester |
+| R52 | Clôture | Clôturer un sprint avec beaucoup d'US | Le tableau défile dans la zone grise, son en-tête et le bouton « Clôturer le sprint » restent visibles |  | À tester |
+| R53 | Lancement | Lancer un sprint avec beaucoup d'US acceptées, puis sans aucune | La liste défile dans la zone grise ; sans US, le message s'affiche dans la zone |  | À tester |
+| R54 | Tâche du sprint | Ouvrir une tâche du sprint en cours, puis d'un sprint clos ; cliquer sur la carte « + » | Onglets « Points de validation (n) » (ouvert) et « Details » : formulaire sur fond blanc pour le sprint en cours, description dans la zone grise pour le sprint clos ; à la création, pas d'onglets, zone « Pas encore de points de validation » et formulaire en dessous |  | À tester |
+| R55 | Mobile | Sur téléphone, ouvrir la modal d'une US | Elle tient dans la largeur de l'écran ; si le contenu dépasse, la modal défile |  | À tester |
 
 ---
 

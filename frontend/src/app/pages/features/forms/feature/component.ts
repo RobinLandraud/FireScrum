@@ -25,7 +25,7 @@ import { FeatureForm } from './form';
  */
 @Component({
   selector: 'app-feature',
-  host: { class: 'grid gap-4' },
+  host: { class: 'flex flex-1 flex-col gap-4' },
   imports: [HlmBadgeImports, HlmButtonImports, HlmDialogImports, HlmInputImports, HlmTabsImports, NgIcon, AppProgress, FeatureForm],
   providers: [provideIcons({ matAddCircleOutline, matRemoveCircleOutline })],
   templateUrl: './template.html',

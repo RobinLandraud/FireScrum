@@ -22,7 +22,7 @@
       @if (lastActive()) {
         <hlm-dialog #closeDialog="hlmDialog">
           <button hlmDialogTrigger hlmBtn variant="outline">Clôturer le sprint</button>
-          <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-xl">
+          <hlm-dialog-content *hlmDialogPortal="let ctx">
             @if (detail.value(); as d) {
               <app-close-sprint-form [sprint]="d" (sprintClosed)="closeDialog.close(); reloadAll()" />
             }
@@ -31,7 +31,7 @@
       } @else if (sprints.hasValue()) {
         <hlm-dialog #launchDialog="hlmDialog">
           <button hlmDialogTrigger hlmBtn>Nouveau sprint</button>
-          <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-xl">
+          <hlm-dialog-content *hlmDialogPortal="let ctx">
             <app-launch-sprint-form
               [stories]="accepted()"
               [carriedIds]="carriedIds()"

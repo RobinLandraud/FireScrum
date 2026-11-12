@@ -23,24 +23,36 @@
 </hlm-dialog-header>
 
 @if (task(); as t) {
-  <section class="grid gap-2" aria-label="Points de validation">
-    <h3 class="text-sm font-medium">Points de validation</h3>
-    @for (p of t.validation_points; track p.id) {
-      <div class="flex items-center gap-2 text-sm">
-        <hlm-checkbox [checked]="p.checked" [disabled]="readonly()" (checkedChange)="check(p.id, $event)" [aria-label]="p.label" />
-        <span>{{ p.label }}</span>
-      </div>
-    } @empty {
-      <p class="text-sm text-muted-foreground">Aucun point de validation.</p>
-    }
-  </section>
-}
+  <hlm-tabs class="flex-1 gap-4" [tab]="tab()" (tabActivated)="tab.set($event)">
+    <hlm-tabs-list class="w-full" aria-label="Parties de la tâche">
+      <button hlmTabsTrigger="points">Points de validation ({{ t.validation_points.length }})</button>
+      <button hlmTabsTrigger="details">Details</button>
+    </hlm-tabs-list>
 
-@if (readonly()) {
-  <section class="grid gap-1" aria-label="Description">
-    <h3 class="text-sm font-medium">Description</h3>
-    <p class="text-sm text-muted-foreground">{{ task()?.description || 'Pas de description.' }}</p>
-  </section>
-} @else {
-  <app-task-form [task]="formValue()" (submitted)="submit($event)" (cancelled)="dismissed.emit()" />
+    <div hlmTabsContent="points" class="flex flex-col">
+      <ul class="list-zone divide-y divide-input" aria-label="Points de validation">
+        @for (p of t.validation_points; track p.id) {
+          <li class="flex items-center gap-2 px-3 py-2 text-sm">
+            <hlm-checkbox [checked]="p.checked" [disabled]="readonly()" (checkedChange)="check(p.id, $event)" [aria-label]="p.label" />
+            <span>{{ p.label }}</span>
+          </li>
+        } @empty {
+          <li class="px-3 py-2 text-sm text-muted-foreground">Aucun point de validation.</li>
+        }
+      </ul>
+    </div>
+
+    <div hlmTabsContent="details" class="flex flex-col">
+      @if (readonly()) {
+        <section class="list-zone px-3 py-2" aria-label="Description">
+          <p class="text-sm text-muted-foreground">{{ t.description || 'Pas de description.' }}</p>
+        </section>
+      } @else {
+        <app-task-form [task]="formValue()" (submitted)="submit($event)" (cancelled)="dismissed.emit()" />
+      }
+    </div>
+  </hlm-tabs>
+} @else if (!readonly()) {
+  <p class="list-zone px-3 py-2 text-sm text-muted-foreground">Pas encore de points de validation</p>
+  <app-task-form [task]="null" (submitted)="submit($event)" (cancelled)="dismissed.emit()" />
 }
