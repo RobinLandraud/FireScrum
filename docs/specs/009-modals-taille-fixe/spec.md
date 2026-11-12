@@ -1,6 +1,6 @@
 # 009 — Modals de taille fixe et listes qui défilent
 
-**Statut** : Validée
+**Statut** : Livrée
 
 ## Contexte
 
@@ -66,3 +66,10 @@ Scénarios de validation, chacun avec son ID du [cahier de recettes](../../cahie
 - **Le gris est réservé aux listes et à la lecture seule** : un formulaire reste sur fond blanc, ce qui sépare ce qu'on lit de ce qu'on saisit.
 - **Points de validation ouverts par défaut** dans la tâche du sprint : en sprint, on ouvre surtout une tâche pour cocher ses points.
 - **En-tête du tableau de clôture figé** : on garde le sens des colonnes Clore / Reporter en faisant défiler.
+- **Taille fixée dans le défaut de `HlmDialogContent`** (`libs/ui/dialog`) plutôt que sur chaque modal : une nouvelle modal a d'office la bonne taille. La modal devient une colonne flex, avec un défilement de secours sur petit écran.
+- **Une classe CSS `.list-zone`** dans `styles.css`, à côté de `.select`, plutôt qu'un composant : c'est du style pur, sans logique. Chaque niveau entre la modal et la zone est en `flex-1 min-h-0`, sinon la zone ne peut ni remplir la hauteur ni défiler.
+- **Séparateurs de lignes en couleur `--input`** (`divide-input`) : `--border` se voit à peine sur le gris, et se confond avec lui en mode sombre (même valeur).
+- **Lignes de la liste de lancement en `auto-rows-max`** : dans une zone de hauteur fixe, la grille écrasait les cartes pour tout faire tenir.
+- **Trait sous l'en-tête figé dessiné en ombre** : une bordure ne suit pas une cellule `sticky` dans un tableau.
+- **Onglets de la tâche du sprint pilotés par un signal `tab`**, comme la modal d'US : le contenu de la modal est recréé à chaque ouverture, l'onglet repart donc sur les points de validation.
+- **Recherche d'US limitée à 5 résultats, inchangée** : la 2ᵉ zone de la feature ne défile donc pas ; on ne change pas ce comportement dans cette spec.

@@ -28,4 +28,4 @@ Le déroulé (spec → plan → code → livraison) est dans le skill [dstory](.
 | 006 | [Page Planning](006-planning/spec.md) | Livrée |
 | 007 | [Page Sprint](007-page-sprint/spec.md) | Livrée |
 | 008 | [Nouveau look : barre latérale et mode sombre](008-style-tailadmin/spec.md) | Livrée |
-| 009 | [Modals de taille fixe et listes qui défilent](009-modals-taille-fixe/spec.md) | Validée |
+| 009 | [Modals de taille fixe et listes qui défilent](009-modals-taille-fixe/spec.md) | Livrée |
