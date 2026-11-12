@@ -40,7 +40,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T4 — Lancer et clôturer un sprint** : liste des US acceptées dans la zone (`sprint/forms/launch/`) ; tableau dans la zone, en-tête figé (`sticky`), message « Aucune US dans ce sprint. » (`sprint/forms/close/`).
   → vérif : lint + build + parcours navigateur.
   → à regarder : Sprint › « Nouveau sprint » et « Clôturer le sprint » avec beaucoup d'US : défilement, en-tête et bouton visibles.
-- [ ] **T5 — Onglets de la tâche du sprint** : onglets « Points de validation (n) » (par défaut) et « Details » (description dans la zone en lecture seule, formulaire sinon) ; à la création, pas d'onglets, zone « Pas encore de points de validation » et formulaire en dessous (`sprint/forms/task/`).
+- [x] **T5 — Onglets de la tâche du sprint** : onglets « Points de validation (n) » (par défaut) et « Details » (description dans la zone en lecture seule, formulaire sinon) ; à la création, pas d'onglets, zone « Pas encore de points de validation » et formulaire en dessous (`sprint/forms/task/`).
   → vérif : lint + build + parcours navigateur.
   → à regarder : Sprint › cliquer sur une tâche (sprint en cours et sprint clos), puis sur la carte « + ».
 - [ ] **T6 — Parcours navigateur** : `tests/e2e/pages.mjs`, ouvrir l'onglet Details avant de modifier une tâche du sprint (R12c, R19) ; nouvelles vérifications R49 (même taille pour toutes les modals), R54 (onglets de la tâche, création sans onglets).
