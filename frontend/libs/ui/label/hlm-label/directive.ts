@@ -1,0 +1,24 @@
+import { Directive } from '@angular/core';
+import { BrnLabel } from '@spartan-ng/brain/label';
+import { classes } from '@spartan-ng/helm/utils';
+
+@Directive({
+	selector: '[hlmLabel]',
+	exportAs: 'hlmLabel',
+	hostDirectives: [{ directive: BrnLabel, inputs: ['id', 'for'] }],
+	host: { 'data-slot': 'label' },
+})
+export class HlmLabel {
+	constructor() {
+		classes(
+			() =>
+				[
+					// layout and text
+					'flex items-center gap-2 text-sm leading-none font-medium select-none',
+					// disabled field
+					'peer-disabled:cursor-not-allowed peer-disabled:opacity-50',
+					'group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50',
+				],
+		);
+	}
+}

@@ -57,7 +57,7 @@
 </section>
 
 <hlm-dialog [state]="opened() === null ? 'closed' : 'open'" (closed)="opened.set(null)">
-  <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-lg">
+  <hlm-dialog-content *hlmDialogPortal="let ctx">
     <app-sprint-task
       [task]="openedTask()"
       [userStoryId]="story().id"

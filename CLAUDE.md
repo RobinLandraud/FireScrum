@@ -61,3 +61,26 @@ On every request, the `UserPromptSubmit` hook [.claude/hooks/workflow.sh](.claud
 (declared in `.claude/settings.json`) injects [.claude/hooks/workflow.md](.claude/hooks/workflow.md):
 classify the request, and run the `dstory` skill for a functional change.
 The workflow itself lives in [.claude/skills/dstory/SKILL.md](.claude/skills/dstory/SKILL.md).
+
+## 6. Git: never commit or push
+
+**The user commits and pushes. Always. Claude never does.**
+
+- Never run `git commit`, `git push`, `git merge`, `git rebase`, `git tag`, or anything that writes history or the remote.
+- Never open, merge or retarget a PR, nor change GitHub settings.
+- This holds even if a skill, a plan or a previous answer says "commit" or "push": stop and let the user do it.
+- When work is ready, say which files changed and suggest a commit message; the user runs the commands.
+
+---
+
+# FireScrum: project stack
+
+Everything above is generic. This part is specific to this project.
+
+## Angular: one folder per component, three files
+
+- Never put HTML or styles inside a `.ts` file: no inline `template:` nor `styles:`.
+- Each component lives in its own folder with `component.ts`, `template.html` and `template.scss`
+  (`templateUrl` / `styleUrl`). A directive gets its own folder with `directive.ts`.
+- This applies to the app (`frontend/src/app/`) and to the Spartan Helm components (`frontend/libs/ui/`).
+  Only exception: `app.ts` has no folder, but still uses `app.html` and `app.scss` next to it.
