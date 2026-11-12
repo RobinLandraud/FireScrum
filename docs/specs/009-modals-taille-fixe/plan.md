@@ -43,7 +43,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T5 — Onglets de la tâche du sprint** : onglets « Points de validation (n) » (par défaut) et « Details » (description dans la zone en lecture seule, formulaire sinon) ; à la création, pas d'onglets, zone « Pas encore de points de validation » et formulaire en dessous (`sprint/forms/task/`).
   → vérif : lint + build + parcours navigateur.
   → à regarder : Sprint › cliquer sur une tâche (sprint en cours et sprint clos), puis sur la carte « + ».
-- [ ] **T6 — Parcours navigateur** : `tests/e2e/pages.mjs`, ouvrir l'onglet Details avant de modifier une tâche du sprint (R12c, R19) ; nouvelles vérifications R49 (même taille pour toutes les modals), R54 (onglets de la tâche, création sans onglets).
+- [x] **T6 — Parcours navigateur** : `tests/e2e/pages.mjs`, ouvrir l'onglet Details avant de modifier une tâche du sprint (R12c, R19) ; nouvelles vérifications R49 (même taille pour toutes les modals), R54 (onglets de la tâche, création sans onglets).
   → vérif : `scripts/test.sh` entièrement vert.
   → à regarder : la sortie OK/KO et les captures dans `tests/e2e/screenshots/`.
 - [ ] **T7 — Cahier de recettes** : ajout de R49 à R55 (nouvelle section « Modals » du lot 1), R15 modifiée (onglet « Points de validation »).
