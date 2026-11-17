@@ -9,6 +9,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 COMPOSE=(docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml)
+# Database credentials, also needed by the e2e tests to empty the database.
+set -a; . ./.env; set +a
 # Test stack ports, distinct from the .env ones: it runs next to the working stack.
 export FRONTEND_PORT=4201 DB_PORT=5443
 URL=http://localhost:$FRONTEND_PORT
@@ -46,7 +48,17 @@ for suite in "${SUITES[@]}"; do
     api) API="$URL/api" bash tests/api.sh || status=1 ;;
     bruno) (cd bruno && npx -y @usebruno/cli run -r --env test) || status=1 ;;
     e2e)
-      # Playwright is installed inside the container (/w): nothing is written to tests/e2e except screenshots.
+      # node_modules lives in an anonymous volume: the local one (IDE types) is neither used nor touched.
+      # Report and traces land in tests/e2e/report and tests/e2e/test-results.
+      docker run --rm --network host -e BASE="$URL" -e DB_PORT \
+        -e POSTGRES_USER -e POSTGRES_PASSWORD -e POSTGRES_DB \
+        -v "$PWD/tests/e2e:/e2e" -v /e2e/node_modules -w /e2e \
+        mcr.microsoft.com/playwright:v1.64.1-noble \
+        sh -c 'npm ci --silent >/dev/null 2>&1; npx playwright test "$@"; s=$?; \
+          chown -R '"$(id -u):$(id -g)"' report test-results 2>/dev/null; exit $s' sh "${E2E_ARGS[@]}" || status=1
+      ;;
+    e2e-legacy)
+      # Old chained script, kept until every check is ported (spec 010).
       docker run --rm --network host -e BASE="$URL" -e SHOTS=/e2e/screenshots/ -v "$PWD/tests/e2e:/e2e" \
         mcr.microsoft.com/playwright:v1.64.1-noble \
         sh -c "mkdir -p /w /e2e/screenshots && cp /e2e/*.mjs /w/ && cd /w \
@@ -54,7 +66,7 @@ for suite in "${SUITES[@]}"; do
           chown -R $(id -u):$(id -g) /e2e/screenshots; exit \$s" || status=1
       ;;
     *)
-      echo "Suite inconnue : $suite (api, bruno, e2e)" >&2
+      echo "Suite inconnue : $suite (api, bruno, e2e, e2e-legacy)" >&2
       status=1
       ;;
   esac

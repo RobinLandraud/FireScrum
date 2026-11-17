@@ -77,10 +77,10 @@ Le **`justfile`** sert de point d'entrée unique et reste mince : la logique de 
 
 Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 
-- [ ] **T1 — Environnements Compose et `justfile`** : on retire les ports de `docker-compose.yml`, on crée `docker-compose.dev.yml` et `docker-compose.prod.yml`, et on ajoute la db `127.0.0.1:5433` à `docker-compose.test.yml`. Le `justfile` contient `dev`, `prod`, `down`, `tests` et `e2e`.
+- [x] **T1 — Environnements Compose et `justfile`** : ports génériques (`FRONTEND_PORT`, `BACKEND_PORT`, `DB_PORT`) lus dans le `.env` de chaque machine (modèle `.env.template`). `docker-compose.yml` est la base et la prod (front seul publié). `docker-compose.dev.yml` ouvre la db et le backend sur 127.0.0.1. `docker-compose.test.yml` ouvre la db, et `test.sh` impose 4201 et 5443. Le `justfile` contient `dev`, `prod`, `down`, `tests` et `e2e`.
   → vérif : `just dev` répond sur 4200, avec la base `./data` intacte ; `psql` et `curl` fonctionnent sur `127.0.0.1:5432` et `:8080` ; `just tests` passe avec l'ancien script.
   → à regarder : les 4 fichiers Compose et le `justfile`.
-- [ ] **T2 — Socle Playwright et `layout/style.spec.ts`** :
+- [x] **T2 — Socle Playwright et `layout/style.spec.ts`** :
   - `tests/e2e/package.json` et son lockfile (`@playwright/test@1.64.1`, `pg`) ;
   - `playwright.config.ts` ;
   - `helpers.ts`, avec les fixtures et les fonctions de localisation ;
