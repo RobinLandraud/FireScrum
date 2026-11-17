@@ -5,12 +5,12 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmTextareaImports } from '@spartan-ng/helm/textarea';
 
-/** Les points de validation sont saisis un par ligne. */
+/** Validation points are entered one per line. */
 const EMPTY = { title: '', description: '', points: '' };
 
 /**
- * Saisie d'une tâche : vide en mode ajout, pré-remplie avec `task` en mode modification.
- * N'appelle pas l'API : émet les valeurs saisies, le parent décide quoi en faire.
+ * Task input: empty in add mode, prefilled with `task` in edit mode.
+ * Does not call the API: emits the entered values, the parent decides what to do with them.
  */
 @Component({
   selector: 'app-task-form',

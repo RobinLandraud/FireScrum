@@ -30,9 +30,9 @@ pub async fn create(
     Ok((StatusCode::CREATED, Json(TaskOut::new(task, points.into_iter().map(Into::into).collect()))))
 }
 
-/// Même corps que la création. Les points sont synchronisés par libellé : un point conservé garde son état
-/// coché, un point retiré est supprimé, un nouveau libellé crée un point non coché.
-/// 404 si la tâche n'existe pas, 409 si on ajoute un point à une tâche terminée ou si son US est terminée.
+/// Same body as creation. Points are synced by label: a kept point keeps its checked
+/// state, a removed point is deleted, a new label creates an unchecked point.
+/// 404 if the task does not exist, 409 if a point is added to a done task or if its US is finished.
 pub async fn update(
     State(db): State<DatabaseConnection>,
     Path(id): Path<i64>,
@@ -62,7 +62,7 @@ pub async fn update(
     Ok(StatusCode::NO_CONTENT)
 }
 
-/// 404 si la tâche n'existe pas, 409 si son US est terminée.
+/// 404 if the task does not exist, 409 if its US is finished.
 pub async fn delete(State(db): State<DatabaseConnection>, Path(id): Path<i64>) -> Result<StatusCode, AppError> {
     let task = model::get(&db, id).await?;
     user_story::controller::ensure_editable(&db, task.user_story_id).await?;

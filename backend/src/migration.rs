@@ -9,7 +9,7 @@ impl MigratorTrait for Migrator {
     }
 }
 
-/// Le schéma reste écrit en SQL (contraintes CHECK, index partiel) dans `migrations/`.
+/// The schema stays written in SQL (CHECK constraints, partial index) in `migrations/`.
 mod m0001_init {
     use sea_orm_migration::prelude::*;
 
@@ -33,8 +33,8 @@ mod m0002_sprint_outcome {
 
     pub struct Migration;
 
-    /// Nom explicite : `DeriveMigrationName` donnerait « migration », déjà pris par 0001
-    /// (nom historique, enregistré dans les bases existantes : ne pas le changer).
+    /// Explicit name: `DeriveMigrationName` would give "migration", already taken by 0001
+    /// (historical name, recorded in existing databases: do not change it).
     impl MigrationName for Migration {
         fn name(&self) -> &str {
             "m0002_sprint_outcome"

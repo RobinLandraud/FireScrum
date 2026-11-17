@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
-# Lance la stack de test (base en mémoire, port 4201), joue les tests, puis l'arrête.
-# La stack de travail (port 4200) et sa base ne sont jamais touchées.
+# Starts the test stack (in-memory database, port 4201), runs the tests, then stops it.
+# The working stack (port 4200) and its database are never touched.
 #   scripts/test.sh            → api + bruno + e2e
-#   scripts/test.sh api e2e    → seulement les suites citées
-#   KEEP=1 scripts/test.sh     → laisse la stack de test lancée à la fin
+#   scripts/test.sh api e2e    → only the listed suites
+#   scripts/test.sh e2e -- …   → options passed to Playwright (e.g. --grep R49)
+#   KEEP=1 scripts/test.sh     → leaves the test stack running at the end
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 COMPOSE=(docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml)
-URL=http://localhost:4201
-if [ $# -gt 0 ]; then SUITES=("$@"); else SUITES=(api bruno e2e); fi
+# Test stack ports, distinct from the .env ones: it runs next to the working stack.
+export FRONTEND_PORT=4201 DB_PORT=5443
+URL=http://localhost:$FRONTEND_PORT
+SUITES=()
+while [ $# -gt 0 ] && [ "$1" != -- ]; do SUITES+=("$1"); shift; done
+[ $# -gt 0 ] && shift
+E2E_ARGS=("$@")
+[ ${#SUITES[@]} -gt 0 ] || SUITES=(api bruno e2e)
 
 [ "${KEEP:-}" = 1 ] || trap '"${COMPOSE[@]}" down >/dev/null 2>&1' EXIT
 
@@ -19,7 +26,7 @@ wait_api() {
   exit 1
 }
 
-# Base vide avant chaque suite : la base en mémoire est perdue au redémarrage du conteneur.
+# Empty database before each suite: the in-memory database is lost when the container restarts.
 reset_db() {
   "${COMPOSE[@]}" restart db >/dev/null
   "${COMPOSE[@]}" up -d --wait db >/dev/null
@@ -39,7 +46,7 @@ for suite in "${SUITES[@]}"; do
     api) API="$URL/api" bash tests/api.sh || status=1 ;;
     bruno) (cd bruno && npx -y @usebruno/cli run -r --env test) || status=1 ;;
     e2e)
-      # Playwright est installé dans le conteneur (/w) : rien n'est écrit dans tests/e2e, sauf les captures.
+      # Playwright is installed inside the container (/w): nothing is written to tests/e2e except screenshots.
       docker run --rm --network host -e BASE="$URL" -e SHOTS=/e2e/screenshots/ -v "$PWD/tests/e2e:/e2e" \
         mcr.microsoft.com/playwright:v1.64.1-noble \
         sh -c "mkdir -p /w /e2e/screenshots && cp /e2e/*.mjs /w/ && cd /w \

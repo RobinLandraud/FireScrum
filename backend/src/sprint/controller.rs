@@ -28,7 +28,7 @@ impl From<model::Model> for SprintOut {
 pub struct SprintUserStoryOut {
     #[serde(flatten)]
     pub story: UserStoryOut,
-    /// `null` tant que le sprint est en cours, puis le sort choisi par le PO à la clôture.
+    /// `null` while the sprint is active, then the outcome chosen by the PO at closing.
     pub outcome: Option<SprintOutcome>,
 }
 
@@ -41,7 +41,7 @@ pub struct SprintDetailOut {
     pub user_stories: Vec<SprintUserStoryOut>,
 }
 
-/// Sprint en cours : US et tâches actuelles. Sprint clos : photo prise à la clôture.
+/// Active sprint: current USs and tasks. Closed sprint: snapshot taken at closing.
 pub async fn detail(db: &DatabaseConnection, id: i64) -> Result<SprintDetailOut, AppError> {
     let sprint = model::get(db, id).await?;
     let links = model::user_story_links(db, id).await?;
@@ -77,7 +77,7 @@ pub struct NewSprint {
 }
 
 impl NewSprint {
-    /// Un seul sprint en cours, au moins une US, et seules des US validées et non terminées peuvent y entrer.
+    /// Only one active sprint, at least one US, and only validated, unfinished USs can enter it.
     pub async fn validate(&mut self, db: &impl ConnectionTrait) -> Result<(), AppError> {
         if self.name.trim().is_empty() {
             return Err(AppError::BadRequest("le nom est requis".into()));
@@ -100,8 +100,8 @@ impl NewSprint {
     }
 }
 
-/// Clôture : les US closes sont terminées, les US reportées seront pré-cochées au prochain lancement,
-/// les autres retournent au backlog.
+/// Closing: closed USs are finished, carried-over USs will be pre-checked at the next launch,
+/// the others return to the backlog.
 #[derive(Deserialize, TS)]
 #[ts(export)]
 pub struct CloseSprint {
@@ -112,7 +112,7 @@ pub struct CloseSprint {
 }
 
 impl CloseSprint {
-    /// Sprint en cours (409), US du sprint (400), une US ne peut pas être à la fois close et reportée (400).
+    /// Active sprint (409), USs of the sprint (400), a US cannot be both closed and carried over (400).
     pub async fn validate(&self, db: &impl ConnectionTrait, sprint_id: i64) -> Result<(), AppError> {
         if model::get(db, sprint_id).await?.status != SprintStatus::Active {
             return Err(AppError::Conflict("ce sprint est déjà clôturé".into()));
@@ -127,7 +127,7 @@ impl CloseSprint {
         Ok(())
     }
 
-    /// Sort d'une US du sprint selon les listes reçues.
+    /// Outcome of a sprint US according to the received lists.
     pub fn outcome(&self, user_story_id: i64) -> SprintOutcome {
         if self.closed_user_story_ids.contains(&user_story_id) {
             SprintOutcome::Closed

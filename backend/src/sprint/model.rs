@@ -15,19 +15,19 @@ pub enum SprintStatus {
     Closed,
 }
 
-/// Sort d'une US à la clôture du sprint.
+/// Outcome of a US when the sprint is closed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, EnumIter, DeriveActiveEnum, Serialize, TS)]
 #[ts(export)]
 #[sea_orm(rs_type = "String", db_type = "Text")]
 #[serde(rename_all = "snake_case")]
 pub enum SprintOutcome {
-    /// Terminée.
+    /// Finished.
     #[sea_orm(string_value = "closed")]
     Closed,
-    /// Reportée : pré-cochée au lancement du sprint suivant.
+    /// Carried over: pre-checked when the next sprint is launched.
     #[sea_orm(string_value = "carried")]
     Carried,
-    /// Retournée au backlog (onglet Accepted).
+    /// Returned to the backlog (Accepted tab).
     #[sea_orm(string_value = "returned")]
     Returned,
 }
@@ -47,8 +47,8 @@ pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
 
-/// Table de liaison sprint ↔ US. Une US reportée apparaît dans plusieurs sprints :
-/// `outcome = Carried` dans l'ancien, `None` dans le sprint en cours.
+/// Sprint ↔ US join table. A carried-over US appears in several sprints:
+/// `outcome = Carried` in the old one, `None` in the active sprint.
 pub mod sprint_user_story {
     use sea_orm::entity::prelude::*;
 
@@ -62,7 +62,7 @@ pub mod sprint_user_story {
         #[sea_orm(primary_key, auto_increment = false)]
         pub user_story_id: i64,
         pub outcome: Option<SprintOutcome>,
-        /// Photo de l'US et de ses tâches à la clôture (`UserStoryOut` en JSON).
+        /// Snapshot of the US and its tasks at closing (`UserStoryOut` as JSON).
         pub snapshot: Option<Json>,
     }
 
@@ -140,7 +140,7 @@ pub async fn add_user_stories(db: &impl ConnectionTrait, sprint_id: i64, user_st
     Ok(())
 }
 
-/// Ids des US du sprint en cours (vide sans sprint en cours).
+/// Ids of the USs in the active sprint (empty without an active sprint).
 pub async fn active_user_story_ids(db: &impl ConnectionTrait, project_id: i64) -> Result<Vec<i64>, DbErr> {
     let Some(sprint) = active(db, project_id).await? else {
         return Ok(Vec::new());
@@ -148,7 +148,7 @@ pub async fn active_user_story_ids(db: &impl ConnectionTrait, project_id: i64) -
     Ok(user_story_links(db, sprint.id).await?.into_iter().map(|l| l.user_story_id).collect())
 }
 
-/// Liens du sprint avec ses US (sort et photo).
+/// Links of the sprint with its USs (outcome and snapshot).
 pub async fn user_story_links(db: &impl ConnectionTrait, sprint_id: i64) -> Result<Vec<sprint_user_story::Model>, DbErr> {
     sprint_user_story::Entity::find()
         .filter(sprint_user_story::Column::SprintId.eq(sprint_id))
@@ -156,7 +156,7 @@ pub async fn user_story_links(db: &impl ConnectionTrait, sprint_id: i64) -> Resu
         .await
 }
 
-/// Enregistre le sort de l'US dans ce sprint et sa photo.
+/// Saves the outcome of the US in this sprint and its snapshot.
 pub async fn set_outcome(
     db: &impl ConnectionTrait,
     sprint_id: i64,

@@ -34,6 +34,6 @@ module.exports = defineConfig([
     extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
     rules: {},
   },
-  // En dernier : désactive les règles de style gérées par Prettier.
+  // Last: disables the style rules handled by Prettier.
   prettier,
 ]);

@@ -8,12 +8,12 @@ import type { NewFeature } from '@contracts/NewFeature';
 export class FeatureApi {
   private http = inject(HttpClient);
 
-  /** Backlog complet : features → US → tâches → points de validation. */
+  /** Full backlog: features → USs → tasks → validation points. */
   list() {
     return this.http.get<FeatureOut[]>('/api/features');
   }
 
-  /** La feature et les US (sans feature) à y rattacher, ensemble. */
+  /** The feature and the USs (without a feature) to attach to it, together. */
   create(body: NewFeature) {
     return this.http.post<FeatureOut>('/api/features', body);
   }

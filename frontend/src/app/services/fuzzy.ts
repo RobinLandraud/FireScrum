@@ -1,4 +1,4 @@
-/** Minuscules, sans accents. */
+/** Lowercase, without accents. */
 function normalize(text: string) {
   return text
     .normalize('NFD')
@@ -7,9 +7,9 @@ function normalize(text: string) {
 }
 
 /**
- * Score de correspondance approximative : toutes les lettres de `query` doivent apparaître dans `text`,
- * dans l'ordre (pas forcément à la suite). Bonus pour les lettres consécutives et les débuts de mot.
- * `null` si pas de correspondance ; plus le score est haut, meilleure est la correspondance.
+ * Fuzzy match score: all letters of `query` must appear in `text`,
+ * in order (not necessarily adjacent). Bonus for consecutive letters and word starts.
+ * `null` if there is no match; the higher the score, the better the match.
  */
 export function fuzzyScore(query: string, text: string): number | null {
   const q = normalize(query.trim());
@@ -30,7 +30,7 @@ export function fuzzyScore(query: string, text: string): number | null {
   return score;
 }
 
-/** Éléments correspondant à `query`, du plus pertinent au moins pertinent (tous si `query` est vide). */
+/** Items matching `query`, from most to least relevant (all if `query` is empty). */
 export function fuzzyFilter<T>(items: T[], query: string, text: (item: T) => string): T[] {
   if (!query.trim()) return items;
   return items

@@ -9,15 +9,15 @@ import { firstValueFrom } from 'rxjs';
 import { toastApiError } from '../../../../services/error';
 import { SprintApi } from '../../../../services/sprint.api';
 
-/** Choix du PO pour une US : close, reportée, ou rien (retournée au backlog). */
+/** PO's choice for a US: closed, carried over, or nothing (returned to the backlog). */
 type Choice = 'closed' | 'carried' | null;
 
-/** Pré-cochage : « Clore » si toutes les tâches sont Terminé, « Reporter » sinon. */
+/** Pre-check: "Clore" if all tasks are "Terminé", "Reporter" otherwise. */
 function initialChoice(story: SprintUserStoryOut): Choice {
   return story.tasks.every((t) => t.status === 'done') ? 'closed' : 'carried';
 }
 
-/** Modal de clôture : pour chaque US, « Clore » ou « Reporter » (exclusifs) ; sans case, l'US retourne au backlog. */
+/** Closing modal: for each US, "Clore" or "Reporter" (exclusive); with no box checked, the US returns to the backlog. */
 @Component({
   selector: 'app-close-sprint-form',
   host: { class: 'flex flex-1 flex-col gap-4' },

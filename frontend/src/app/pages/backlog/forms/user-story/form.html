@@ -1,5 +1,5 @@
 <form class="grid gap-4" (submit)="save($event)">
-  <!-- US terminée : lecture seule (le back refuse aussi toute modification). -->
+  <!-- Finished US: read-only (the backend also rejects any change). -->
   <fieldset class="grid gap-4" [disabled]="story()?.done">
     <div class="grid gap-2">
       <label hlmLabel [for]="idPrefix() + '-title'">Titre</label>

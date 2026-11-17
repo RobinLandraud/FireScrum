@@ -1,6 +1,6 @@
 import type { UserStoryStatus } from '@contracts/UserStoryStatus';
 
-/** Libellé et couleurs du badge de statut d'une US. */
+/** Label and colors of a US status badge. */
 export const USER_STORY_STATUS: Record<UserStoryStatus, { label: string; class: string }> = {
   pending: { label: 'En attente', class: 'bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-gray-400' },
   planned: { label: 'Planifié', class: 'bg-blue-50 text-blue-600 dark:bg-blue-500/15 dark:text-blue-400' },

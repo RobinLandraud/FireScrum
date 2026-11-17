@@ -16,9 +16,9 @@ import { ValidationPointApi } from '../../../../services/validation-point.api';
 import { TaskForm } from '../../../backlog/forms/task/form';
 
 /**
- * Contenu de la modal d'une tâche sur la page Sprint.
- * Création si `task` est `null` (carte « + »), modification sinon.
- * En lecture seule (sprint clos), affiche la tâche telle qu'à la clôture.
+ * Content of a task modal on the Sprint page.
+ * Creation if `task` is `null` ("+" card), edit otherwise.
+ * Read-only (closed sprint), shows the task as it was at closing.
  */
 @Component({
   selector: 'app-sprint-task',
@@ -34,11 +34,11 @@ export class SprintTask {
   readonly task = input<TaskOut | null>(null);
   readonly userStoryId = input.required<number>();
   readonly readonly = input(false);
-  /** Tâche créée, modifiée ou supprimée : le parent ferme la modal et recharge. */
+  /** Task created, edited or deleted: the parent closes the modal and reloads. */
   readonly saved = output();
-  /** Point coché ou décoché : le parent recharge, la modal reste ouverte. */
+  /** Point checked or unchecked: the parent reloads, the modal stays open. */
   readonly changed = output();
-  /** « Annuler » en modification : le parent ferme la modal. */
+  /** "Annuler" in edit mode: the parent closes the modal. */
   readonly dismissed = output();
 
   protected statusLabel = TASK_STATUS_LABEL;
