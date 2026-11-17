@@ -98,6 +98,19 @@ export const checkPoint = (api: Api, id: number) => api('PATCH', `/validation-po
 export const dialog = (page: Page) => page.getByRole('dialog');
 export const card = (page: Page, title: string) => page.getByRole('button', { name: new RegExp(`^${title}`) });
 export const nav = (page: Page, name: string) => page.getByRole('navigation').getByRole('link', { name }).click();
+/** All modals have the same size: 1024 × 85% of the height (680 px in the 1280 × 800 window).
+ *  Polls until the opening zoom animation ends, otherwise the box is measured mid-zoom. */
+export const expectModalSize = (page: Page, name: string) =>
+  expect
+    .poll(
+      async () => {
+        const box = await dialog(page).boundingBox();
+        return box && `${Math.round(box.width)} × ${Math.round(box.height)}`;
+      },
+      { message: `${name} modal size` },
+    )
+    .toBe('1024 × 680');
+
 export const progressBar = (page: Page, title: string) =>
   page.getByRole('progressbar', { name: `Avancement de « ${title} »` });
 

@@ -99,7 +99,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T5 — `task/`** : `logic.spec.ts` (R05, R05b ×2, R05c, R12, R12b, R12c, R54) et `rules.spec.ts` (R14, R15, R15b).
   → vérif : `just e2e task/` est vert.
   → à regarder : `drag()` et les tests de glisser-déposer.
-- [ ] **T6 — `sprint/`** : `logic.spec.ts` (R08, R09, R10, R11, R16, R16b, R17 ×2, R17b, R18, R19, R48) et `rules.spec.ts` (lancement bloqué sans US).
+- [x] **T6 — `sprint/`** : `logic.spec.ts` (R08, R09, R10, R11, R16, R16b, R17 ×2, R17b, R18, R19, R48) et `rules.spec.ts` (lancement bloqué sans US).
   → vérif : `just e2e sprint/` est vert, seul.
   → à regarder : R18 et R19, qui étaient les plus chaînés.
 - [ ] **T7 — R49 dans `layout/style.spec.ts`** : toutes les modals font la même taille, à partir de données créées par les fabriques.
