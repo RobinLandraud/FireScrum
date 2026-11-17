@@ -57,16 +57,8 @@ for suite in "${SUITES[@]}"; do
         sh -c 'npm ci --silent >/dev/null 2>&1; npx playwright test "$@"; s=$?; \
           chown -R '"$(id -u):$(id -g)"' report test-results 2>/dev/null; exit $s' sh "${E2E_ARGS[@]}" || status=1
       ;;
-    e2e-legacy)
-      # Old chained script, kept until every check is ported (spec 010).
-      docker run --rm --network host -e BASE="$URL" -e SHOTS=/e2e/screenshots/ -v "$PWD/tests/e2e:/e2e" \
-        mcr.microsoft.com/playwright:v1.64.1-noble \
-        sh -c "mkdir -p /w /e2e/screenshots && cp /e2e/*.mjs /w/ && cd /w \
-          && npm i --silent --no-save playwright@1.64.1 >/dev/null 2>&1; node pages.mjs; s=\$?; \
-          chown -R $(id -u):$(id -g) /e2e/screenshots; exit \$s" || status=1
-      ;;
     *)
-      echo "Suite inconnue : $suite (api, bruno, e2e, e2e-legacy)" >&2
+      echo "Suite inconnue : $suite (api, bruno, e2e)" >&2
       status=1
       ;;
   esac

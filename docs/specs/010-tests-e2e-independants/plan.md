@@ -105,7 +105,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T7 — R49 dans `layout/style.spec.ts`** : toutes les modals font la même taille, à partir de données créées par les fabriques.
   → vérif : `just e2e --grep R49` lance seulement R49, qui est vert.
   → à regarder : la liste des 7 modals vérifiées.
-- [ ] **T8 — Suppression de l'ancien script** : on supprime `pages.mjs` et la suite `e2e-legacy`, on retire `screenshots/` de `.gitignore`, et on compare les IDs de l'ancien script avec les titres des nouveaux tests.
+- [x] **T8 — Suppression de l'ancien script** : on supprime `pages.mjs` et la suite `e2e-legacy`, on retire `screenshots/` de `.gitignore`, et on compare les IDs de l'ancien script avec les titres des nouveaux tests.
   → vérif :
   - `just tests` est vert (R56) ;
   - la liste des IDs est identique ;
