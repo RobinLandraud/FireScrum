@@ -87,7 +87,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T2 — `api/project` et `api/feature`** : R01 ; R02, R02b, R02c, R03 (contenu de la feature), R06 dans `logic` ; R02, R02b, R02c, R03g dans `rules`.
   → vérif : `--back` est vert.
   → à regarder : la forme d'un test de règle avec `call`.
-- [ ] **T3 — `api/user-story`** : R03, R03c, R03f, R07 dans `logic` ; R03, R03c, R03e, R04 dans `rules`.
+- [x] **T3 — `api/user-story`** : R03, R03c, R03f, R07 dans `logic` ; R03, R03c, R03e, R04 dans `rules`.
   → vérif : `--back` est vert.
   → à regarder : R03f, qui prépare les 4 statuts d'US par les fabriques.
 - [ ] **T4 — `api/task`** : R05, R05b (synchronisation des points par libellé), R05c, R12, R15, R18 dans `logic` ; R05, R05b, R05c, R05d, R12 (422), R14, R15b dans `rules`.
