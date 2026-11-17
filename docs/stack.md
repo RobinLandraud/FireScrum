@@ -147,7 +147,7 @@ Un fichier Compose par environnement, par-dessus la base `docker-compose.yml`. L
 |---------------|----------|----------|---------------|
 | Dev | `just dev` | `docker-compose.yml` + `docker-compose.dev.yml` | front `FRONTEND_PORT` ; base et backend sur `127.0.0.1` (`DB_PORT`, `BACKEND_PORT`) |
 | Prod | `just prod` | `docker-compose.yml` | front `FRONTEND_PORT` seulement |
-| Test | `just tests` | `docker-compose.yml` + `docker-compose.test.yml` | front 4201 ; base sur `127.0.0.1:5443` (imposés par `scripts/test.sh`) |
+| Test | `just tests` | `docker-compose.yml` + `docker-compose.test.yml` | front 4201 (imposé par `scripts/test.sh`) ; base non publiée |
 
 Dev et prod partagent le même projet Compose (`firescrum`) et la même base `data/` : `just prod` remplace la stack de dev.
 
@@ -161,12 +161,13 @@ just tests api bruno        # seulement les suites citées
 just e2e                    # tests navigateur seuls
 just e2e --grep R49         # un seul test, par son ID de recette
 just e2e sprint/            # un seul dossier
+just e2e --ui               # mode UI de Playwright : http://localhost:9324, jusqu'à Ctrl+C
 KEEP=1 just e2e             # laisse la stack de test lancée à la fin
 ```
 
 Tests navigateur (`tests/e2e/`, [Playwright](https://playwright.dev/)) :
 
-- Lancés dans Docker (image Playwright) : pas de navigateur à installer. `npm install` dans `tests/e2e/` ne sert qu'aux types dans l'IDE.
+- Lancés par le service `e2e` (ou `e2e-ui`) de `docker-compose.test.yml`, image Playwright : pas de navigateur à installer. Le service est sur le réseau de la stack de test et joint le front et la base par leur nom (`frontend`, `db`). `npm install` dans `tests/e2e/` ne sert qu'aux types dans l'IDE.
 - Un dossier par entité (`feature/`, `user-story/`, `task/`, `sprint/`, `layout/`), un fichier par sous-catégorie : `logic.spec.ts`, `rules.spec.ts`, `style.spec.ts`.
 - La base est vidée avant chaque test (`TRUNCATE`) : chaque test crée ses données par l'API (fabriques de `helpers.ts`), puis utilise l'UI seulement pour ce qu'il vérifie.
 - Le titre d'un test commence par son ID du [cahier de recettes](cahier-de-recettes.md).

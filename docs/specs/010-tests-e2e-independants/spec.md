@@ -64,7 +64,7 @@ Les ports viennent du `.env` de chaque machine (modèle `.env.template`, en bloc
 |---------|------|---------------|
 | `docker-compose.yml` | Base commune, et configuration de prod | front `FRONTEND_PORT` |
 | `docker-compose.dev.yml` | Stack de travail, base `./data` | en plus : db `127.0.0.1:DB_PORT`, backend `127.0.0.1:BACKEND_PORT` |
-| `docker-compose.test.yml` | Stack de test, base en mémoire (tmpfs) | en plus : db `127.0.0.1:DB_PORT` ; `test.sh` impose front 4201 et db 5443 |
+| `docker-compose.test.yml` | Stack de test, base en mémoire (tmpfs), services `e2e` / `e2e-ui` (lanceur Playwright) | `test.sh` impose le front sur 4201 ; base non publiée ; mode UI sur `127.0.0.1:9324` |
 
 Le `justfile` à la racine contient :
 
@@ -74,7 +74,7 @@ Le `justfile` à la racine contient :
 | `just prod` | Lance la stack de prod (port 80) |
 | `just down` | Arrête la stack de dev ou de prod |
 | `just tests [suites]` | Lance les suites de tests |
-| `just e2e [args]` | Lance la suite e2e, avec les options passées à Playwright |
+| `just e2e [args]` | Lance la suite e2e, avec les options passées à Playwright ; `--ui` ouvre le mode UI sur http://localhost:9324 |
 
 Dev et prod partagent le projet Compose `firescrum` et la base `data/` : `just prod` remplace la stack de dev.
 
@@ -120,7 +120,7 @@ Nouvelle section « Outillage » dans le [cahier de recettes](../../cahier-de-re
 - **Fonctions de localisation plutôt que page objects**, **fonctions fabriques plutôt qu'un Builder** : la suite (51 tests) est trop petite pour justifier des classes ou un mini-langage.
 - **Un jeu de données partagé par dossier quand plusieurs tests partent du même état** (`feature/seed.ts`, `sprint/seed.ts`) : un sprint en cours, clôturé ou reporté se prépare en une ligne.
 - **R08 et R17 découpés** : la partie « lancement bloqué sans US » passe dans `sprint/rules.spec.ts` ; 49 vérifications deviennent 51 tests.
-- **Ports en variables du `.env`** (`FRONTEND_PORT`, `BACKEND_PORT`, `DB_PORT`), mêmes noms dans tous les environnements : 5432 et 5433 étaient déjà pris sur le poste de dev, et chaque machine a ses contraintes. La stack de test impose les siens depuis `test.sh` (prioritaires sur le `.env`), car elle tourne à côté de la stack de dev.
+- **Ports en variables du `.env`** (`FRONTEND_PORT`, `BACKEND_PORT`, `DB_PORT`), mêmes noms dans tous les environnements : 5432 et 5433 étaient déjà pris sur le poste de dev, et chaque machine a ses contraintes. La stack de test impose son port de front depuis `test.sh` (prioritaire sur le `.env`), car elle tourne à côté de la stack de dev.
 - **Pas de `docker-compose.prod.yml`** : le front est publié dans les trois environnements, donc dans la base ; la prod n'a rien à surcharger.
 - **Base et backend publiés sur `127.0.0.1` seulement** : sans préfixe, Docker les ouvrirait au réseau local en passant par-dessus le pare-feu, avec des identifiants faibles.
-- **`node_modules` du conteneur dans un volume anonyme** : les tests tournent directement dans `tests/e2e` (rapport et traces au bon endroit) sans utiliser ni écraser le `node_modules` local, qui ne sert qu'aux types de l'IDE.
+- **Lanceur Playwright déclaré comme service Compose** (`e2e`, et `e2e-ui` pour le mode UI, derrière un profil) plutôt qu'un `docker run` dans `test.sh` : il est sur le réseau de la stack de test et joint `frontend` et `db` par leur nom, la base de test n'est donc plus publiée (sous Docker Desktop, un conteneur en `--network host` reste dans la VM, et un port publié peut tomber sur une autre base de la machine). Son `node_modules` est dans un volume anonyme : le `node_modules` local ne sert qu'aux types de l'IDE.

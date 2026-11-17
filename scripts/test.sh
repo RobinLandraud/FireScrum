@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 # Starts the test stack (in-memory database, port 4201), runs the tests, then stops it.
 # The working stack (port 4200) and its database are never touched.
-#   scripts/test.sh            → api + bruno + e2e
-#   scripts/test.sh api e2e    → only the listed suites
-#   scripts/test.sh e2e -- …   → options passed to Playwright (e.g. --grep R49)
-#   KEEP=1 scripts/test.sh     → leaves the test stack running at the end
+#   scripts/test.sh              → api + bruno + e2e
+#   scripts/test.sh api e2e      → only the listed suites
+#   scripts/test.sh e2e -- …     → options passed to Playwright (e.g. --grep R49)
+#   scripts/test.sh e2e -- --ui  → Playwright UI mode on http://localhost:9324
+#   KEEP=1 scripts/test.sh       → leaves the test stack running at the end
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 COMPOSE=(docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml)
-# Database credentials, also needed by the e2e tests to empty the database.
-set -a; . ./.env; set +a
-# Test stack ports, distinct from the .env ones: it runs next to the working stack.
-export FRONTEND_PORT=4201 DB_PORT=5443
+# Front port of the test stack, distinct from the .env one: it runs next to the working stack.
+# HOST_UID: owner given back to the e2e report and traces.
+export FRONTEND_PORT=4201 HOST_UID="$(id -u):$(id -g)"
 URL=http://localhost:$FRONTEND_PORT
 SUITES=()
 while [ $# -gt 0 ] && [ "$1" != -- ]; do SUITES+=("$1"); shift; done
@@ -48,28 +48,14 @@ for suite in "${SUITES[@]}"; do
     api) API="$URL/api" bash tests/api.sh || status=1 ;;
     bruno) (cd bruno && npx -y @usebruno/cli run -r --env test) || status=1 ;;
     e2e)
-      # Bridge network: the stack is reached through host.docker.internal (with Docker Desktop,
-      # host-network ports stay inside its VM). node_modules lives in an anonymous volume: the local
-      # one (IDE types) is neither used nor touched. Report and traces land in tests/e2e/report.
-      # --ui: Playwright UI mode on http://localhost:9324 (published on 127.0.0.1 only), until Ctrl+C.
-      UI_PORT=()
-      for i in "${!E2E_ARGS[@]}"; do
-        [ "${E2E_ARGS[$i]}" = --ui ] || continue
-        E2E_ARGS[$i]=--ui-host=0.0.0.0
-        E2E_ARGS+=(--ui-port=9324)
-        UI_PORT=(-p 127.0.0.1:9324:9324)
-        echo "Mode UI : http://localhost:9324 (Ctrl+C pour arrêter)"
-      done
-      docker run --rm --init "${UI_PORT[@]}" --add-host=host.docker.internal:host-gateway \
-        -e BASE="http://host.docker.internal:$FRONTEND_PORT" -e DB_HOST=host.docker.internal -e DB_PORT \
-        -e POSTGRES_USER -e POSTGRES_PASSWORD -e POSTGRES_DB \
-        -v "$PWD/tests/e2e:/e2e" -v /e2e/node_modules -w /e2e \
-        mcr.microsoft.com/playwright:v1.64.1-noble \
-        sh -c 'npm ci --silent >/dev/null 2>&1; npx playwright test "$@"; s=$?; \
-          chown -R '"$(id -u):$(id -g)"' report test-results 2>/dev/null; exit $s' sh "${E2E_ARGS[@]}" || status=1
+      # Services e2e / e2e-ui of docker-compose.test.yml; --ui picks the UI mode.
+      service=e2e args=()
+      for a in "${E2E_ARGS[@]}"; do [ "$a" = --ui ] && service=e2e-ui || args+=("$a"); done
+      [ $service = e2e ] || echo "Mode UI : http://localhost:9324 (Ctrl+C pour arrêter)"
+      "${COMPOSE[@]}" run --rm --service-ports $service "${args[@]}" || status=1
       ;;
     *)
-      echo "Suite inconnue : $suite (api, bruno, e2e, e2e-ui)" >&2
+      echo "Suite inconnue : $suite (api, bruno, e2e)" >&2
       status=1
       ;;
   esac
