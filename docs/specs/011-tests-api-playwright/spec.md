@@ -1,10 +1,10 @@
 # 011 — Tests de l'API indépendants, au même endroit que les tests navigateur
 
-**Statut** : Validée
+**Statut** : Livrée
 
 ## Contexte
 
-Les tests de l'API sont un script bash ([`tests/api.sh`](../../../tests/api.sh), 89 vérifications). Il a les défauts qu'avait l'ancien script e2e avant la spec 010 :
+Les tests de l'API sont un script bash (`tests/api.sh`, 88 vérifications, supprimé par cette spec). Il a les défauts qu'avait l'ancien script e2e avant la spec 010 :
 
 - c'est une seule histoire enchaînée, où les ids créés passent d'une vérification à l'autre (`$F`, `$A`, `$T1`…) ;
 - un échec fait tomber les vérifications suivantes ;
@@ -28,6 +28,7 @@ On porte `api.sh` dans Playwright, à côté des tests navigateur, avec les mêm
 | `just tests --ui` | Mode UI de Playwright sur http://localhost:9324, jusqu'à Ctrl+C (combinable avec `--back` / `--front`) |
 | `KEEP=1 just tests` | Laisse la stack de test lancée à la fin |
 
+- `just tests` construit la stack de test, la lance, attend qu'elle réponde, joue les tests, puis l'arrête, même en cas d'échec.
 - Un seul run Playwright, donc un seul rapport HTML (`tests/report/`), avec une trace pour chaque test en échec. Dans la trace d'un test API, l'onglet *Network* montre chaque requête et chaque réponse.
 - La stack de travail (port 4200) et sa base ne sont jamais touchées.
 - Bruno n'est plus lancé par les tests. La collection `bruno/` reste là pour manipuler l'API à la main (environnements `local` et `test`), avec ses assertions, qui s'affichent dans l'IDE Bruno.
@@ -61,10 +62,11 @@ tests/
 ### Lancement
 
 - `scripts/test.sh` est supprimé. La recette `tests` du `justfile` devient une recette *shebang* (bash) :
-  - elle lance la stack de test et attend l'API ;
-  - elle lance `docker compose run tests …` en lui passant les arguments tels quels ;
+  - elle construit les images de la stack de test et du lanceur ;
+  - elle lance `docker compose run tests …` en lui passant les arguments tels quels. `run` démarre la stack et attend que le front soit *healthy* ;
   - elle arrête la stack à la fin, même en cas d'échec (`trap`).
-- Le service Compose `e2e` est renommé **`tests`**. Il monte `./tests`, et son image est construite depuis `tests/Dockerfile`.
+- Le service Compose `e2e` est renommé **`tests`**. Il monte `./tests`, son image est construite depuis `tests/Dockerfile`, et il dépend du front de test (`depends_on: service_healthy`).
+- Le port du front de test vient du `.env` : `TEST_FRONTEND_PORT` (4201 par défaut).
 - `tests/api.sh` est supprimé.
 
 ## Règles métier
@@ -99,9 +101,14 @@ Section « Outillage » du [cahier de recettes](../../cahier-de-recettes.md) :
 - **Tests API dans Playwright plutôt qu'en bash, Hurl ou Bruno** : Playwright était déjà installé, avec les fixtures, les fabriques, le rapport, les traces et le mode UI. Un seul lanceur sert les deux niveaux de tests.
 - **Un dossier `tests/api/` à côté de `tests/e2e/`, avec deux projets Playwright**, plutôt qu'un `api.spec.ts` dans chaque entité : on les lance séparément (`--back` / `--front`), chacun a ses réglages (navigateur, viewport, surveillance de la console pour l'e2e seulement), et `e2e` garde un nom juste.
 - **Même rangement qu'en e2e** (entité, puis `logic` / `rules`) : une seule convention dans tout `tests/`.
-- **Un test par comportement**, chaque vérification gardée comme `expect` avec son libellé : environ 55 tests lisibles au lieu de 89 tests qui recréeraient chacun les mêmes données.
+- **Un test par comportement**, chaque vérification gardée comme `expect` avec son libellé : 47 tests lisibles (plus Health) au lieu de 88 tests qui recréeraient chacun les mêmes données. Une comparaison automatique a confirmé que les 88 libellés d'`api.sh` sont tous présents, avec leur ID dans le titre du test.
 - **Un seul run, un seul rapport** : le choix de ce qui tourne passe par des options (`--back`, `--front`, `--grep`), au lieu de suites séparées qui écraseraient le rapport.
 - **`--back`, `--front` et `--ui` traduits par `entrypoint.sh`** : toute la traduction des options est dans l'image, et le `justfile` transmet les arguments sans les lire.
 - **`scripts/test.sh` remplacé par une recette shebang** : sans Bruno ni suites, il ne restait que lancer, attendre et arrêter la stack. Le `trap` marche dans une recette shebang.
 - **Bruno sorti des tests** : ses assertions ne vérifiaient que le chemin nominal, déjà couvert. La collection reste l'outil pour manipuler l'API à la main.
 - **La fixture `errors` reste propre à l'e2e** : elle dépend de `page`, et elle lancerait un navigateur pour chaque test API.
+- **Fixture `call` à côté de `api`** : `api` prépare les données et lève une erreur si la réponse n'est pas OK ; `call` renvoie la réponse brute pour vérifier un 400, un 404 ou un 409. Même signature, préfixe `/api` à un seul endroit, et un test de règle tient sur une ligne.
+- **Compose attend la stack, pas le script** : un healthcheck sur le front de test (`/api/health`, qui traverse nginx, le backend et la base) et `depends_on: service_healthy` sur le service `tests` remplacent la boucle `curl` du script. Le healthcheck vise `127.0.0.1` : dans l'image alpine, `localhost` se résout d'abord en IPv6, que nginx n'écoute pas.
+- **`TEST_FRONTEND_PORT` dans le `.env`** plutôt qu'un port en dur dans la recette : tous les ports se règlent au même endroit, chaque machine a ses valeurs.
+- **Nettoyage par `--profile tests down --remove-orphans`** : un conteneur lancé par `run` (mode UI interrompu, par exemple) survivait à un simple `down` et bloquait le port 9324. Il faut les deux options : chacune seule ne le supprime pas.
+- **R02b, R03e, R05d, R19b ajoutées au cahier de recettes** : elles n'existaient que dans `api.sh`.
