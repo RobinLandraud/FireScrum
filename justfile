@@ -21,14 +21,10 @@ down:
 tests *args:
     #!/usr/bin/env bash
     set -euo pipefail
-    # Own front port: the test stack runs next to the working one. HOST_UID: owner of the report.
-    export FRONTEND_PORT=4201 HOST_UID="$(id -u):$(id -g)"
-    compose=(docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml)
-    # --profile tests --remove-orphans: also removes a leftover tests container (one-off `run`, e.g. UI mode interrupted).
-    [ "${KEEP:-}" = 1 ] || trap '"${compose[@]}" --profile tests down --remove-orphans >/dev/null 2>&1' EXIT
-    echo "Construction et lancement de la stack de test…"
-    "${compose[@]}" up -d --build >/dev/null
-    for _ in $(seq 60); do curl -sf "http://localhost:$FRONTEND_PORT/api/project" >/dev/null && break; sleep 1; done
-    curl -sf "http://localhost:$FRONTEND_PORT/api/project" >/dev/null \
-      || { echo "La stack de test ne répond pas sur le port $FRONTEND_PORT" >&2; exit 1; }
-    "${compose[@]}" run --rm --build --service-ports tests "$@"
+    export HOST_UID="$(id -u):$(id -g)"  # owner given back to the report and traces
+    compose=(docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml --profile tests)
+    # Stops the test stack even if tests fail; --remove-orphans also removes an interrupted `run` container.
+    [ "${KEEP:-}" = 1 ] || trap '"${compose[@]}" down --remove-orphans >/dev/null 2>&1' EXIT
+    "${compose[@]}" build --quiet
+    # `run` starts the stack and waits until the front is healthy (see docker-compose.test.yml).
+    "${compose[@]}" run --rm --service-ports tests "$@"

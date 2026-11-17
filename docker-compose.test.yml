@@ -1,19 +1,33 @@
 # Test stack: used by `just tests`, never by the working stack.
 #   docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml up
-# In-memory database (lost when the container stops). Front port set by `just tests` (4201).
+# In-memory database (lost when the container stops).
 services:
   db:
     volumes: !reset []
     tmpfs:
       - /var/lib/postgresql/data
 
+  frontend:
+    # Own port: the test stack runs next to the working one.
+    ports: !override
+      - "${TEST_FRONTEND_PORT:-4201}:80"
+    # Healthy once the whole chain answers: nginx → backend → database.
+    # 127.0.0.1, not localhost: localhost resolves to IPv6 first, and nginx listens on IPv4 only.
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/api/health"]
+      interval: 2s
+      retries: 60
+
   # API and browser tests (Playwright, tests/Dockerfile), on the test stack network: they reach the
-  # front and the database by service name. Profile: never started by `up`, only by `run`; the
-  # arguments go to Playwright (--back, --front, --ui: see tests/entrypoint.sh).
+  # front and the database by service name. Profile: never started by `up`, only by `run`, which
+  # starts the stack and waits for it; the arguments go to Playwright (see tests/entrypoint.sh).
   tests:
     profiles: [tests]
     build: ./tests
     init: true
+    depends_on:
+      frontend:
+        condition: service_healthy
     volumes:
       - ./tests:/tests
       # Hides the local node_modules (IDE types): the image's own dependencies are used.
