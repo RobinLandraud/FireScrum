@@ -113,7 +113,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
   - la stack de travail est inchangée (R60).
 
   → à regarder : la comparaison des IDs.
-- [ ] **T9 — Docs** :
+- [x] **T9 — Docs** :
   - `README.md` : nouvelle section Prérequis (Docker avec Compose, `just`, Node) ;
   - `docs/stack.md` : « Lancer le projet » passe à `just dev`, on y met les ports par environnement et une section Tests ;
   - `docs/cahier-de-recettes.md` : section Outillage, R56 à R61 ;
