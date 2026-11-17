@@ -10,8 +10,8 @@ export const test = base.extend<{ resetDb: void; errors: string[]; api: Api }, {
   db: [
     async ({}, use) => {
       const db = new pg.Client({
-        host: '127.0.0.1',
-        port: Number(process.env.DB_PORT ?? 5443),
+        // Set by the e2e service of docker-compose.test.yml.
+        host: process.env.DB_HOST,
         user: process.env.POSTGRES_USER,
         password: process.env.POSTGRES_PASSWORD,
         database: process.env.POSTGRES_DB,

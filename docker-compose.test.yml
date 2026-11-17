@@ -1,11 +1,45 @@
 # Test stack: used by scripts/test.sh, never by the working stack.
 #   docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml up
-# In-memory database (lost when the container stops). Ports are set by test.sh (front 4201, database 5443);
-# the database is open on 127.0.0.1 so the e2e tests can empty it before each test.
+# In-memory database (lost when the container stops). Front port set by test.sh (4201).
 services:
   db:
     volumes: !reset []
     tmpfs:
       - /var/lib/postgresql/data
+
+  # Browser tests (Playwright), on the test stack network: they reach the front and the database
+  # by service name. Profile: never started by `up`, only by `run` (arguments go to Playwright).
+  e2e:
+    profiles: [e2e]
+    image: mcr.microsoft.com/playwright:v1.64.1-noble
+    init: true
+    working_dir: /e2e
+    volumes:
+      - ./tests/e2e:/e2e
+      # Container's own node_modules: the local one (IDE types) is neither used nor touched.
+      - /e2e/node_modules
+    environment:
+      BASE: http://frontend
+      DB_HOST: db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      # Owner given back to the report and traces (the container runs as root).
+      HOST_UID: ${HOST_UID:-}
+    entrypoint:
+      - sh
+      - -c
+      - |
+        npm ci --silent >/dev/null 2>&1
+        npx playwright test $$UI_FLAGS "$$@"; status=$$?
+        [ -n "$$HOST_UID" ] && chown -R "$$HOST_UID" report test-results 2>/dev/null
+        exit $$status
+      - sh
+
+  # Same, in UI mode: http://localhost:9324 (published on 127.0.0.1 only), until Ctrl+C.
+  e2e-ui:
+    extends: e2e
+    environment:
+      UI_FLAGS: --ui-host=0.0.0.0 --ui-port=9324
     ports:
-      - "127.0.0.1:${DB_PORT}:5432"
+      - "127.0.0.1:9324:9324"

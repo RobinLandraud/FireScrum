@@ -23,3 +23,7 @@ tests *suites:
 # e2e suite only, options passed to Playwright: just e2e --grep R49
 e2e *args:
     scripts/test.sh e2e -- "$@"
+
+# Playwright UI mode on http://localhost:9324 (watch and replay the e2e tests), until Ctrl+C
+e2e-ui *args:
+    scripts/test.sh e2e-ui -- "$@"

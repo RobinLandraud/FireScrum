@@ -48,9 +48,20 @@ for suite in "${SUITES[@]}"; do
     api) API="$URL/api" bash tests/api.sh || status=1 ;;
     bruno) (cd bruno && npx -y @usebruno/cli run -r --env test) || status=1 ;;
     e2e)
-      # node_modules lives in an anonymous volume: the local one (IDE types) is neither used nor touched.
-      # Report and traces land in tests/e2e/report and tests/e2e/test-results.
-      docker run --rm --network host -e BASE="$URL" -e DB_PORT \
+      # Bridge network: the stack is reached through host.docker.internal (with Docker Desktop,
+      # host-network ports stay inside its VM). node_modules lives in an anonymous volume: the local
+      # one (IDE types) is neither used nor touched. Report and traces land in tests/e2e/report.
+      # --ui: Playwright UI mode on http://localhost:9324 (published on 127.0.0.1 only), until Ctrl+C.
+      UI_PORT=()
+      for i in "${!E2E_ARGS[@]}"; do
+        [ "${E2E_ARGS[$i]}" = --ui ] || continue
+        E2E_ARGS[$i]=--ui-host=0.0.0.0
+        E2E_ARGS+=(--ui-port=9324)
+        UI_PORT=(-p 127.0.0.1:9324:9324)
+        echo "Mode UI : http://localhost:9324 (Ctrl+C pour arrêter)"
+      done
+      docker run --rm --init "${UI_PORT[@]}" --add-host=host.docker.internal:host-gateway \
+        -e BASE="http://host.docker.internal:$FRONTEND_PORT" -e DB_HOST=host.docker.internal -e DB_PORT \
         -e POSTGRES_USER -e POSTGRES_PASSWORD -e POSTGRES_DB \
         -v "$PWD/tests/e2e:/e2e" -v /e2e/node_modules -w /e2e \
         mcr.microsoft.com/playwright:v1.64.1-noble \
@@ -58,7 +69,7 @@ for suite in "${SUITES[@]}"; do
           chown -R '"$(id -u):$(id -g)"' report test-results 2>/dev/null; exit $s' sh "${E2E_ARGS[@]}" || status=1
       ;;
     *)
-      echo "Suite inconnue : $suite (api, bruno, e2e)" >&2
+      echo "Suite inconnue : $suite (api, bruno, e2e, e2e-ui)" >&2
       status=1
       ;;
   esac
