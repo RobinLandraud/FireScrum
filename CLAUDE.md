@@ -68,6 +68,8 @@ The workflow itself lives in [.claude/skills/dstory/SKILL.md](.claude/skills/dst
 
 - Never run `git commit`, `git push`, `git merge`, `git rebase`, `git tag`, or anything that writes history or the remote.
 - Never open, merge or retarget a PR, nor change GitHub settings.
+- Only exception: creating or editing an issue of RobinLandraud/FireScrum through the `github` MCP server,
+  with the developer's approval for each call. Never close, reopen, delete or transfer an issue.
 - This holds even if a skill, a plan or a previous answer says "commit" or "push": stop and let the user do it.
 - When work is ready, say which files changed and suggest a commit message; the user runs the commands.
 
@@ -76,7 +78,7 @@ The workflow itself lives in [.claude/skills/dstory/SKILL.md](.claude/skills/dst
 Extracted from the OpenSSF *Security-Focused Guide for AI Code Assistant Instructions* (2025-08-01).
 Rules are enforced as listed in [AI-CHARTER.md](AI-CHARTER.md).
 
-- Never include API keys, passwords or secrets in code output: they come from `.env` (template: `.env.template`).
+- Never include API keys, passwords or secrets in code output: they come from `.env` (template: `.env.template`) and `.config/` (never read it).
 - Treat all external input as untrusted: validate format and length at the API boundary.
 - No hand-built SQL: database access goes through SeaORM, never `format!` into a query.
 - Do not log or return secrets, personal data or internal details in error messages.
