@@ -1,4 +1,6 @@
-import { test, expect, dialog, nav, type Page } from '../helpers';
+import type { Locator } from '@playwright/test';
+import { test, expect, dialog, nav, card, taskCard, addTaskButton, expectModalSize, type Page } from '../helpers';
+import { US, seedRunningSprint } from '../sprint/seed';
 
 const menuButton = (page: Page) => page.getByRole('button', { name: 'Afficher ou masquer le menu' });
 const sidebarWidth = async (page: Page) => (await page.locator('app-sidebar aside').boundingBox())!.width;
@@ -72,6 +74,33 @@ test.describe('system dark theme', () => {
     await page.goto('/backlog');
     await expect.poll(() => isDark(page), { message: 'system preference ignored' }).toBe(true);
   });
+});
+
+// Spec 009-modals-taille-fixe: R49 (the launch modal is measured in R08)
+test('R49 toutes les modals ont la même taille, quel que soit l’onglet', async ({ page, api }) => {
+  await seedRunningSprint(api);
+  const open = async (name: string, trigger: Locator, tabs: (string | RegExp)[] = []) => {
+    await trigger.click();
+    await expectModalSize(page, name);
+    for (const tab of tabs) {
+      await dialog(page).getByRole('tab', { name: tab }).click();
+      await expectModalSize(page, `${name} › ${tab}`);
+    }
+    await page.keyboard.press('Escape');
+    await expect(dialog(page)).toBeHidden();
+  };
+
+  await page.goto('/sprint');
+  await open('sprint task', taskCard(page, US, 'Formulaire de connexion'), ['Details']);
+  await open('new task', addTaskButton(page, US));
+  await open('close', page.getByRole('button', { name: 'Clôturer le sprint' }));
+  await nav(page, 'Backlog');
+  await open('new US', page.getByRole('button', { name: 'New Story' }), [/Tasks/]);
+  await page.getByRole('tab', { name: /Accepted/ }).click();
+  await open('US detail', card(page, US), [/Tasks/]);
+  await nav(page, 'Features');
+  await open('new feature', page.getByRole('button', { name: 'New Feature' }), [/User stories/]);
+  await open('feature detail', card(page, 'Authentification'), [/User stories/]);
 });
 
 // Spec 006-planning
