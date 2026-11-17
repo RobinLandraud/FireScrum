@@ -84,7 +84,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 
   → vérif : `test.sh e2e -- --front` donne 51 tests verts ; `-- --back` lance seulement Health ; `api.sh` passe toujours.
   → à regarder : `fixtures.ts`, `e2e/helpers.ts` (les deux couches) et `entrypoint.sh`.
-- [ ] **T2 — `api/project` et `api/feature`** : R01 ; R02, R02b, R02c, R03 (contenu de la feature), R06 dans `logic` ; R02, R02b, R02c, R03g dans `rules`.
+- [x] **T2 — `api/project` et `api/feature`** : R01 ; R02, R02b, R02c, R03 (contenu de la feature), R06 dans `logic` ; R02, R02b, R02c, R03g dans `rules`.
   → vérif : `--back` est vert.
   → à regarder : la forme d'un test de règle avec `call`.
 - [ ] **T3 — `api/user-story`** : R03, R03c, R03f, R07 dans `logic` ; R03, R03c, R03e, R04 dans `rules`.
