@@ -1,6 +1,6 @@
-# Test stack: used by scripts/test.sh, never by the working stack.
+# Test stack: used by `just tests`, never by the working stack.
 #   docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml up
-# In-memory database (lost when the container stops). Front port set by test.sh (4201).
+# In-memory database (lost when the container stops). Front port set by `just tests` (4201).
 services:
   db:
     volumes: !reset []

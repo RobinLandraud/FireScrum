@@ -96,10 +96,10 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T5 — `api/sprint`** : R09, R10, R11, R16, R17, R17b, R18, R19, R19b dans `logic` ; R08, R09 (409), R16 (re-clôture), R17, R17b dans `rules`.
   → vérif : `--back` est vert.
   → à regarder : R19b, la photo du sprint 1 face au sprint 2 qui avance.
-- [ ] **T6 — Comparaison avec `api.sh`** : script jetable (dans le scratchpad, non versionné) qui compare chaque `check ID "libellé"` d'`api.sh` aux titres de test et aux messages des `expect`.
+- [x] **T6 — Comparaison avec `api.sh`** : script jetable (dans le scratchpad, non versionné) qui compare chaque `check ID "libellé"` d'`api.sh` aux titres de test et aux messages des `expect`.
   → vérif : les 89 vérifications sont toutes présentes.
   → à regarder : la liste comparée.
-- [ ] **T7 — `just tests` en recette shebang, et suppressions** : on supprime `scripts/test.sh`, `tests/api.sh`, et le lancement de Bruno.
+- [x] **T7 — `just tests` en recette shebang, et suppressions** : on supprime `scripts/test.sh`, `tests/api.sh`, et le lancement de Bruno.
   → vérif :
   - `just tests` : api + e2e, verts ;
   - `just tests --back` et `--front --grep R49` ;

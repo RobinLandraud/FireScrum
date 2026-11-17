@@ -16,10 +16,19 @@ prod:
 down:
     docker compose -p firescrum down
 
-# Tests on the test stack (port 4201): just tests [api bruno e2e]
-tests *suites:
-    scripts/test.sh "$@"
-
-# e2e suite only, options passed to Playwright: just e2e --grep R49, just e2e --ui
-e2e *args:
-    scripts/test.sh e2e -- "$@"
+# Runs on the test stack (port 4201, throwaway database), then stops it; KEEP=1 leaves it running.
+# API and browser tests: just tests [--back | --front] [--ui] [Playwright options, e.g. --grep R49]
+tests *args:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # Own front port: the test stack runs next to the working one. HOST_UID: owner of the report.
+    export FRONTEND_PORT=4201 HOST_UID="$(id -u):$(id -g)"
+    compose=(docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml)
+    # --profile tests --remove-orphans: also removes a leftover tests container (one-off `run`, e.g. UI mode interrupted).
+    [ "${KEEP:-}" = 1 ] || trap '"${compose[@]}" --profile tests down --remove-orphans >/dev/null 2>&1' EXIT
+    echo "Construction et lancement de la stack de test…"
+    "${compose[@]}" up -d --build >/dev/null
+    for _ in $(seq 60); do curl -sf "http://localhost:$FRONTEND_PORT/api/project" >/dev/null && break; sleep 1; done
+    curl -sf "http://localhost:$FRONTEND_PORT/api/project" >/dev/null \
+      || { echo "La stack de test ne répond pas sur le port $FRONTEND_PORT" >&2; exit 1; }
+    "${compose[@]}" run --rm --build --service-ports tests "$@"
