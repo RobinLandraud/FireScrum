@@ -16,10 +16,15 @@ prod:
 down:
     docker compose -p firescrum down
 
-# Tests on the test stack (port 4201): just tests [api bruno e2e]
-tests *suites:
-    scripts/test.sh "$@"
-
-# e2e suite only, options passed to Playwright: just e2e --grep R49
-e2e *args:
-    scripts/test.sh e2e -- "$@"
+# Runs on the test stack (port 4201, throwaway database), then stops it; KEEP=1 leaves it running.
+# API and browser tests: just tests [--back | --front] [--ui] [Playwright options, e.g. --grep R49]
+tests *args:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    export HOST_UID="$(id -u):$(id -g)"  # owner given back to the report and traces
+    compose=(docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml --profile tests)
+    # Stops the test stack even if tests fail; --remove-orphans also removes an interrupted `run` container.
+    [ "${KEEP:-}" = 1 ] || trap '"${compose[@]}" down --remove-orphans >/dev/null 2>&1' EXIT
+    "${compose[@]}" build --quiet
+    # `run` starts the stack and waits until the front is healthy (see docker-compose.test.yml).
+    "${compose[@]}" run --rm --service-ports tests "$@"

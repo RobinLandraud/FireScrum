@@ -3,5 +3,5 @@
 data/
 node_modules/
 dist/
-tests/e2e/report/
-tests/e2e/test-results/
+tests/report/
+tests/test-results/

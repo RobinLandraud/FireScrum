@@ -25,8 +25,10 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 | R03 | User Story | Créer une US avec « New Story », avec et sans feature | L'US apparaît en card dans l'onglet Sandbox, avec sa feature si associée |  | À tester |
 | R03d | User Story | Cliquer sur « New Story », saisir un titre sans tâche | La modal a les onglets Details / Tasks ; « Créer l'US » reste grisé tant qu'il n'y a pas au moins une tâche dans l'onglet Tasks |  | À tester |
 | R03b | Feature | Dans la modal d'une feature (onglet User stories), rechercher (recherche approximative) et ajouter une US sans feature puis la retirer ; à la création, ajouter une US avant de créer | L'US apparaît dans la liste de la feature, puis redevient sans feature ; à la création, la feature est créée avec l'US |  | À tester |
+| R02b | Feature | Créer une feature avec des US sans feature (`POST /features` avec `user_story_ids`) ; avec une US déjà rattachée ou inexistante | La feature est créée avec ses US ; sinon 400, et aucune feature n'est créée |  | À tester |
 | R03f | Feature | Ouvrir une feature qui a une US de chaque état (Sandbox, validée, dans le sprint en cours, terminée), onglet User stories | Chaque US a son badge : « En attente » (gris), « Planifié » (bleu), « En cours » (orange), « Terminé » (vert), lisibles en clair et en sombre |  | À tester |
 | R03g | Feature | Ouvrir une feature qui a une US terminée ; chercher une US terminée sans feature ; `POST /features` avec l'id d'une US terminée | Pas d'icône « Retirer » sur l'US terminée ; elle n'est pas proposée à l'ajout ; l'API répond 400 |  | À tester |
+| R03e | User Story | Modifier une US terminée, ou changer sa feature (API) | Refusé (409) : une US terminée ne se modifie plus |  | À tester |
 | R46 | Progression | Une US avec 1 tâche en Terminé sur 2 (et une « En validation ») ; une US terminée | Barre à 50 % dans le Backlog, sur la page Sprint et dans la modal de sa feature ; l'US terminée affiche 100 % en vert |  | À tester |
 | R47 | Progression | Une feature avec 1 US terminée sur 4 ; une feature sans US | Sa card affiche 25 % ; pas de barre sans US |  | À tester |
 | R48 | Progression | Passer une tâche en Terminé sur la page Sprint, revenir sur le Backlog | La barre de l'US a avancé |  | À tester |
@@ -36,6 +38,7 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 | R05 | Tâche | Dans la modal d'une US, onglet Tasks : créer une tâche avec un nom, une description et des points de validation | La tâche apparaît dans la liste (nom seul), statut `À faire` |  | À tester |
 | R05b | Tâche | Cliquer sur l'icône modifier d'une tâche, changer le nom, valider | Les champs du bas sont pré-remplis, le bouton devient « Modifier la tâche » ; après validation la liste est à jour et le formulaire revient à vide avec « Ajouter la tâche » |  | À tester |
 | R05c | Tâche | Cliquer sur l'icône supprimer d'une tâche | La tâche disparaît de la liste |  | À tester |
+| R05d | Tâche | Sur une US terminée : ajouter, modifier, déplacer ou supprimer une tâche, cocher un point (API) | Refusé (409) |  | À tester |
 | R06 | Persistance | Créer une feature, une US et une tâche, puis recharger la page | Les trois éléments sont toujours présents |  | À tester |
 | R07 | Validation | Valider une US depuis sa modal | L'US passe de Sandbox à Accepted et peut être ajoutée à un sprint (page Sprint) |  | À tester |
 | R08 | Validation | Tenter d'ajouter une US non validée à un sprint | L'ajout est impossible |  | À tester |
@@ -63,6 +66,7 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 | R17d | Report d'US | Décocher une US reportée dans la modal de lancement, puis lancer | L'US n'est pas dans le nouveau sprint et reste dans l'onglet Accepted |  | À tester |
 | R18 | Report d'US | Reporter une US dont une tâche est `En cours` et une autre `Terminé` | Dans le sprint suivant, l'US garde ses tâches avec les mêmes statuts |  | À tester |
 | R19 | Sprints passés | Choisir un sprint clos dans le menu, après avoir fait avancer une de ses US reportée dans le sprint suivant | Les tâches sont affichées telles qu'à la clôture, en lecture seule (ni déplacement, ni modification, ni carte « + »), avec le sort de chaque US |  | À tester |
+| R19b | Photo du sprint clos | Faire avancer une tâche d'une US reportée dans le sprint en cours, puis rouvrir le sprint clos | Le sprint clos montre le statut à la clôture, le sprint en cours le statut actuel |  | À tester |
 
 ## Cadre et thème
 
@@ -91,12 +95,14 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 
 | ID | Fonctionnalité | Scénario | Résultat attendu | Résultat obtenu | Statut |
 |----|----------------|----------|------------------|-----------------|--------|
-| R56 | Tests | `just tests` | Toutes les suites (api, bruno, e2e) passent ; la suite e2e contient toutes les recettes de l'ancien script |  | À tester |
-| R57 | Tests isolés | `just e2e sprint/` | Seuls les tests de sprint tournent, et passent sans les autres fichiers |  | À tester |
-| R58 | Filtre par ID | `just e2e --grep R49` | Seul R49 tourne |  | À tester |
-| R59 | Trace | Faire échouer un test exprès | Le rapport HTML (`tests/e2e/report/`) montre le test en échec avec sa trace (étapes, captures, DOM) |  | À tester |
+| R56 | Tests | `just tests` | Les tests API et navigateur passent ; les tests API contiennent toutes les vérifications de l'ancien `api.sh` |  | À tester |
+| R57 | Tests isolés | `just tests --front e2e/sprint/` | Seuls les tests navigateur de sprint tournent, et passent sans les autres fichiers |  | À tester |
+| R58 | Filtre par ID | `just tests --front --grep R49` | Seul R49 tourne |  | À tester |
+| R59 | Trace | Faire échouer un test exprès (API ou navigateur) | Le rapport HTML (`tests/report/`) montre le test en échec avec sa trace (étapes, captures, DOM, onglet *Network*) |  | À tester |
 | R60 | Isolation | Lancer `just tests` avec la stack de travail lancée et des données dedans | La stack de travail tourne toujours, sa base est inchangée |  | À tester |
 | R61 | Environnements | `just dev`, puis `just prod` | Dev : l'app répond sur `FRONTEND_PORT`, la base et le backend sur `127.0.0.1` (`DB_PORT`, `BACKEND_PORT`) ; prod : seule l'app est publiée |  | À tester |
+| R62 | Tests de l'API | `just tests --back` | Seuls les tests API tournent, sans navigateur, en quelques secondes |  | À tester |
+| R63 | Mode UI | `just tests --ui`, puis Ctrl+C | Le mode UI s'ouvre sur http://localhost:9324 avec les projets api et e2e ; Ctrl+C l'arrête, puis la stack de test |  | À tester |
 
 ---
 
