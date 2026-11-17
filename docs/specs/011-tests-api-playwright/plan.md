@@ -93,7 +93,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T4 — `api/task`** : R05, R05b (synchronisation des points par libellé), R05c, R12, R15, R18 dans `logic` ; R05, R05b, R05c, R05d, R12 (422), R14, R15b dans `rules`.
   → vérif : `--back` est vert.
   → à regarder : R05b, avec le point coché conservé et p3 ajouté puis retiré.
-- [ ] **T5 — `api/sprint`** : R09, R10, R11, R16, R17, R17b, R18, R19, R19b dans `logic` ; R08, R09 (409), R16 (re-clôture), R17, R17b dans `rules`.
+- [x] **T5 — `api/sprint`** : R09, R10, R11, R16, R17, R17b, R18, R19, R19b dans `logic` ; R08, R09 (409), R16 (re-clôture), R17, R17b dans `rules`.
   → vérif : `--back` est vert.
   → à regarder : R19b, la photo du sprint 1 face au sprint 2 qui avance.
 - [ ] **T6 — Comparaison avec `api.sh`** : script jetable (dans le scratchpad, non versionné) qui compare chaque `check ID "libellé"` d'`api.sh` aux titres de test et aux messages des `expect`.
