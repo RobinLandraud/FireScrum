@@ -90,7 +90,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T3 — `api/user-story`** : R03, R03c, R03f, R07 dans `logic` ; R03, R03c, R03e, R04 dans `rules`.
   → vérif : `--back` est vert.
   → à regarder : R03f, qui prépare les 4 statuts d'US par les fabriques.
-- [ ] **T4 — `api/task`** : R05, R05b (synchronisation des points par libellé), R05c, R12, R15, R18 dans `logic` ; R05, R05b, R05c, R05d, R12 (422), R14, R15b dans `rules`.
+- [x] **T4 — `api/task`** : R05, R05b (synchronisation des points par libellé), R05c, R12, R15, R18 dans `logic` ; R05, R05b, R05c, R05d, R12 (422), R14, R15b dans `rules`.
   → vérif : `--back` est vert.
   → à regarder : R05b, avec le point coché conservé et p3 ajouté puis retiré.
 - [ ] **T5 — `api/sprint`** : R09, R10, R11, R16, R17, R17b, R18, R19, R19b dans `logic` ; R08, R09 (409), R16 (re-clôture), R17, R17b dans `rules`.
