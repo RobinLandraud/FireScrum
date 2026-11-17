@@ -47,6 +47,18 @@ L'interface s'adapte au mobile et propose un mode sombre.
 - **Ensuite** : plusieurs utilisateurs, avec des rôles *Product Owner* et *Développeur*, et le calendrier des sprints.
 - **Plus tard** : l'authentification et la gestion de plusieurs projets.
 
+## Prérequis
+
+- [Docker](https://docs.docker.com/get-docker/) avec Docker Compose
+- [`just`](https://github.com/casey/just) (`sudo apt install just`, `brew install just` ou `cargo install just`)
+- [Node](https://nodejs.org/) 24 : seulement pour les types des tests dans l'IDE
+
+```bash
+cp .env.template .env   # identifiants et ports, à adapter
+just dev                # http://localhost:4200
+just tests              # tous les tests, sur une stack à part
+```
+
 ## Pour aller plus loin
 
 - [Vision du produit](docs/idee-projet.md)

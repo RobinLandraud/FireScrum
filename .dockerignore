@@ -1,4 +1,4 @@
-# Contexte de build du front (racine) : seulement frontend/ et contracts/
+# Front build context (repo root): only frontend/ and contracts/
 *
 !frontend
 !contracts

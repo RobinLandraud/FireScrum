@@ -6,7 +6,7 @@ import { AppSidebar } from './layout/sidebar/component';
 import { SidebarService } from './services/sidebar';
 import { ThemeService } from './services/theme';
 
-/** Cadre de l'app : barre latérale, en-tête, page. */
+/** App shell: sidebar, header, page. */
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, HlmToasterImports, AppHeader, AppSidebar],
@@ -16,7 +16,7 @@ import { ThemeService } from './services/theme';
 export class App {
   protected sidebar = inject(SidebarService);
   constructor() {
-    // Instancié au démarrage pour appliquer le thème avant le premier affichage.
+    // Instantiated at startup to apply the theme before the first render.
     inject(ThemeService);
   }
 }

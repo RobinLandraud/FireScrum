@@ -40,7 +40,7 @@ pub async fn create(
     .await
 }
 
-/// `DbErr::RecordNotUpdated` si la feature n'existe pas.
+/// `DbErr::RecordNotUpdated` if the feature does not exist.
 pub async fn update(db: &impl ConnectionTrait, id: i64, title: &str, description: &str) -> Result<(), DbErr> {
     ActiveModel {
         id: Set(id),

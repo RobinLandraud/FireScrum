@@ -12,7 +12,7 @@ import { FeatureApi } from '../../../../services/feature.api';
 
 const EMPTY = { title: '', description: '' };
 
-/** Détails d'une feature : création (avec les US choisies `userStoryIds`), ou modification si `feature` est fourni. */
+/** Feature details: creation (with the chosen USs `userStoryIds`), or edit if `feature` is given. */
 @Component({
   selector: 'app-feature-form',
   host: { class: 'block' },
@@ -23,11 +23,11 @@ const EMPTY = { title: '', description: '' };
 export class FeatureForm {
   private api = inject(FeatureApi);
   readonly feature = input<FeatureOut | null>(null);
-  /** US à rattacher à la création (création uniquement). */
+  /** USs to attach on creation (creation only). */
   readonly userStoryIds = input<number[]>([]);
   readonly saved = output();
 
-  /** Identifiants des champs, uniques par feature (pour les `<label for>`). */
+  /** Field ids, unique per feature (for the `<label for>`). */
   protected idPrefix = computed(() => `feature-${this.feature()?.id ?? 'new'}`);
 
   private model = linkedSignal(() => {

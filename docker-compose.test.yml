@@ -1,12 +1,11 @@
-# Stack de test : utilisée par scripts/test.sh, jamais par la stack de travail.
+# Test stack: used by scripts/test.sh, never by the working stack.
 #   docker compose -p firescrum-test -f docker-compose.yml -f docker-compose.test.yml up
-# Base en mémoire (perdue à l'arrêt du conteneur), front sur le port 4201.
+# In-memory database (lost when the container stops). Ports are set by test.sh (front 4201, database 5443);
+# the database is open on 127.0.0.1 so the e2e tests can empty it before each test.
 services:
   db:
     volumes: !reset []
     tmpfs:
       - /var/lib/postgresql/data
-
-  frontend:
-    ports: !override
-      - "4201:80"
+    ports:
+      - "127.0.0.1:${DB_PORT}:5432"

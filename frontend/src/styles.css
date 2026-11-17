@@ -6,7 +6,7 @@
 @import '@spartan-ng/brain/hlm-tailwind-preset.css';
 @import '@fontsource-variable/outfit';
 
-/* Palette, police et rayons repris de TailAdmin Angular (MIT, voir THIRD-PARTY-NOTICES.md). */
+/* Palette, font and radii taken from TailAdmin Angular (MIT, see THIRD-PARTY-NOTICES.md). */
 
 :root {
   color-scheme: light;
@@ -92,14 +92,14 @@
   }
 }
 
-/* Toasts : même police que l'app. */
+/* Toasts: same font as the app. */
 [data-sonner-toaster] {
   font-family: var(--font-sans);
 }
 
-/* Dans la couche components : les utilitaires (ex. `w-64`) l'emportent. */
+/* In the components layer: utilities (e.g. `w-64`) take precedence. */
 @layer components {
-  /* Liste déroulante native, au style des champs Spartan (hauteur, coins et focus de TailAdmin). */
+  /* Native dropdown, styled like Spartan fields (height, corners and focus from TailAdmin). */
   .select {
     height: 2.75rem;
     width: 100%;

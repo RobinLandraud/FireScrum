@@ -23,8 +23,8 @@ const OUTCOME_LABEL: Record<SprintOutcome, string> = {
 };
 
 /**
- * Ligne d'une US sur le tableau du sprint : en-tête (titre, feature, vélocité) et tâches en kanban.
- * Une tâche se déplace entre les colonnes de sa ligne uniquement (`cdkDropListGroup` par ligne).
+ * Row of a US on the sprint board: header (title, feature, velocity) and tasks as a kanban.
+ * A task moves only between the columns of its own row (`cdkDropListGroup` per row).
  */
 @Component({
   selector: 'app-sprint-story',
@@ -38,9 +38,9 @@ export class SprintStory {
   private taskApi = inject(TaskApi);
   readonly story = input.required<SprintUserStoryOut>();
   readonly featureTitle = input<string | null>(null);
-  /** Sprint clos : pas de déplacement, pas de modification, pas de carte « + ». */
+  /** Closed sprint: no moving, no editing, no "+" card. */
   readonly readonly = input(false);
-  /** Une tâche a changé : le parent recharge le sprint. */
+  /** A task changed: the parent reloads the sprint. */
   readonly changed = output();
 
   protected columns = TASK_STATUSES;
@@ -50,7 +50,7 @@ export class SprintStory {
     return outcome ? OUTCOME_LABEL[outcome] : null;
   });
 
-  /** Statut affiché tout de suite après un déplacement, avant la réponse de l'API (remis à zéro au rechargement). */
+  /** Status shown right after a move, before the API response (reset on reload). */
   private moved = linkedSignal<SprintUserStoryOut, Record<number, TaskStatus>>({ source: this.story, computation: () => ({}) });
   protected tasksByStatus = computed(() => {
     const moved = this.moved();
@@ -59,7 +59,7 @@ export class SprintStory {
     return byStatus;
   });
 
-  /** Modal de tâche : id de la tâche ouverte, `'new'` pour la carte « + », `null` si fermée. */
+  /** Task modal: id of the open task, `'new'` for the "+" card, `null` when closed. */
   protected opened = signal<number | 'new' | null>(null);
   protected openedTask = computed(() => {
     const id = this.opened();

@@ -1,0 +1,11 @@
+# Working stack: `just dev`.
+#   docker compose -p firescrum -f docker-compose.yml -f docker-compose.dev.yml up
+# On top of the front: database and backend open on this machine only (127.0.0.1), for tools.
+services:
+  db:
+    ports:
+      - "127.0.0.1:${DB_PORT}:5432"
+
+  backend:
+    ports:
+      - "127.0.0.1:${BACKEND_PORT}:8080"

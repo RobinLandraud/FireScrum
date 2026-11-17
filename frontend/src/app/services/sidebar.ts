@@ -2,20 +2,20 @@ import { DOCUMENT, Service, inject, signal } from '@angular/core';
 import { readStorage, writeStorage } from './storage';
 
 const KEY = 'firescrum.sidebar-collapsed';
-/** Au-dessus : barre fixe et repliable. En dessous : barre cachée, ouverte par-dessus la page. */
+/** Above: fixed, collapsible sidebar. Below: hidden sidebar, opened over the page. */
 const DESKTOP = '(min-width: 1024px)';
 
-/** État de la barre latérale, partagé par l'en-tête, la barre et le fond assombri. */
+/** Sidebar state, shared by the header, the sidebar and the dimmed backdrop. */
 @Service()
 export class SidebarService {
   private document = inject(DOCUMENT);
 
-  /** Grand écran : repliée en colonne d'icônes (mémorisé). */
+  /** Large screen: collapsed into an icon column (remembered). */
   readonly collapsed = signal(readStorage(KEY) === 'true');
-  /** Mobile : ouverte par-dessus la page (jamais mémorisé). */
+  /** Mobile: opened over the page (never remembered). */
   readonly mobileOpen = signal(false);
 
-  /** Bouton de l'en-tête : replie / déplie sur grand écran, ouvre / ferme sur mobile. */
+  /** Header button: collapses / expands on large screens, opens / closes on mobile. */
   toggle() {
     if (this.document.defaultView?.matchMedia(DESKTOP).matches) {
       this.collapsed.update((c) => !c);

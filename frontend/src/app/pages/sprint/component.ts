@@ -23,13 +23,13 @@ export class SprintPage {
   private storyApi = inject(UserStoryApi);
   private featureApi = inject(FeatureApi);
 
-  /** Du plus ancien au plus récent : le sprint actuel est le dernier. */
+  /** Oldest to newest: the current sprint is the last one. */
   protected sprints = rxResource({ stream: () => this.sprintApi.list() });
   protected ordered = computed(() => [...(this.sprints.value() ?? [])].reverse());
   protected last = computed(() => this.ordered().at(-1) ?? null);
   protected lastActive = computed(() => this.last()?.status === 'active');
 
-  /** Sprint affiché : le dernier par défaut, et après chaque rechargement de la liste. */
+  /** Displayed sprint: the last one by default, and after each reload of the list. */
   protected selectedId = linkedSignal(() => this.last()?.id ?? null);
   protected detail = rxResource({
     params: () => this.selectedId(),
@@ -38,8 +38,8 @@ export class SprintPage {
   protected readonly = computed(() => this.detail.value()?.status === 'closed');
 
   /**
-   * Recharge le sprint affiché après un changement de tâche. `reload()` est ignoré tant qu'un chargement est en cours :
-   * on le rejoue à la fin, sinon deux cases cochées vite n'afficheraient que la première.
+   * Reloads the displayed sprint after a task change. `reload()` is ignored while a load is in progress:
+   * it is replayed at the end, otherwise two boxes checked quickly would only show the first one.
    */
   private reloadPending = false;
   protected refresh() {
@@ -59,7 +59,7 @@ export class SprintPage {
   protected featureTitle = (story: { feature_id: number | null }) =>
     story.feature_id === null ? null : (this.featureTitles().get(story.feature_id) ?? null);
 
-  /** Pour la modal de lancement : US acceptées, et US reportées à la clôture du dernier sprint. */
+  /** For the launch modal: accepted USs, and USs carried over when the last sprint was closed. */
   private stories = rxResource({ stream: () => this.storyApi.list() });
   protected accepted = computed(() => (this.stories.value() ?? []).filter((s: UserStoryOut) => s.validated && !s.done));
   private lastDetail = rxResource({
@@ -74,7 +74,7 @@ export class SprintPage {
     this.selectedId.set(Number((event.target as HTMLSelectElement).value));
   }
 
-  /** Après un lancement ou une clôture : tout recharger, le dernier sprint est sélectionné. */
+  /** After a launch or a closing: reload everything, the last sprint is selected. */
   protected reloadAll() {
     this.sprints.reload();
     this.stories.reload();

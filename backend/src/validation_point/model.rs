@@ -34,7 +34,7 @@ pub async fn create(db: &impl ConnectionTrait, task_id: i64, label: &str) -> Res
     .await
 }
 
-/// `DbErr::RecordNotUpdated` si le point n'existe pas.
+/// `DbErr::RecordNotUpdated` if the point does not exist.
 pub async fn set_checked(db: &impl ConnectionTrait, id: i64, checked: bool) -> Result<(), DbErr> {
     ActiveModel { id: Set(id), checked: Set(checked), ..Default::default() }
         .update(db)

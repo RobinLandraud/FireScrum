@@ -11,7 +11,7 @@ import { storyProgress } from '../../services/progress';
 import { UserStoryApi } from '../../services/user-story.api';
 import { UserStoryEditor } from './forms/user-story/component';
 
-/** Onglets du backlog : à valider, validées (pas encore terminées), terminées. */
+/** Backlog tabs: to validate, validated (not finished yet), finished. */
 const TABS = [
   { id: 'sandbox', label: 'Sandbox', empty: 'Aucune US à valider.', match: (s: UserStoryOut) => !s.validated },
   { id: 'accepted', label: 'Accepted', empty: 'Aucune US acceptée.', match: (s: UserStoryOut) => s.validated && !s.done },

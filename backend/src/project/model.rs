@@ -1,6 +1,6 @@
 use sea_orm::entity::prelude::*;
 
-/// MVP : un seul projet, créé par la migration initiale.
+/// MVP: a single project, created by the initial migration.
 pub const PROJECT_ID: i64 = 1;
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]

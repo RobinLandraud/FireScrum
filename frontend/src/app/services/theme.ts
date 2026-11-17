@@ -5,8 +5,8 @@ export type Theme = 'light' | 'dark';
 const KEY = 'firescrum.theme';
 
 /**
- * Thème clair / sombre (classe `.dark` sur la page) : la préférence du système tant que rien n'est mémorisé,
- * puis le choix fait avec la bascule. Le système n'est pas écouté en direct.
+ * Light / dark theme (`.dark` class on the page): the system preference as long as nothing is remembered,
+ * then the choice made with the toggle. The system is not listened to live.
  */
 @Service()
 export class ThemeService {

@@ -11,14 +11,14 @@ use crate::error::AppError;
 use crate::project::model::PROJECT_ID;
 use crate::user_story;
 
-/// Backlog complet : features > US > tâches > points de validation.
+/// Full backlog: features > USs > tasks > validation points.
 pub async fn list(State(db): State<DatabaseConnection>) -> Result<Json<Vec<FeatureOut>>, AppError> {
     let features = model::for_project(&db, PROJECT_ID).await?;
     Ok(Json(controller::serialize_many(&db, features).await?))
 }
 
-/// Crée la feature et y rattache les US choisies, dans une même transaction.
-/// 400 si une de ces US n'existe pas ou a déjà une feature.
+/// Creates the feature and attaches the chosen USs to it, in a single transaction.
+/// 400 if one of these USs does not exist or already has a feature.
 pub async fn create(
     State(db): State<DatabaseConnection>,
     Json(mut body): Json<NewFeature>,
@@ -39,7 +39,7 @@ pub async fn create(
     Ok((StatusCode::CREATED, Json(out.remove(0))))
 }
 
-/// 404 si la feature n'existe pas.
+/// 404 if the feature does not exist.
 pub async fn update(
     State(db): State<DatabaseConnection>,
     Path(id): Path<i64>,

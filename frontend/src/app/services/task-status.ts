@@ -1,6 +1,6 @@
 import type { TaskStatus } from '@contracts/TaskStatus';
 
-/** Colonnes du tableau de sprint, dans l'ordre. */
+/** Sprint board columns, in order. */
 export const TASK_STATUSES: { value: TaskStatus; label: string }[] = [
   { value: 'todo', label: 'À faire' },
   { value: 'in_progress', label: 'En cours' },

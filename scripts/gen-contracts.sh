@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Régénère contracts/*.ts depuis les types Rust (#[derive(TS)]) du back.
-# À lancer après avoir modifié un controller.rs ou un statut. Rust tourne dans Docker.
+# Regenerates contracts/*.ts from the backend's Rust types (#[derive(TS)]).
+# Run after changing a controller.rs or a status. Rust runs in Docker.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 

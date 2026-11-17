@@ -1,4 +1,4 @@
-// Cadre repris de TailAdmin Angular (MIT, voir THIRD-PARTY-NOTICES.md).
+// Shell taken from TailAdmin Angular (MIT, see THIRD-PARTY-NOTICES.md).
 import { Component, computed, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -15,8 +15,8 @@ import { ProjectApi } from '../../services/project.api';
 import { SidebarService } from '../../services/sidebar';
 
 /**
- * Barre latérale : logo, nom du projet et navigation.
- * Grand écran : fixe, repliable en colonne d'icônes. Mobile : cachée, ouverte par-dessus la page.
+ * Sidebar: logo, project name and navigation.
+ * Large screen: fixed, collapsible into an icon column. Mobile: hidden, opened over the page.
  */
 @Component({
   selector: 'app-sidebar',
@@ -37,7 +37,7 @@ export class AppSidebar {
   private projectApi = inject(ProjectApi);
   protected project = rxResource({ stream: () => this.projectApi.get() });
 
-  /** Ajouter une page = ajouter une ligne. */
+  /** Adding a page = adding a line. */
   protected links = [
     { path: '/backlog', label: 'Backlog', icon: 'matViewListOutline' },
     { path: '/features', label: 'Features', icon: 'matCategoryOutline' },
@@ -45,11 +45,11 @@ export class AppSidebar {
     { path: '/sprint', label: 'Sprint', icon: 'matViewKanbanOutline' },
   ];
 
-  /** Repliée : seulement sur grand écran, et jamais quand elle est ouverte sur mobile. */
+  /** Collapsed: only on large screens, and never when it is open on mobile. */
   protected collapsed = computed(() => this.sidebar.collapsed() && !this.sidebar.mobileOpen());
 
   constructor() {
-    // Sur mobile, changer de page referme la barre.
+    // On mobile, changing page closes the sidebar.
     inject(Router)
       .events.pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe(() => this.sidebar.closeMobile());

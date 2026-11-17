@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# Scénarios API (cahier de recettes). Base vide attendue : lancé par scripts/test.sh sur la stack de test.
+# API scenarios (acceptance test book). Expects an empty database: run by scripts/test.sh on the test stack.
 API=${API:-http://localhost:4201/api}
 BODY=$(mktemp)
 trap 'rm -f "$BODY"' EXIT
 ok=0; ko=0
-check() { # check <id> <description> <attendu> <obtenu>
+check() { # check <id> <description> <expected> <actual>
   if [ "$3" == "$4" ]; then ok=$((ok+1)); echo "OK  $1 $2"; else ko=$((ko+1)); echo "KO  $1 $2 (attendu: $3, obtenu: $4)"; fi
 }
 req() { curl -s -o "$BODY" -w '%{http_code}' -X "$1" "$API$2" -H 'Content-Type: application/json' ${3:+-d "$3"}; }
-# j <expression JS sur d> : évalue sur le dernier corps de réponse
+# j <JS expression on d>: evaluates on the last response body
 j() { node -e 'const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8")); console.log(eval(process.argv[2]))' "$BODY" "$1"; }
 
 check R01 "projet unique" 200 "$(req GET /project)"
@@ -76,7 +76,7 @@ check R12 "déplacer en in_progress" 204 "$(req PATCH /tasks/$T1/status '{"statu
 check R12 "statut invalide refusé" 422 "$(req PATCH /tasks/$T1/status '{"status":"merged"}')"
 check R14 "done refusé si point non coché" 409 "$(req PATCH /tasks/$T1/status '{"status":"done"}')"
 req PATCH /validation-points/$P1 '{"checked":true}' >/dev/null
-# Modification / suppression de tâche (points synchronisés par libellé)
+# Task edit / deletion (points synced by label)
 tpoints() { req GET /user-stories >/dev/null; j "d.flatMap(s => s.tasks).find(t => t.id == $T1).validation_points.map(p => p.label + (p.checked ? '+' : '')).join(',')"; }
 check R05b "modifier une tâche (ajout de p3)" 204 "$(req PUT /tasks/$T1 '{"title":"T1b","description":"d2","validation_points":["p1","p2","p3"]}')"
 check R05b "point coché conservé, p3 ajouté" "p1+,p2,p3" "$(tpoints)"
@@ -95,7 +95,7 @@ check R18 "tâche sans point en in_progress" 204 "$(req PATCH /tasks/$T2/status 
 req POST /user-stories '{"title":"US D","velocity":1,"tasks":[{"title":"td"}]}' >/dev/null; D=$(j d.id)
 req POST /user-stories/$D/validate >/dev/null
 
-# Clôture à trois sorts (spec 007)
+# Closing with three outcomes (spec 007)
 check R17 "clôture : US à la fois close et reportée refusée" 400 "$(req POST /sprints/$S1/close "{\"closed_user_story_ids\":[$B],\"carried_user_story_ids\":[$B]}")"
 check R17 "clôture : US hors du sprint refusée" 400 "$(req POST /sprints/$S1/close "{\"closed_user_story_ids\":[$D]}")"
 check R17 "clôturer S1 : B et C closes, A reportée" 200 "$(req POST /sprints/$S1/close "{\"closed_user_story_ids\":[$B,$C],\"carried_user_story_ids\":[$A]}")"
@@ -108,7 +108,7 @@ check R17 "lancer S2 avec l'US reportée et D" 201 "$(req POST /sprints "{\"name
 check R17 "US de S2" "$A,$D" "$(j 'd.user_stories.map(s => s.id).join(",")')"
 check R18 "statuts conservés après report" "done,in_progress" "$(j 'd.user_stories[0].tasks.map(t => t.status).join(",")')"
 
-# Photo à la clôture : S1 garde l'état de ses tâches, même si l'US reportée avance dans S2
+# Snapshot at closing: S1 keeps the state of its tasks, even if the carried-over US moves on in S2
 check R19b "faire avancer une tâche reportée" 204 "$(req PATCH /tasks/$T2/status '{"status":"in_review"}')"
 req GET /sprints/$S1 >/dev/null
 check R19 "sprint passé : 3 US, statut closed" "3 closed" "$(j 'd.user_stories.length + " " + d.status')"
@@ -118,7 +118,7 @@ check R19b "sprint en cours : statut actuel" in_review "$(j "d.user_stories.find
 req GET /sprints >/dev/null
 check R19 "liste des sprints" 2 "$(j d.length)"
 
-# Statut des US (spec 005) : C terminée, A dans S2 en cours, D validée dans S2, E en Sandbox
+# US status (spec 005): C finished, A in active S2, D validated in S2, E in Sandbox
 req POST /user-stories '{"title":"US E","velocity":1,"tasks":[{"title":"te"}]}' >/dev/null; E=$(j d.id)
 req POST /user-stories '{"title":"US G","velocity":1,"tasks":[{"title":"tg"}]}' >/dev/null; G=$(j d.id)
 req POST /user-stories/$G/validate >/dev/null
@@ -126,7 +126,7 @@ req GET /user-stories >/dev/null
 check R03f "statuts des US" "done in_progress planned pending" "$(j "[$C, $A, $G, $E].map(id => d.find(s => s.id == id).status).join(' ')")"
 check R03g "créer une feature avec une US terminée refusé" 400 "$(req POST /features "{\"title\":\"F4\",\"user_story_ids\":[$C]}")"
 
-# Une US terminée (B) et ses tâches ne se modifient plus
+# A finished US (B) and its tasks can no longer be edited
 check R03e "modifier une US terminée refusé" 409 "$(req PUT /user-stories/$B '{"title":"x","velocity":1}')"
 check R03e "changer la feature d'une US terminée refusé" 409 "$(req PATCH /user-stories/$B/feature '{"feature_id":null}')"
 check R05d "ajouter une tâche à une US terminée refusé" 409 "$(req POST /user-stories/$B/tasks '{"title":"x"}')"
@@ -135,7 +135,7 @@ check R05d "déplacer une tâche d'une US terminée refusé" 409 "$(req PATCH /t
 check R05d "cocher un point d'une US terminée refusé" 409 "$(req PATCH /validation-points/$PB '{"checked":true}')"
 check R05d "supprimer une tâche d'une US terminée refusé" 409 "$(req DELETE /tasks/$TB)"
 
-# Clôture de S2 : A close, D sans case → retournée au backlog
+# Closing S2: A closed, D unchecked → returned to the backlog
 check R16 "clôturer S2 : A close, D sans case" 200 "$(req POST /sprints/$S2/close "{\"closed_user_story_ids\":[$A]}")"
 check R17b "D retournée au backlog" returned "$(j "d.user_stories.find(s => s.id == $D).outcome")"
 req GET /user-stories >/dev/null
