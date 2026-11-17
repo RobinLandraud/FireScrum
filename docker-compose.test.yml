@@ -7,17 +7,17 @@ services:
     tmpfs:
       - /var/lib/postgresql/data
 
-  # Browser tests (Playwright, tests/e2e/Dockerfile), on the test stack network: they reach the front
-  # and the database by service name. Profile: never started by `up`, only by `run`; the arguments
-  # go to Playwright, `--ui` opens the UI mode on http://localhost:9324.
-  e2e:
-    profiles: [e2e]
-    build: ./tests/e2e
+  # API and browser tests (Playwright, tests/Dockerfile), on the test stack network: they reach the
+  # front and the database by service name. Profile: never started by `up`, only by `run`; the
+  # arguments go to Playwright (--back, --front, --ui: see tests/entrypoint.sh).
+  tests:
+    profiles: [tests]
+    build: ./tests
     init: true
     volumes:
-      - ./tests/e2e:/e2e
+      - ./tests:/tests
       # Hides the local node_modules (IDE types): the image's own dependencies are used.
-      - /e2e/node_modules
+      - /tests/node_modules
     environment:
       BASE: http://frontend
       DB_HOST: db

@@ -48,8 +48,8 @@ for suite in "${SUITES[@]}"; do
     api) API="$URL/api" bash tests/api.sh || status=1 ;;
     bruno) (cd bruno && npx -y @usebruno/cli run -r --env test) || status=1 ;;
     e2e)
-      # e2e service of docker-compose.test.yml; the arguments go to Playwright (--ui: UI mode).
-      "${COMPOSE[@]}" run --rm --build --service-ports e2e "${E2E_ARGS[@]}" || status=1
+      # tests service of docker-compose.test.yml; the arguments go to Playwright (--back, --front, --ui).
+      "${COMPOSE[@]}" run --rm --build --service-ports tests "${E2E_ARGS[@]}" || status=1
       ;;
 
     *)

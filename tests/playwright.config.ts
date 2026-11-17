@@ -1,8 +1,8 @@
 import { defineConfig } from '@playwright/test';
 
-// Run by the e2e service of docker-compose.test.yml (scripts/test.sh), against the test stack.
+// Run by the tests service of docker-compose.test.yml, against the test stack.
+// Projects: api (HTTP only, no browser) and e2e (browser); entrypoint.sh maps --back / --front to them.
 export default defineConfig({
-  testMatch: '**/*.spec.ts',
   // One worker: every test empties the shared database first.
   workers: 1,
   retries: 0,
@@ -10,7 +10,10 @@ export default defineConfig({
   outputDir: 'test-results',
   use: {
     baseURL: process.env.BASE,
-    viewport: { width: 1280, height: 800 },
     trace: 'retain-on-failure',
   },
+  projects: [
+    { name: 'api', testDir: 'api' },
+    { name: 'e2e', testDir: 'e2e', use: { viewport: { width: 1280, height: 800 } } },
+  ],
 });
