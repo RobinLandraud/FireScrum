@@ -1,0 +1,8 @@
+#!/bin/sh
+# Refuses the commit if gitleaks finds a secret in the staged changes.
+# gitleaks runs through Docker (image pinned by digest): nothing to install but Docker.
+# Enable once per clone: git config core.hooksPath .github/hooks
+exec docker run --rm -u "$(id -u):$(id -g)" \
+  -v "$(git rev-parse --show-toplevel):/repo" -w /repo \
+  ghcr.io/gitleaks/gitleaks:v8.28.0@sha256:cdbb7c955abce02001a9f6c9f602fb195b7fadc1e812065883f695d1eeaba854 \
+  git --pre-commit --staged --redact --verbose /repo
