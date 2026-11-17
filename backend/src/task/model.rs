@@ -58,7 +58,7 @@ pub async fn create(
     .await
 }
 
-/// `DbErr::RecordNotUpdated` si la tâche n'existe pas.
+/// `DbErr::RecordNotUpdated` if the task does not exist.
 pub async fn set_status(db: &impl ConnectionTrait, id: i64, status: TaskStatus) -> Result<(), DbErr> {
     ActiveModel { id: Set(id), status: Set(status), ..Default::default() }
         .update(db)
@@ -85,7 +85,7 @@ pub async fn update(db: &impl ConnectionTrait, id: i64, title: &str, description
     Ok(())
 }
 
-/// Supprime la tâche et ses points de validation (cascade en base).
+/// Deletes the task and its validation points (database cascade).
 pub async fn delete(db: &impl ConnectionTrait, id: i64) -> Result<(), DbErr> {
     let result = Entity::delete_by_id(id).exec(db).await?;
     if result.rows_affected == 0 {
@@ -94,7 +94,7 @@ pub async fn delete(db: &impl ConnectionTrait, id: i64) -> Result<(), DbErr> {
     Ok(())
 }
 
-/// Crée la tâche et ses points de validation.
+/// Creates the task and its validation points.
 pub async fn create_with_points(
     db: &impl ConnectionTrait,
     user_story_id: i64,

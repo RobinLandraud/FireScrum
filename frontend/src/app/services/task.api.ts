@@ -12,7 +12,7 @@ export class TaskApi {
     return this.http.post<TaskOut>(`/api/user-stories/${userStoryId}/tasks`, body);
   }
 
-  /** Même corps que la création ; les points cochés dont le libellé est conservé restent cochés. */
+  /** Same body as creation; checked points whose label is kept stay checked. */
   update(id: number, body: NewTask) {
     return this.http.put<void>(`/api/tasks/${id}`, body);
   }
@@ -21,7 +21,7 @@ export class TaskApi {
     return this.http.delete<void>(`/api/tasks/${id}`);
   }
 
-  /** 409 si `done` alors qu'un point de validation n'est pas coché. */
+  /** 409 if `done` while a validation point is unchecked. */
   setStatus(id: number, body: StatusUpdate) {
     return this.http.patch<void>(`/api/tasks/${id}/status`, body);
   }

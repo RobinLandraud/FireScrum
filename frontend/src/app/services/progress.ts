@@ -6,13 +6,13 @@ export interface Progress {
   max: number;
 }
 
-/** Tâches en Terminé sur toutes les tâches ; une US terminée est complète. */
+/** Tasks in "Terminé" out of all tasks; a finished US is complete. */
 export function storyProgress(story: UserStoryOut): Progress {
   const max = story.tasks.length;
   return { value: story.done ? max : story.tasks.filter((t) => t.status === 'done').length, max };
 }
 
-/** US terminées sur toutes les US de la feature. */
+/** Finished USs out of all USs of the feature. */
 export function featureProgress(feature: FeatureOut): Progress {
   return { value: feature.user_stories.filter((s) => s.done).length, max: feature.user_stories.length };
 }

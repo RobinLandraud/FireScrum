@@ -25,10 +25,10 @@ Navigateur ──HTTP──> [frontend : Angular] ──API REST──> [backend
 | `backend` | API REST, règles métier (droits PO/Dev, calcul des %, points de validation) | `rust` (build) puis une image légère (exécution) |
 | `db` | Stockage des projets, features, US, tâches, sprints, utilisateurs | `postgres` |
 
-Les trois services sont décrits dans un `docker-compose.yml` à la racine. Le lancement se fait avec :
+Les trois services sont décrits dans `docker-compose.yml` à la racine, complété par un fichier par environnement (voir [Environnements](#environnements)). Le lancement se fait avec :
 
 ```bash
-docker compose up
+just dev
 ```
 
 ## Répartition des responsabilités
@@ -125,11 +125,50 @@ npx ng g @spartan-ng/cli:ui <composant>   # ex. card, dialog, input
 
 ## Lancer le projet
 
+Prérequis : Docker avec Compose, [`just`](https://github.com/casey/just), et Node (pour les types des tests dans l'IDE).
+
 ```bash
-cp .env.example .env   # identifiants de la base, à adapter
-docker compose up --build
+cp .env.template .env   # identifiants de la base et ports, propres à chaque machine
+just dev                # stack de travail
+just down               # l'arrête
 ```
 
+`just --list` affiche toutes les recettes.
+
 - Application : http://localhost:4200
-- L'API est servie sous `/api` via le nginx du front (pas de CORS). Le back et la base ne sont pas exposés sur la machine hôte.
+- L'API est servie sous `/api` via le nginx du front (pas de CORS).
 - Les données PostgreSQL sont stockées dans `data/` (ignoré par git). Pour repartir d'une base vide : arrêter les conteneurs et vider `data/`.
+
+### Environnements
+
+Un fichier Compose par environnement, par-dessus la base `docker-compose.yml`. Les ports viennent du `.env` (`FRONTEND_PORT`, `BACKEND_PORT`, `DB_PORT`) : les trois environnements ont les mêmes variables, chaque machine a ses valeurs.
+
+| Environnement | Commande | Fichiers | Ports publiés |
+|---------------|----------|----------|---------------|
+| Dev | `just dev` | `docker-compose.yml` + `docker-compose.dev.yml` | front `FRONTEND_PORT` ; base et backend sur `127.0.0.1` (`DB_PORT`, `BACKEND_PORT`) |
+| Prod | `just prod` | `docker-compose.yml` | front `FRONTEND_PORT` seulement |
+| Test | `just tests` | `docker-compose.yml` + `docker-compose.test.yml` | front 4201 ; base sur `127.0.0.1:5443` (imposés par `scripts/test.sh`) |
+
+Dev et prod partagent le même projet Compose (`firescrum`) et la même base `data/` : `just prod` remplace la stack de dev.
+
+## Tests
+
+Tout tourne sur la stack de test (base en mémoire, port 4201), lancée puis arrêtée par `scripts/test.sh`. La stack de travail et sa base ne sont jamais touchées.
+
+```bash
+just tests                  # toutes les suites : api, bruno, e2e
+just tests api bruno        # seulement les suites citées
+just e2e                    # tests navigateur seuls
+just e2e --grep R49         # un seul test, par son ID de recette
+just e2e sprint/            # un seul dossier
+KEEP=1 just e2e             # laisse la stack de test lancée à la fin
+```
+
+Tests navigateur (`tests/e2e/`, [Playwright](https://playwright.dev/)) :
+
+- Lancés dans Docker (image Playwright) : pas de navigateur à installer. `npm install` dans `tests/e2e/` ne sert qu'aux types dans l'IDE.
+- Un dossier par entité (`feature/`, `user-story/`, `task/`, `sprint/`, `layout/`), un fichier par sous-catégorie : `logic.spec.ts`, `rules.spec.ts`, `style.spec.ts`.
+- La base est vidée avant chaque test (`TRUNCATE`) : chaque test crée ses données par l'API (fabriques de `helpers.ts`), puis utilise l'UI seulement pour ce qu'il vérifie.
+- Le titre d'un test commence par son ID du [cahier de recettes](cahier-de-recettes.md).
+- Une erreur dans la console du navigateur fait échouer le test (sauf les réponses 400, 404 et 409 attendues).
+- Rapport HTML dans `tests/e2e/report/index.html` (ignoré par git) ; chaque test en échec a sa trace, à ouvrir dans le Trace Viewer : `npx playwright show-trace <trace.zip>` ou https://trace.playwright.dev.

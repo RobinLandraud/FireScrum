@@ -11,13 +11,13 @@ use crate::error::AppError;
 use crate::project::model::PROJECT_ID;
 use crate::task;
 
-/// Toutes les US du projet (avec leurs tâches), avec ou sans feature.
+/// All USs of the project (with their tasks), with or without a feature.
 pub async fn list(State(db): State<DatabaseConnection>) -> Result<Json<Vec<UserStoryOut>>, AppError> {
     let stories = model::for_project(&db, PROJECT_ID).await?;
     Ok(Json(controller::serialize_many(&db, stories).await?))
 }
 
-/// Crée l'US et ses tâches dans une même transaction. 404 si `feature_id` ne correspond à aucune feature.
+/// Creates the US and its tasks in a single transaction. 404 if `feature_id` matches no feature.
 pub async fn create(
     State(db): State<DatabaseConnection>,
     Json(body): Json<NewUserStory>,
@@ -35,7 +35,7 @@ pub async fn create(
     Ok((StatusCode::CREATED, Json(out.remove(0))))
 }
 
-/// 404 si l'US ou la feature n'existe pas, 409 si l'US est terminée.
+/// 404 if the US or the feature does not exist, 409 if the US is finished.
 pub async fn update(
     State(db): State<DatabaseConnection>,
     Path(id): Path<i64>,
@@ -52,7 +52,7 @@ pub async fn validate(State(db): State<DatabaseConnection>, Path(id): Path<i64>)
     Ok(StatusCode::NO_CONTENT)
 }
 
-/// 404 si l'US ou la feature n'existe pas, 409 si l'US est terminée.
+/// 404 if the US or the feature does not exist, 409 if the US is finished.
 pub async fn set_feature(
     State(db): State<DatabaseConnection>,
     Path(id): Path<i64>,

@@ -13,17 +13,17 @@ use crate::task::{
 
 const FIBONACCI: [i32; 7] = [1, 2, 3, 5, 8, 13, 21];
 
-/// Statut d'une US, calculé (non stocké).
+/// Status of a US, computed (not stored).
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize, TS)]
 #[ts(export)]
 #[serde(rename_all = "snake_case")]
 pub enum UserStoryStatus {
-    /// Sandbox : pas encore validée.
+    /// Sandbox: not validated yet.
     #[default]
     Pending,
-    /// Validée, hors du sprint en cours.
+    /// Validated, outside the active sprint.
     Planned,
-    /// Dans le sprint en cours.
+    /// In the active sprint.
     InProgress,
     Done,
 }
@@ -52,7 +52,7 @@ pub struct UserStoryOut {
     pub velocity: i32,
     pub validated: bool,
     pub done: bool,
-    /// Absent des photos des sprints clos avant son ajout.
+    /// Missing from snapshots of sprints closed before it was added.
     #[serde(default)]
     pub status: UserStoryStatus,
     pub tasks: Vec<TaskOut>,
@@ -74,7 +74,7 @@ impl UserStoryOut {
     }
 }
 
-/// US avec leurs tâches (et les points de validation de chaque tâche).
+/// USs with their tasks (and the validation points of each task).
 pub async fn serialize_many(
     db: &impl ConnectionTrait,
     stories: Vec<model::Model>,
@@ -99,7 +99,7 @@ pub struct UserStoryUpdate {
     #[serde(default)]
     pub description: String,
     pub velocity: i32,
-    /// Facultative : `null` pour une US sans feature.
+    /// Optional: `null` for a US without a feature.
     #[serde(default)]
     pub feature_id: Option<i64>,
 }
@@ -118,7 +118,7 @@ impl UserStoryUpdate {
     }
 }
 
-/// Création : les champs de l'US et au moins une tâche, créés ensemble.
+/// Creation: the US fields and at least one task, created together.
 #[derive(Deserialize, TS)]
 #[ts(export)]
 pub struct NewUserStory {
@@ -140,11 +140,11 @@ impl NewUserStory {
 #[derive(Deserialize, TS)]
 #[ts(export)]
 pub struct FeatureUpdate {
-    /// `null` pour retirer l'US de sa feature.
+    /// `null` to remove the US from its feature.
     pub feature_id: Option<i64>,
 }
 
-/// 404 si l'US n'existe pas, 409 si elle est terminée : une US terminée et ses tâches ne se modifient plus.
+/// 404 if the US does not exist, 409 if it is finished: a finished US and its tasks can no longer be edited.
 pub async fn ensure_editable(db: &impl ConnectionTrait, id: i64) -> Result<(), AppError> {
     if model::get(db, id).await?.done {
         return Err(AppError::Conflict("cette US est terminée : elle ne se modifie plus".into()));

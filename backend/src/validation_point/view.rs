@@ -11,7 +11,7 @@ use crate::error::AppError;
 use crate::task::{self, model::TaskStatus};
 use crate::user_story;
 
-/// 404 si le point n'existe pas, 409 si l'US est terminée ou si on décoche un point d'une tâche Terminé.
+/// 404 if the point does not exist, 409 if the US is finished or if a point of a "Terminé" task is unchecked.
 pub async fn update(
     State(db): State<DatabaseConnection>,
     Path(id): Path<i64>,

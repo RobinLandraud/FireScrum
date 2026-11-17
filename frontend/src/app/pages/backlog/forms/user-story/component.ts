@@ -16,16 +16,16 @@ import { UserStoryApi } from '../../../../services/user-story.api';
 import { TaskForm } from '../task/form';
 import { UserStoryForm } from './form';
 
-/** Ligne de la liste des tâches : `key` = id de la tâche (US existante) ou index du brouillon (création). */
+/** Row of the task list: `key` = task id (existing US) or draft index (creation). */
 interface TaskRow {
   key: number;
   title: string;
 }
 
 /**
- * Contenu de la modal d'une US, onglets Details et Tasks.
- * Création si `story` est `null` : les tâches restent en brouillon jusqu'à la création de l'US.
- * Modification sinon : chaque action sur une tâche est enregistrée tout de suite.
+ * Content of a US modal, Details and Tasks tabs.
+ * Creation if `story` is `null`: tasks stay as drafts until the US is created.
+ * Edit otherwise: each action on a task is saved right away.
  */
 @Component({
   selector: 'app-user-story',
@@ -40,14 +40,14 @@ export class UserStoryEditor {
   private taskApi = inject(TaskApi);
   readonly story = input<UserStoryOut | null>(null);
   readonly features = input<FeatureOut[]>([]);
-  /** Détails enregistrés (ou US créée) : le parent ferme la modal. */
+  /** Details saved (or US created): the parent closes the modal. */
   readonly saved = output();
-  /** Une tâche ou le statut a changé : le parent recharge les US, la modal reste ouverte. */
+  /** A task or the status changed: the parent reloads the USs, the modal stays open. */
   readonly changed = output();
 
   protected tab = signal('details');
   protected drafts = signal<NewTask[]>([]);
-  /** Tâche en cours de modification dans le formulaire du bas, `null` en mode ajout. */
+  /** Task being edited in the bottom form, `null` in add mode. */
   protected editingKey = signal<number | null>(null);
 
   protected rows = computed<TaskRow[]>(() => {

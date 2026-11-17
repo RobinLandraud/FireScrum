@@ -12,7 +12,7 @@ pub struct Model {
     pub description: String,
     pub velocity: i32,
     pub validated: bool,
-    /// Passe à true quand le PO la coche comme finie à la clôture d'un sprint.
+    /// Set to true when the PO checks it as finished when closing a sprint.
     pub done: bool,
 }
 
@@ -29,7 +29,7 @@ pub async fn for_features(db: &impl ConnectionTrait, feature_ids: &[i64]) -> Res
         .await
 }
 
-/// Toutes les US du projet, avec ou sans feature.
+/// All USs of the project, with or without a feature.
 pub async fn for_project(db: &impl ConnectionTrait, project_id: i64) -> Result<Vec<Model>, DbErr> {
     Entity::find()
         .filter(Column::ProjectId.eq(project_id))
@@ -66,7 +66,7 @@ pub async fn create(
     .await
 }
 
-/// Remplace les champs modifiables de l'US. `DbErr::RecordNotUpdated` si l'US n'existe pas.
+/// Replaces the editable fields of the US. `DbErr::RecordNotUpdated` if the US does not exist.
 pub async fn update(
     db: &impl ConnectionTrait,
     id: i64,
@@ -88,7 +88,7 @@ pub async fn update(
     Ok(())
 }
 
-/// `DbErr::RecordNotUpdated` si l'US n'existe pas.
+/// `DbErr::RecordNotUpdated` if the US does not exist.
 pub async fn validate(db: &impl ConnectionTrait, id: i64) -> Result<(), DbErr> {
     ActiveModel { id: Set(id), validated: Set(true), ..Default::default() }
         .update(db)
@@ -96,7 +96,7 @@ pub async fn validate(db: &impl ConnectionTrait, id: i64) -> Result<(), DbErr> {
     Ok(())
 }
 
-/// Associe l'US à une feature, ou la retire de sa feature (`None`). `DbErr::RecordNotUpdated` si l'US n'existe pas.
+/// Links the US to a feature, or removes it from its feature (`None`). `DbErr::RecordNotUpdated` if the US does not exist.
 pub async fn set_feature(db: &impl ConnectionTrait, id: i64, feature_id: Option<i64>) -> Result<(), DbErr> {
     ActiveModel { id: Set(id), feature_id: Set(feature_id), ..Default::default() }
         .update(db)
@@ -104,7 +104,7 @@ pub async fn set_feature(db: &impl ConnectionTrait, id: i64, feature_id: Option<
     Ok(())
 }
 
-/// Nombre d'US parmi `ids` qui peuvent entrer dans un sprint (validées et non terminées).
+/// Number of USs among `ids` that can enter a sprint (validated and unfinished).
 pub async fn count_launchable(db: &impl ConnectionTrait, ids: &[i64]) -> Result<u64, DbErr> {
     Entity::find()
         .filter(Column::Id.is_in(ids.iter().copied()))
@@ -123,7 +123,7 @@ pub async fn mark_done(db: &impl ConnectionTrait, ids: &[i64]) -> Result<(), DbE
     Ok(())
 }
 
-/// Rattache à la feature celles des US `ids` qui n'ont pas encore de feature. Renvoie le nombre d'US rattachées.
+/// Attaches to the feature those of the `ids` USs that have no feature yet. Returns the number of USs attached.
 pub async fn assign_unassigned(db: &impl ConnectionTrait, ids: &[i64], feature_id: i64) -> Result<u64, DbErr> {
     let result = Entity::update_many()
         .col_expr(Column::FeatureId, Expr::value(feature_id))

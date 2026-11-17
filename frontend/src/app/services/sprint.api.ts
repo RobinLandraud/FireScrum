@@ -9,12 +9,12 @@ import type { SprintOut } from '@contracts/SprintOut';
 export class SprintApi {
   private http = inject(HttpClient);
 
-  /** Du plus récent au plus ancien. */
+  /** Newest to oldest. */
   list() {
     return this.http.get<SprintOut[]>('/api/sprints');
   }
 
-  /** 404 si aucun sprint en cours. */
+  /** 404 if there is no active sprint. */
   current() {
     return this.http.get<SprintDetailOut>('/api/sprints/current');
   }

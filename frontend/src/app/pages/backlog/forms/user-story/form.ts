@@ -13,10 +13,10 @@ import { toastApiError } from '../../../../services/error';
 import { UserStoryApi } from '../../../../services/user-story.api';
 
 const FIBONACCI = [1, 2, 3, 5, 8, 13, 21];
-/** Les listes déroulantes manipulent des chaînes ; converties à l'envoi. `feature: ''` = sans feature. */
+/** Dropdowns handle strings; converted on submit. `feature: ''` = no feature. */
 const EMPTY = { title: '', description: '', velocity: '1', feature: '' };
 
-/** Détails d'une US : création (avec les tâches en brouillon `tasks`), ou modification si `story` est fourni. */
+/** US details: creation (with the draft tasks `tasks`), or edit if `story` is given. */
 @Component({
   selector: 'app-user-story-form',
   host: { class: 'block' },
@@ -28,12 +28,12 @@ export class UserStoryForm {
   private api = inject(UserStoryApi);
   readonly features = input<FeatureOut[]>([]);
   readonly story = input<UserStoryOut | null>(null);
-  /** Tâches à créer avec l'US (création uniquement) : au moins une est requise. */
+  /** Tasks to create with the US (creation only): at least one is required. */
   readonly tasks = input<NewTask[]>([]);
   readonly saved = output();
 
   protected fibonacci = FIBONACCI;
-  /** Identifiants des champs, uniques par US (pour les `<label for>`). */
+  /** Field ids, unique per US (for the `<label for>`). */
   protected idPrefix = computed(() => `us-${this.story()?.id ?? 'new'}`);
 
   private model = linkedSignal(() => {

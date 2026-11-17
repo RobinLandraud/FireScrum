@@ -87,6 +87,17 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 | R54 | Tâche du sprint | Ouvrir une tâche du sprint en cours, puis d'un sprint clos ; cliquer sur la carte « + » | Onglets « Points de validation (n) » (ouvert) et « Details » : formulaire sur fond blanc pour le sprint en cours, description dans la zone grise pour le sprint clos ; à la création, pas d'onglets, zone « Pas encore de points de validation » et formulaire en dessous |  | À tester |
 | R55 | Mobile | Sur téléphone, ouvrir la modal d'une US | Elle tient dans la largeur de l'écran ; si le contenu dépasse, la modal défile |  | À tester |
 
+## Outillage
+
+| ID | Fonctionnalité | Scénario | Résultat attendu | Résultat obtenu | Statut |
+|----|----------------|----------|------------------|-----------------|--------|
+| R56 | Tests | `just tests` | Toutes les suites (api, bruno, e2e) passent ; la suite e2e contient toutes les recettes de l'ancien script |  | À tester |
+| R57 | Tests isolés | `just e2e sprint/` | Seuls les tests de sprint tournent, et passent sans les autres fichiers |  | À tester |
+| R58 | Filtre par ID | `just e2e --grep R49` | Seul R49 tourne |  | À tester |
+| R59 | Trace | Faire échouer un test exprès | Le rapport HTML (`tests/e2e/report/`) montre le test en échec avec sa trace (étapes, captures, DOM) |  | À tester |
+| R60 | Isolation | Lancer `just tests` avec la stack de travail lancée et des données dedans | La stack de travail tourne toujours, sa base est inchangée |  | À tester |
+| R61 | Environnements | `just dev`, puis `just prod` | Dev : l'app répond sur `FRONTEND_PORT`, la base et le backend sur `127.0.0.1` (`DB_PORT`, `BACKEND_PORT`) ; prod : seule l'app est publiée |  | À tester |
+
 ---
 
 # Lot 2 — Pourcentages et dates

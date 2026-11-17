@@ -22,7 +22,7 @@ export class FeaturesPage {
   protected progress = featureProgress;
   protected features = rxResource({ stream: () => this.featureApi.list() });
   private stories = rxResource({ stream: () => this.storyApi.list() });
-  /** US qu'on peut ajouter à une feature : celles qui n'en ont pas. */
+  /** USs that can be added to a feature: those without one. */
   protected unassigned = computed(() => (this.stories.value() ?? []).filter((s) => s.feature_id === null && !s.done));
 
   protected reload() {

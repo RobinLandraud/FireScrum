@@ -25,7 +25,7 @@ pub async fn get(State(db): State<DatabaseConnection>, Path(id): Path<i64>) -> R
     Ok(Json(controller::detail(&db, id).await?))
 }
 
-/// Lance un sprint avec les US choisies (les US reportées sont seulement pré-cochées par le front).
+/// Launches a sprint with the chosen USs (carried-over USs are only pre-checked by the front).
 pub async fn launch(
     State(db): State<DatabaseConnection>,
     Json(mut body): Json<NewSprint>,
@@ -38,8 +38,8 @@ pub async fn launch(
     Ok((StatusCode::CREATED, Json(controller::detail(&db, sprint.id).await?)))
 }
 
-/// Clôture : chaque US reçoit son sort (close, reportée, retournée au backlog), les US closes sont terminées,
-/// puis la photo de chaque US et de ses tâches est enregistrée.
+/// Closing: each US gets its outcome (closed, carried over, returned to the backlog), closed USs are finished,
+/// then the snapshot of each US and its tasks is saved.
 pub async fn close(
     State(db): State<DatabaseConnection>,
     Path(id): Path<i64>,

@@ -9,12 +9,12 @@ import type { UserStoryUpdate } from '@contracts/UserStoryUpdate';
 export class UserStoryApi {
   private http = inject(HttpClient);
 
-  /** Toutes les US du projet, avec ou sans feature. */
+  /** All USs of the project, with or without a feature. */
   list() {
     return this.http.get<UserStoryOut[]>('/api/user-stories');
   }
 
-  /** L'US et au moins une tâche, créées ensemble. */
+  /** The US and at least one task, created together. */
   create(body: NewUserStory) {
     return this.http.post<UserStoryOut>('/api/user-stories', body);
   }
@@ -27,7 +27,7 @@ export class UserStoryApi {
     return this.http.post<void>(`/api/user-stories/${id}/validate`, null);
   }
 
-  /** `feature_id: null` retire l'US de sa feature. */
+  /** `feature_id: null` removes the US from its feature. */
   setFeature(id: number, body: FeatureUpdate) {
     return this.http.patch<void>(`/api/user-stories/${id}/feature`, body);
   }

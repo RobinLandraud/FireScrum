@@ -11,7 +11,7 @@ import { firstValueFrom } from 'rxjs';
 import { toastApiError } from '../../../../services/error';
 import { SprintApi } from '../../../../services/sprint.api';
 
-/** Modal de lancement : un nom et les US acceptées à embarquer (les US reportées sont déjà cochées). */
+/** Launch modal: a name and the accepted USs to take in (carried-over USs are already checked). */
 @Component({
   selector: 'app-launch-sprint-form',
   host: { class: 'flex flex-1 flex-col gap-4' },
@@ -21,12 +21,12 @@ import { SprintApi } from '../../../../services/sprint.api';
 })
 export class LaunchSprintForm {
   private api = inject(SprintApi);
-  /** US acceptées et non terminées. */
+  /** Accepted, unfinished USs. */
   readonly stories = input<UserStoryOut[]>([]);
-  /** US reportées à la clôture du sprint précédent : pré-cochées. */
+  /** USs carried over when the previous sprint was closed: pre-checked. */
   readonly carriedIds = input<number[]>([]);
   readonly featureTitle = input<(story: UserStoryOut) => string | null>(() => null);
-  /** Id du sprint lancé : le parent ferme la modal et le sélectionne. */
+  /** Id of the launched sprint: the parent closes the modal and selects it. */
   readonly launched = output<number>();
 
   private model = signal({ name: '' });

@@ -24,7 +24,7 @@ impl TaskOut {
     }
 }
 
-/// Tâches (avec leurs points de validation) des US données, regroupées par US.
+/// Tasks (with their validation points) of the given USs, grouped by US.
 pub async fn by_user_story(
     db: &impl ConnectionTrait,
     user_story_ids: &[i64],
@@ -71,7 +71,7 @@ pub struct StatusUpdate {
 }
 
 impl StatusUpdate {
-    /// Une tâche ne peut passer en `done` que si tous ses points de validation sont cochés.
+    /// A task can move to `done` only if all its validation points are checked.
     pub async fn validate(&self, db: &impl ConnectionTrait, task_id: i64) -> Result<(), AppError> {
         if self.status == TaskStatus::Done && validation_point::model::count_unchecked(db, task_id).await? > 0 {
             return Err(AppError::Conflict("tous les points de validation doivent être cochés".into()));

@@ -23,7 +23,7 @@ impl FeatureOut {
     }
 }
 
-/// Features avec leurs US (et les tâches de chaque US).
+/// Features with their USs (and the tasks of each US).
 pub async fn serialize_many(
     db: &DatabaseConnection,
     features: Vec<model::Model>,
@@ -47,7 +47,7 @@ pub async fn serialize_many(
         .collect())
 }
 
-/// Champs modifiables d'une feature.
+/// Editable fields of a feature.
 #[derive(Deserialize, TS)]
 #[ts(export)]
 pub struct FeatureDetails {
@@ -65,7 +65,7 @@ impl FeatureDetails {
     }
 }
 
-/// Création : les champs de la feature et les US (sans feature) à y rattacher.
+/// Creation: the feature's fields and the USs (without a feature) to attach to it.
 #[derive(Deserialize, TS)]
 #[ts(export)]
 pub struct NewFeature {

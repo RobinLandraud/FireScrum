@@ -1,4 +1,4 @@
-/** `localStorage` peut être bloqué (navigation privée, données de site refusées) : on ignore alors l'erreur. */
+/** `localStorage` can be blocked (private browsing, site data refused): the error is then ignored. */
 export function readStorage(key: string): string | null {
   try {
     return localStorage.getItem(key);
@@ -11,6 +11,6 @@ export function writeStorage(key: string, value: string) {
   try {
     localStorage.setItem(key, value);
   } catch {
-    // Préférence non mémorisée : elle reste valable jusqu'au rechargement.
+    // Preference not remembered: it stays valid until reload.
   }
 }
