@@ -3,7 +3,7 @@ import pg from 'pg';
 
 export { expect, type Page };
 
-type Api = <T = any>(method: string, path: string, data?: unknown) => Promise<T>;
+export type Api = <T = any>(method: string, path: string, data?: unknown) => Promise<T>;
 
 /** Every spec imports `test` from here: empty database before each test, console watched. */
 export const test = base.extend<{ resetDb: void; errors: string[]; api: Api }, { db: pg.Client }>({

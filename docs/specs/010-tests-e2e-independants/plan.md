@@ -93,7 +93,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T3 — Fabriques et `user-story/`** : on ajoute les fabriques à `helpers.ts`, puis `user-story/logic.spec.ts` (backlog vide, R03 ×2, R03c ×3, R07, R46) et `user-story/rules.spec.ts` (R03d, R03 titre blanc).
   → vérif : `just e2e user-story/` est vert, deux fois de suite.
   → à regarder : les données de départ de chaque test, qui doivent être lisibles d'un coup d'œil.
-- [ ] **T4 — `feature/`** : `logic.spec.ts` (R02, R02c, R03b ×4, R03f, R47) et `rules.spec.ts` (R03g).
+- [x] **T4 — `feature/`** : `logic.spec.ts` (R02, R02c, R03b ×4, R03f, R47) et `rules.spec.ts` (R03g).
   → vérif : `just e2e feature/` est vert.
   → à regarder : R03f, dont les données de départ couvrent les 4 statuts d'US.
 - [ ] **T5 — `task/`** : `logic.spec.ts` (R05, R05b ×2, R05c, R12, R12b, R12c, R54) et `rules.spec.ts` (R14, R15, R15b).
