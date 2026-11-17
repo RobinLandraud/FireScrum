@@ -25,9 +25,7 @@
     "deny": [
       "Read(./.env)",
       "Read(./data/**)",
-      "Edit(./justfile)",
       "Edit(./**/package.json)",
-      "Edit(./scripts/**)",
       "Edit(./.claude/settings.json)",
       "Edit(./.claude/settings.local.json)"
     ]
