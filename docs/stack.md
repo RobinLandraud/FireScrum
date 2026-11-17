@@ -65,11 +65,7 @@ Un dossier par entité dans `backend/src/` (`project`, `feature`, `user_story`, 
 
 Le schéma de la base est dans `backend/migrations/`, appliqué automatiquement au démarrage du back. Les routes sont décrites dans [api.md](api.md).
 
-Pour tester l'API : ouvrir le dossier `bruno/` dans [Bruno](https://www.usebruno.com/) (environnement `local`), ou lancer toute la collection en ligne de commande :
-
-```bash
-cd bruno && npx @usebruno/cli run -r --env local
-```
+Pour appeler l'API à la main : ouvrir le dossier `bruno/` dans [Bruno](https://www.usebruno.com/), environnement `local` (stack de travail) ou `test` (stack de test lancée avec `KEEP=1 just tests`). La collection documente chaque route ; ses assertions s'affichent quand on envoie une requête, mais elle ne fait pas partie des tests (voir [Tests](#tests)).
 
 ## Architecture du front
 
@@ -141,35 +137,42 @@ just down               # l'arrête
 
 ### Environnements
 
-Un fichier Compose par environnement, par-dessus la base `docker-compose.yml`. Les ports viennent du `.env` (`FRONTEND_PORT`, `BACKEND_PORT`, `DB_PORT`) : les trois environnements ont les mêmes variables, chaque machine a ses valeurs.
+Un fichier Compose par environnement, par-dessus la base `docker-compose.yml`. Les ports viennent du `.env` (`FRONTEND_PORT`, `BACKEND_PORT`, `DB_PORT`, et `TEST_FRONTEND_PORT` pour la stack de test) : les trois environnements ont les mêmes variables, chaque machine a ses valeurs.
 
 | Environnement | Commande | Fichiers | Ports publiés |
 |---------------|----------|----------|---------------|
 | Dev | `just dev` | `docker-compose.yml` + `docker-compose.dev.yml` | front `FRONTEND_PORT` ; base et backend sur `127.0.0.1` (`DB_PORT`, `BACKEND_PORT`) |
 | Prod | `just prod` | `docker-compose.yml` | front `FRONTEND_PORT` seulement |
-| Test | `just tests` | `docker-compose.yml` + `docker-compose.test.yml` | front 4201 (imposé par `scripts/test.sh`) ; base non publiée |
+| Test | `just tests` | `docker-compose.yml` + `docker-compose.test.yml` | front `TEST_FRONTEND_PORT` (4201) ; base non publiée ; mode UI sur `127.0.0.1:9324` |
 
 Dev et prod partagent le même projet Compose (`firescrum`) et la même base `data/` : `just prod` remplace la stack de dev.
 
 ## Tests
 
-Tout tourne sur la stack de test (base en mémoire, port 4201), lancée puis arrêtée par `scripts/test.sh`. La stack de travail et sa base ne sont jamais touchées.
+Tests de l'API et tests navigateur, avec [Playwright](https://playwright.dev/), sur la stack de test (base en mémoire, port 4201). `just tests` la construit, la lance, attend qu'elle réponde, joue les tests puis l'arrête, même en cas d'échec. La stack de travail et sa base ne sont jamais touchées.
 
 ```bash
-just tests                  # toutes les suites : api, bruno, e2e
-just tests api bruno        # seulement les suites citées
-just e2e                    # tests navigateur seuls
-just e2e --grep R49         # un seul test, par son ID de recette
-just e2e sprint/            # un seul dossier
-just e2e --ui               # mode UI de Playwright : http://localhost:9324, jusqu'à Ctrl+C
-KEEP=1 just e2e             # laisse la stack de test lancée à la fin
+just tests                        # tout : API et navigateur
+just tests --back                 # tests de l'API seuls (sans navigateur, quelques secondes)
+just tests --front                # tests navigateur seuls
+just tests --grep R49             # un test par son ID de recette (combinable avec --back / --front)
+just tests --front e2e/sprint/    # un seul dossier
+just tests --ui                   # mode UI de Playwright : http://localhost:9324, jusqu'à Ctrl+C
+KEEP=1 just tests                 # laisse la stack de test lancée à la fin
 ```
 
-Tests navigateur (`tests/e2e/`, [Playwright](https://playwright.dev/)) :
+```
+tests/
+├── playwright.config.ts   projets api (testDir api/) et e2e (testDir e2e/)
+├── fixtures.ts            partagé : base vidée avant chaque test, api() / call(), fabriques (createStory, startSprint…)
+├── Dockerfile             lanceur : image Playwright, dépendances installées au build
+├── entrypoint.sh          traduit --back / --front / --ui, puis lance Playwright
+├── api/<entité>/          logic.spec.ts, rules.spec.ts : requêtes HTTP, aucun navigateur
+└── e2e/<entité>/          logic.spec.ts, rules.spec.ts, style.spec.ts ; e2e/helpers.ts : localisateurs, surveillance de la console
+```
 
-- Lancés par le service `e2e` de `docker-compose.test.yml`, construit depuis `tests/e2e/Dockerfile` (image Playwright, dépendances installées au build) : pas de navigateur à installer. Son `entrypoint.sh` passe les arguments à Playwright et traduit `--ui` en mode UI. Le service est sur le réseau de la stack de test et joint le front et la base par leur nom (`frontend`, `db`). `npm install` dans `tests/e2e/` ne sert qu'aux types dans l'IDE.
-- Un dossier par entité (`feature/`, `user-story/`, `task/`, `sprint/`, `layout/`), un fichier par sous-catégorie : `logic.spec.ts`, `rules.spec.ts`, `style.spec.ts`.
-- La base est vidée avant chaque test (`TRUNCATE`) : chaque test crée ses données par l'API (fabriques de `helpers.ts`), puis utilise l'UI seulement pour ce qu'il vérifie.
-- Le titre d'un test commence par son ID du [cahier de recettes](cahier-de-recettes.md).
-- Une erreur dans la console du navigateur fait échouer le test (sauf les réponses 400, 404 et 409 attendues).
-- Rapport HTML dans `tests/e2e/report/index.html` (ignoré par git) ; chaque test en échec a sa trace, à ouvrir dans le Trace Viewer : `npx playwright show-trace <trace.zip>` ou https://trace.playwright.dev.
+- Lancés par le service `tests` de `docker-compose.test.yml` : pas de navigateur à installer. Le service est sur le réseau de la stack de test, joint le front et la base par leur nom (`frontend`, `db`), et attend que le front soit *healthy* (`/api/health`). `npm install` dans `tests/` ne sert qu'aux types dans l'IDE.
+- La base est vidée avant chaque test (`TRUNCATE`) : chaque test crée ses données par l'API (fabriques de `fixtures.ts`), puis vérifie une réponse (`call`) ou un écran.
+- Le titre d'un test commence par son ID du [cahier de recettes](cahier-de-recettes.md) ; dans un test API, chaque `expect` porte le libellé de la vérification.
+- Tests navigateur : une erreur dans la console fait échouer le test (sauf les réponses 400, 404 et 409 attendues).
+- Rapport HTML dans `tests/report/index.html` (ignoré par git) ; chaque test en échec a sa trace (étapes, captures, DOM, et onglet *Network* pour les requêtes), à ouvrir dans le Trace Viewer : `npx playwright show-trace <trace.zip>` ou https://trace.playwright.dev.

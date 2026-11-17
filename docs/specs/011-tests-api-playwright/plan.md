@@ -108,6 +108,6 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
   - la stack de travail est intacte (R60).
 
   → à regarder : la recette `tests` du `justfile`.
-- [ ] **T8 — Docs** : `docs/stack.md` (section Tests, commandes `just tests`, Bruno en usage manuel), `README.md`, cahier de recettes (R56 à R58 modifiés, R62 et R63 ajoutés), ligne 011 dans `docs/specs/README.md`.
+- [x] **T8 — Docs** : `docs/stack.md` (section Tests, commandes `just tests`, Bruno en usage manuel), `README.md`, cahier de recettes (R56 à R58 modifiés, R62 et R63 ajoutés), ligne 011 dans `docs/specs/README.md`.
   → vérif : chaque commande citée fonctionne.
   → à regarder : la section Tests de `docs/stack.md`.
