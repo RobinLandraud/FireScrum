@@ -100,3 +100,27 @@ export const card = (page: Page, title: string) => page.getByRole('button', { na
 export const nav = (page: Page, name: string) => page.getByRole('navigation').getByRole('link', { name }).click();
 export const progressBar = (page: Page, title: string) =>
   page.getByRole('progressbar', { name: `Avancement de « ${title} »` });
+
+// ---------- Sprint board ----------
+
+/** The row of a user story on the Sprint page. */
+export const row = (page: Page, us: string) => page.getByRole('region', { name: us });
+export const column = (page: Page, us: string, label: string) => row(page, us).getByLabel(label, { exact: true });
+export const taskCard = (page: Page, us: string, title: string) =>
+  row(page, us).getByRole('button', { name: new RegExp(`^${title}`) });
+export const addTaskButton = (page: Page, us: string) =>
+  row(page, us).getByRole('button', { name: `Ajouter une tâche à « ${us} »` });
+
+export const expectInColumn = (page: Page, us: string, title: string, label: string) =>
+  expect(column(page, us, label).getByRole('button', { name: new RegExp(`^${title}`) })).toBeVisible();
+
+/** Manual drag and drop: the CDK expects progressive mouse moves. */
+export async function drag(page: Page, us: string, title: string, to: string) {
+  const from = (await taskCard(page, us, title).boundingBox())!;
+  const target = (await column(page, us, to).boundingBox())!;
+  await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(from.x + from.width / 2 + 10, from.y + from.height / 2, { steps: 5 });
+  await page.mouse.move(target.x + target.width / 2, target.y + target.height / 2, { steps: 15 });
+  await page.mouse.up();
+}

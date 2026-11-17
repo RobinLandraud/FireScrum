@@ -96,7 +96,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T4 — `feature/`** : `logic.spec.ts` (R02, R02c, R03b ×4, R03f, R47) et `rules.spec.ts` (R03g).
   → vérif : `just e2e feature/` est vert.
   → à regarder : R03f, dont les données de départ couvrent les 4 statuts d'US.
-- [ ] **T5 — `task/`** : `logic.spec.ts` (R05, R05b ×2, R05c, R12, R12b, R12c, R54) et `rules.spec.ts` (R14, R15, R15b).
+- [x] **T5 — `task/`** : `logic.spec.ts` (R05, R05b ×2, R05c, R12, R12b, R12c, R54) et `rules.spec.ts` (R14, R15, R15b).
   → vérif : `just e2e task/` est vert.
   → à regarder : `drag()` et les tests de glisser-déposer.
 - [ ] **T6 — `sprint/`** : `logic.spec.ts` (R08, R09, R10, R11, R16, R16b, R17 ×2, R17b, R18, R19, R48) et `rules.spec.ts` (lancement bloqué sans US).
