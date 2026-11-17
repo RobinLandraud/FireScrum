@@ -1,4 +1,5 @@
 {
+  "enabledMcpjsonServers": ["github", "playwright", "angular-cli", "spartan-ui", "context7"],
   "permissions": {
     "allow": [
       "Bash(ls:*)",
@@ -8,7 +9,6 @@
     "deny": [
       "Read(./.env)",
       "Edit(./.env)",
-      "Write(./.env)",
       "Bash(cat .env*)"
     ]
   }
