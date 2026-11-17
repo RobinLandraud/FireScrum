@@ -48,12 +48,10 @@ for suite in "${SUITES[@]}"; do
     api) API="$URL/api" bash tests/api.sh || status=1 ;;
     bruno) (cd bruno && npx -y @usebruno/cli run -r --env test) || status=1 ;;
     e2e)
-      # Services e2e / e2e-ui of docker-compose.test.yml; --ui picks the UI mode.
-      service=e2e args=()
-      for a in "${E2E_ARGS[@]}"; do [ "$a" = --ui ] && service=e2e-ui || args+=("$a"); done
-      [ $service = e2e ] || echo "Mode UI : http://localhost:9324 (Ctrl+C pour arrêter)"
-      "${COMPOSE[@]}" run --rm --service-ports $service "${args[@]}" || status=1
+      # e2e service of docker-compose.test.yml; the arguments go to Playwright (--ui: UI mode).
+      "${COMPOSE[@]}" run --rm --build --service-ports e2e "${E2E_ARGS[@]}" || status=1
       ;;
+
     *)
       echo "Suite inconnue : $suite (api, bruno, e2e)" >&2
       status=1

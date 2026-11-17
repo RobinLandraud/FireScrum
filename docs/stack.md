@@ -167,7 +167,7 @@ KEEP=1 just e2e             # laisse la stack de test lancée à la fin
 
 Tests navigateur (`tests/e2e/`, [Playwright](https://playwright.dev/)) :
 
-- Lancés par le service `e2e` (ou `e2e-ui`) de `docker-compose.test.yml`, image Playwright : pas de navigateur à installer. Le service est sur le réseau de la stack de test et joint le front et la base par leur nom (`frontend`, `db`). `npm install` dans `tests/e2e/` ne sert qu'aux types dans l'IDE.
+- Lancés par le service `e2e` de `docker-compose.test.yml`, construit depuis `tests/e2e/Dockerfile` (image Playwright, dépendances installées au build) : pas de navigateur à installer. Son `entrypoint.sh` passe les arguments à Playwright et traduit `--ui` en mode UI. Le service est sur le réseau de la stack de test et joint le front et la base par leur nom (`frontend`, `db`). `npm install` dans `tests/e2e/` ne sert qu'aux types dans l'IDE.
 - Un dossier par entité (`feature/`, `user-story/`, `task/`, `sprint/`, `layout/`), un fichier par sous-catégorie : `logic.spec.ts`, `rules.spec.ts`, `style.spec.ts`.
 - La base est vidée avant chaque test (`TRUNCATE`) : chaque test crée ses données par l'API (fabriques de `helpers.ts`), puis utilise l'UI seulement pour ce qu'il vérifie.
 - Le titre d'un test commence par son ID du [cahier de recettes](cahier-de-recettes.md).

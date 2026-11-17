@@ -20,6 +20,6 @@ down:
 tests *suites:
     scripts/test.sh "$@"
 
-# e2e suite only, options passed to Playwright: just e2e --grep R49
+# e2e suite only, options passed to Playwright: just e2e --grep R49, just e2e --ui
 e2e *args:
     scripts/test.sh e2e -- "$@"

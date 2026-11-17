@@ -64,7 +64,7 @@ Les ports viennent du `.env` de chaque machine (modèle `.env.template`, en bloc
 |---------|------|---------------|
 | `docker-compose.yml` | Base commune, et configuration de prod | front `FRONTEND_PORT` |
 | `docker-compose.dev.yml` | Stack de travail, base `./data` | en plus : db `127.0.0.1:DB_PORT`, backend `127.0.0.1:BACKEND_PORT` |
-| `docker-compose.test.yml` | Stack de test, base en mémoire (tmpfs), services `e2e` / `e2e-ui` (lanceur Playwright) | `test.sh` impose le front sur 4201 ; base non publiée ; mode UI sur `127.0.0.1:9324` |
+| `docker-compose.test.yml` | Stack de test, base en mémoire (tmpfs), service `e2e` (lanceur Playwright, `tests/e2e/Dockerfile`) | `test.sh` impose le front sur 4201 ; base non publiée ; mode UI sur `127.0.0.1:9324` |
 
 Le `justfile` à la racine contient :
 
@@ -123,4 +123,4 @@ Nouvelle section « Outillage » dans le [cahier de recettes](../../cahier-de-re
 - **Ports en variables du `.env`** (`FRONTEND_PORT`, `BACKEND_PORT`, `DB_PORT`), mêmes noms dans tous les environnements : 5432 et 5433 étaient déjà pris sur le poste de dev, et chaque machine a ses contraintes. La stack de test impose son port de front depuis `test.sh` (prioritaire sur le `.env`), car elle tourne à côté de la stack de dev.
 - **Pas de `docker-compose.prod.yml`** : le front est publié dans les trois environnements, donc dans la base ; la prod n'a rien à surcharger.
 - **Base et backend publiés sur `127.0.0.1` seulement** : sans préfixe, Docker les ouvrirait au réseau local en passant par-dessus le pare-feu, avec des identifiants faibles.
-- **Lanceur Playwright déclaré comme service Compose** (`e2e`, et `e2e-ui` pour le mode UI, derrière un profil) plutôt qu'un `docker run` dans `test.sh` : il est sur le réseau de la stack de test et joint `frontend` et `db` par leur nom, la base de test n'est donc plus publiée (sous Docker Desktop, un conteneur en `--network host` reste dans la VM, et un port publié peut tomber sur une autre base de la machine). Son `node_modules` est dans un volume anonyme : le `node_modules` local ne sert qu'aux types de l'IDE.
+- **Lanceur Playwright déclaré comme service Compose** (`e2e`, derrière un profil, image `tests/e2e/Dockerfile` avec les dépendances installées au build) plutôt qu'un `docker run` dans `test.sh` : il est sur le réseau de la stack de test et joint `frontend` et `db` par leur nom, la base de test n'est donc plus publiée (sous Docker Desktop, un conteneur en `--network host` reste dans la VM, et un port publié peut tomber sur une autre base de la machine). Le `node_modules` local, qui ne sert qu'aux types de l'IDE, est masqué par un volume anonyme. Son `entrypoint.sh` traduit `--ui` en mode UI : le `justfile` garde une seule recette `e2e`, et `test.sh` passe les arguments sans les lire.
