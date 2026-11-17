@@ -58,8 +58,45 @@ export const test = base.extend<{ resetDb: void; errors: string[]; api: Api }, {
   },
 });
 
+// ---------- Seed factories (arrange through the API) ----------
+
+type TaskSeed = string | { title: string; description?: string; validation_points?: string[] };
+
+export const createFeature = (api: Api, title: string, { description = '', storyIds = [] as number[] } = {}) =>
+  api('POST', '/features', { title, description, user_story_ids: storyIds });
+
+/** A user story with its tasks; `accepted` validates it (Accepted tab). */
+export async function createStory(
+  api: Api,
+  title: string,
+  { velocity = 1, featureId = null as number | null, tasks = ['t'] as TaskSeed[], accepted = false } = {},
+) {
+  const story = await api('POST', '/user-stories', {
+    title,
+    description: '',
+    velocity,
+    feature_id: featureId,
+    tasks: tasks.map((t) => (typeof t === 'string' ? { title: t } : t)).map((t) => ({ description: '', validation_points: [], ...t })),
+  });
+  if (accepted) await api('POST', `/user-stories/${story.id}/validate`);
+  return story;
+}
+
+export const startSprint = (api: Api, name: string, storyIds: number[]) =>
+  api('POST', '/sprints', { name, user_story_ids: storyIds });
+
+export const closeSprint = (api: Api, id: number, { closed = [] as number[], carried = [] as number[] } = {}) =>
+  api('POST', `/sprints/${id}/close`, { closed_user_story_ids: closed, carried_user_story_ids: carried });
+
+export const setTaskStatus = (api: Api, id: number, status: 'todo' | 'in_progress' | 'in_review' | 'done') =>
+  api('PATCH', `/tasks/${id}/status`, { status });
+
+export const checkPoint = (api: Api, id: number) => api('PATCH', `/validation-points/${id}`, { checked: true });
+
 // ---------- Locators ----------
 
 export const dialog = (page: Page) => page.getByRole('dialog');
 export const card = (page: Page, title: string) => page.getByRole('button', { name: new RegExp(`^${title}`) });
 export const nav = (page: Page, name: string) => page.getByRole('navigation').getByRole('link', { name }).click();
+export const progressBar = (page: Page, title: string) =>
+  page.getByRole('progressbar', { name: `Avancement de « ${title} »` });

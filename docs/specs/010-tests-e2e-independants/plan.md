@@ -90,7 +90,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 
   → vérif : `just e2e` est vert ; `just e2e --grep R43` lance un seul test ; une erreur console provoquée exprès fait échouer le test.
   → à regarder : `helpers.ts` (fixtures) et le rapport `tests/e2e/report/index.html`.
-- [ ] **T3 — Fabriques et `user-story/`** : on ajoute les fabriques à `helpers.ts`, puis `user-story/logic.spec.ts` (backlog vide, R03 ×2, R03c ×3, R07, R46) et `user-story/rules.spec.ts` (R03d, R03 titre blanc).
+- [x] **T3 — Fabriques et `user-story/`** : on ajoute les fabriques à `helpers.ts`, puis `user-story/logic.spec.ts` (backlog vide, R03 ×2, R03c ×3, R07, R46) et `user-story/rules.spec.ts` (R03d, R03 titre blanc).
   → vérif : `just e2e user-story/` est vert, deux fois de suite.
   → à regarder : les données de départ de chaque test, qui doivent être lisibles d'un coup d'œil.
 - [ ] **T4 — `feature/`** : `logic.spec.ts` (R02, R02c, R03b ×4, R03f, R47) et `rules.spec.ts` (R03g).
