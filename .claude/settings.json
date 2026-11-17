@@ -1,5 +1,7 @@
 {
   "permissions": {
+    "disableBypassPermissionsMode": "disable",
+    "disableAutoMode": "disable",
     "defaultMode": "dontAsk",
     "allow": [
       "Bash(just dev)",
@@ -28,7 +30,15 @@
       "mcp__github__list_issue_fields",
       "mcp__github__list_issue_types"
     ],
-    "ask": [ "mcp__github__issue_write" ],
+    "ask": [
+      "mcp__github__issue_write",
+      "Bash(docker *)",
+      "Bash(docker-compose *)",
+      "Edit(./.claude/hooks/**)",
+      "Edit(./justfile)",
+      "Edit(./scripts/**)",
+      "Edit(./docker-compose*.yml)"
+    ],
     "deny": [
       "Read(./.env)",
       "Read(./data/**)",
