@@ -35,12 +35,13 @@
   --muted: var(--surface);
   --muted-foreground: #5b6577; /* darker than TailAdmin's gray-500: AA on the surface */
   --accent: rgb(70 95 255 / 10%);
-  --accent-foreground: #3a4fe0; /* brand blue darkened for AA as text on the surface */
-  --destructive: #f04438; /* error-500 */
+  --accent-foreground: #3141d1; /* brand blue darkened for AA as text on the surface and on tints */
+  --destructive: #b42318; /* error-700: AA as text on the surface and behind white text */
+  --destructive-foreground: #ffffff;
   --success: #12b76a;
   --success-foreground: #05603a;
   --info: #465fff;
-  --info-foreground: #3a4fe0;
+  --info-foreground: #3141d1;
   --warning: #f79009;
   --warning-foreground: #93370d;
   --border: #cfd5e0; /* light stroke, kept only where an inset alone is not enough */
@@ -51,7 +52,7 @@
   --sidebar-primary: #465fff;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: var(--surface);
-  --sidebar-accent-foreground: #3a4fe0;
+  --sidebar-accent-foreground: #3141d1;
   --sidebar-border: #cfd5e0;
   --sidebar-ring: #465fff;
 
@@ -88,12 +89,13 @@
   --muted: var(--surface);
   --muted-foreground: #a3adbf;
   --accent: rgb(70 95 255 / 14%);
-  --accent-foreground: #7592ff; /* brand-400 */
-  --destructive: #f97066; /* error-400 */
+  --accent-foreground: #8ea6ff;
+  --destructive: #fda29b; /* error-300: light enough for AA as text on the dark surface */
+  --destructive-foreground: #1d2939; /* dark text on the light red button */
   --success: #12b76a;
   --success-foreground: #32d583;
   --info: #465fff;
-  --info-foreground: #7592ff;
+  --info-foreground: #8ea6ff;
   --warning: #f79009;
   --warning-foreground: #fd853a;
   --border: #2f3a4f;
@@ -104,17 +106,19 @@
   --sidebar-primary: #465fff;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: var(--surface);
-  --sidebar-accent-foreground: #7592ff;
+  --sidebar-accent-foreground: #8ea6ff;
   --sidebar-border: #2f3a4f;
   --sidebar-ring: #7592ff;
 
-  --neu-light: #2c3649;
-  --neu-dark: #161c28;
+  /* Stronger than the light theme's pair, as dark shadows read less on a dark surface. */
+  --neu-light: #313c52;
+  --neu-dark: #121722;
   --neu-pressed: inset 3px 3px 7px rgb(0 0 0 / 40%), inset -2px -2px 6px rgb(255 255 255 / 6%);
 }
 
 /* Tailwind utilities: `shadow-raised`, `shadow-inset`, `bg-success`, `text-info-foreground`… */
 @theme inline {
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
   --color-info: var(--info);

@@ -50,7 +50,7 @@ export const buttonVariants = cva(
 				],
 				destructive: [
 					// colors
-					'bg-destructive text-white shadow-raised-sm hover:bg-destructive/90 active:shadow-pressed',
+					'bg-destructive text-destructive-foreground shadow-raised-sm hover:bg-destructive/90 active:shadow-pressed',
 					// focus
 					'focus-visible:border-destructive/40 focus-visible:ring-destructive/50',
 				],

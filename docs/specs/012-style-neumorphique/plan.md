@@ -62,7 +62,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T8 — Tableau Sprint et glisser-déposer** : colonnes en creux, tâches en relief, et styles des classes CDK (soulevée et inclinée, trace pâle, colonne en creux avec contour bleu, tâche qui se repose) (`pages/sprint/forms/user-story/template.html` et `template.scss`).
   → vérif : lint + build + parcours navigateur, dont un passage avec « réduire les animations ».
   → à regarder : glisser une tâche d'une colonne à l'autre (R68, R69).
-- [ ] **T9 — Calibrage du mode sombre et du contraste** : ajuster les valeurs de surface et d'ombre, puis mesurer les contrastes des textes (`styles.css`).
+- [x] **T9 — Calibrage du mode sombre et du contraste** : ajuster les valeurs de surface et d'ombre, puis mesurer les contrastes des textes (`styles.css`).
   → vérif : mesures de contraste (outils du navigateur) ≥ 4,5:1, en clair et en sombre.
   → à regarder : chaque page et chaque modal en sombre (R71, R72).
 - [ ] **T10 — Test e2e du glisser-déposer** : vérifier que la tâche change de colonne et que son statut est enregistré après le lâcher (`tests/e2e/…`, ID R68).
