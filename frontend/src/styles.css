@@ -41,6 +41,8 @@
   --success-foreground: #05603a;
   --info: #465fff;
   --info-foreground: #3a4fe0;
+  --warning: #f79009;
+  --warning-foreground: #93370d;
   --border: #cfd5e0; /* light stroke, kept only where an inset alone is not enough */
   --input: #c3cad8;
   --ring: #465fff;
@@ -92,6 +94,8 @@
   --success-foreground: #32d583;
   --info: #465fff;
   --info-foreground: #7592ff;
+  --warning: #f79009;
+  --warning-foreground: #fd853a;
   --border: #2f3a4f;
   --input: #3a465d;
   --ring: #7592ff;
@@ -115,6 +119,8 @@
   --color-success-foreground: var(--success-foreground);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
   --shadow-raised-sm: var(--neu-raised-sm);
   --shadow-raised: var(--neu-raised);
   --shadow-raised-lg: var(--neu-raised-lg);

@@ -142,7 +142,7 @@ test('R46 US : tâches en Terminé sur le total, « En validation » non compté
   await nav(page, 'Backlog');
   await page.getByRole('tab', { name: /Done/ }).click();
   await expect(progressBar(page, 'Se connecter')).toHaveAttribute('aria-valuenow', '100');
-  await expect(progressBar(page, 'Se connecter').locator('[data-slot=progress-indicator]')).toHaveClass(/bg-emerald-500/);
+  await expect(progressBar(page, 'Se connecter').locator('[data-slot=progress-indicator]')).toHaveClass(/bg-success/);
 
   await nav(page, 'Sprint');
   await expect(progressBar(page, 'Importer')).toHaveAttribute('aria-valuenow', '50');
