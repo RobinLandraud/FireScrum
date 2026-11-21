@@ -14,13 +14,13 @@ export class HlmTextarea {
 		classes(
 			() =>
 				[
-					// size and frame: grows with its content
-					'flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-4 py-2.5',
-					'shadow-xs outline-none transition-[color,box-shadow] dark:bg-input/30',
+					// size and frame: grows with its content; inset, with a light stroke (spec 012)
+					'flex field-sizing-content min-h-16 w-full rounded-lg border border-border bg-transparent px-4 py-2.5',
+					'shadow-inset outline-none transition-[color,box-shadow]',
 					// text
 					'text-base md:text-sm placeholder:text-muted-foreground',
 					// focus
-					'focus-visible:border-ring focus-visible:ring-primary/10 focus-visible:ring-3',
+					'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3',
 					// invalid
 					'data-[matches-spartan-invalid=true]:border-destructive data-[matches-spartan-invalid=true]:ring-3',
 					'data-[matches-spartan-invalid=true]:ring-destructive/20',

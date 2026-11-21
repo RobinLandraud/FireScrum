@@ -43,7 +43,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T3 — Cartes, onglets, progression** : cartes en relief qui ressortent au survol, barre d'onglets en creux et onglet actif en relief, rail de progression en creux (`libs/ui/card`, `libs/ui/tabs`, `libs/ui/progress`).
   → vérif : lint + build + parcours navigateur.
   → à regarder : la page Backlog (R64, R66).
-- [ ] **T4 — Champs de formulaire** : champs, zones de texte, cases à cocher, `.select` et `.list-zone` en creux, avec un trait léger et le focus bleu (`libs/ui/input`, `libs/ui/textarea`, `libs/ui/checkbox`, `styles.css`).
+- [x] **T4 — Champs de formulaire** : champs, zones de texte, cases à cocher, `.select` et `.list-zone` en creux, avec un trait léger et le focus bleu (`libs/ui/input`, `libs/ui/textarea`, `libs/ui/checkbox`, `styles.css`).
   → vérif : lint + build + parcours navigateur au clavier.
   → à regarder : le formulaire « New Story » et la liste du Sprint, parcourus à la touche Tab (R70).
 - [ ] **T5 — Modals et toasts** : modal en relief marqué sur le fond assombri, toasts en relief (`libs/ui/dialog`, `libs/ui/sonner`).

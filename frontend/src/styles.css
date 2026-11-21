@@ -151,21 +151,23 @@
 
 /* In the components layer: utilities (e.g. `w-64`) take precedence. */
 @layer components {
-  /* Native dropdown, styled like Spartan fields (height, corners and focus from TailAdmin). */
+  /* Native dropdown, styled like Spartan fields: inset with a light stroke (spec 012). */
   .select {
     height: 2.75rem;
     width: 100%;
-    border: 1px solid var(--input);
+    border: 1px solid var(--border);
     border-radius: var(--radius-lg, 0.5rem);
     background: transparent;
     padding: 0 1rem;
     font-size: 0.875rem;
-    box-shadow: 0 1px 2px 0 rgb(16 24 40 / 5%);
+    box-shadow: var(--neu-inset);
 
     &:focus-visible {
       outline: none;
       border-color: var(--ring);
-      box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 10%, transparent);
+      box-shadow:
+        var(--neu-inset),
+        0 0 0 3px color-mix(in oklab, var(--ring) 50%, transparent);
     }
 
     & option {
@@ -174,7 +176,7 @@
     }
   }
 
-  /* List zone in a modal: fills the remaining height and scrolls, on a grey background.
+  /* List zone in a modal: fills the remaining height and scrolls, inset in the surface.
      `contain: size`: the zone does not claim the height of its rows, it takes the space it is given.
      `min-height`: on a short screen, the modal scrolls instead of crushing the zone. */
   .list-zone {
@@ -185,5 +187,6 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-md, 0.375rem);
     background: var(--muted);
+    box-shadow: var(--neu-inset);
   }
 }
