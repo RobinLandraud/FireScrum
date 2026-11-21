@@ -13,7 +13,7 @@
   <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
     @for (feature of features.value(); track feature.id) {
       <hlm-dialog #detail="hlmDialog">
-        <button hlmDialogTrigger hlmCard size="sm" type="button" class="h-full w-full text-left transition-colors hover:bg-muted/50">
+        <button hlmDialogTrigger hlmCard size="sm" type="button" class="h-full w-full text-left transition-shadow hover:shadow-raised-lg">
           <span hlmCardContent class="grid gap-1">
             <span class="font-medium">{{ feature.title }}</span>
             @if (feature.description) {

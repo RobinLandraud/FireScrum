@@ -39,7 +39,8 @@ export class HlmProgressIndicator {
 })
 export class HlmProgress {
 	constructor() {
-		classes(() => 'bg-muted h-1.5 rounded-full relative inline-flex w-full overflow-hidden');
+		// inset rail (neumorphic, spec 012)
+		classes(() => 'bg-muted shadow-inset-sm h-2 rounded-full relative inline-flex w-full overflow-hidden');
 	}
 }
 
