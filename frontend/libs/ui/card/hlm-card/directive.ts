@@ -16,8 +16,8 @@ export class HlmCard {
 
 	constructor() {
 		classes(() => [
-			// frame
-			'group/card flex flex-col overflow-hidden rounded-2xl border border-border bg-card text-sm',
+			// frame: raised, without border (neumorphic, spec 012)
+			'group/card flex flex-col overflow-hidden rounded-2xl bg-card text-sm shadow-raised',
 			'text-card-foreground',
 			// spacing, smaller with size="sm"
 			'[--card-spacing:--spacing(6)] data-[size=sm]:[--card-spacing:--spacing(4)] gap-(--card-spacing)',

@@ -18,12 +18,11 @@ export class HlmTabsTrigger {
 			'relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 whitespace-nowrap',
 			'rounded-md border border-transparent px-2 py-1',
 			// text
-			'text-sm font-medium text-foreground/60 hover:text-foreground dark:text-muted-foreground',
-			'dark:hover:text-foreground transition-all',
+			'text-sm font-medium text-muted-foreground hover:text-foreground transition-all',
 			// vertical tabs
 			'group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start',
-			// shadow on the active tab
-			'group-data-[variant=default]/tabs-list:data-active:shadow-sm',
+			// active tab raised out of the inset bar
+			'group-data-[variant=default]/tabs-list:data-active:shadow-raised-sm',
 			'group-data-[variant=line]/tabs-list:data-active:shadow-none',
 			// icons
 			'[&_ng-icon]:pointer-events-none [&_ng-icon]:shrink-0',
@@ -39,8 +38,7 @@ export class HlmTabsTrigger {
 			'dark:group-data-[variant=line]/tabs-list:data-active:border-transparent',
 			'dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent',
 			// active tab
-			'data-active:bg-background data-active:text-foreground dark:data-active:border-input',
-			'dark:data-active:bg-input/30 dark:data-active:text-foreground',
+			'data-active:bg-background data-active:text-accent-foreground',
 			// underline of the line variant
 			'after:absolute after:bg-foreground after:opacity-0 after:transition-opacity',
 			'group-data-[variant=line]/tabs-list:data-active:after:opacity-100',
