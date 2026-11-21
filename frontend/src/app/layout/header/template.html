@@ -1,7 +1,7 @@
-<header class="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b bg-card px-4 lg:px-6">
+<header class="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 bg-card px-4 lg:px-6">
   <button
     type="button"
-    class="inline-flex size-10 items-center justify-center rounded-[10px] border border-input text-muted-foreground shadow-xs transition-colors hover:bg-muted hover:text-foreground"
+    class="inline-flex size-10 items-center justify-center rounded-[10px] text-muted-foreground shadow-raised-sm transition-[color,box-shadow] hover:text-foreground active:shadow-inset"
     aria-label="Afficher ou masquer le menu"
     [attr.aria-expanded]="sidebar.mobileOpen()"
     (click)="sidebar.toggle()"
@@ -11,7 +11,7 @@
 
   <button
     type="button"
-    class="inline-flex size-10 items-center justify-center rounded-full border border-input text-muted-foreground shadow-xs transition-colors hover:bg-muted hover:text-foreground"
+    class="inline-flex size-10 items-center justify-center rounded-full text-muted-foreground shadow-raised-sm transition-[color,box-shadow] hover:text-foreground active:shadow-inset"
     [attr.aria-label]="theme.theme() === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'"
     (click)="theme.toggle()"
   >
