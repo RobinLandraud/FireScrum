@@ -65,4 +65,6 @@ export async function drag(page: Page, us: string, title: string, to: string) {
   await page.mouse.move(from.x + from.width / 2 + 10, from.y + from.height / 2, { steps: 5 });
   await page.mouse.move(target.x + target.width / 2, target.y + target.height / 2, { steps: 15 });
   await page.mouse.up();
+  // The drop (and the status save) fires only once the settle animation is over.
+  await expect(page.locator('.cdk-drag-preview')).toHaveCount(0);
 }

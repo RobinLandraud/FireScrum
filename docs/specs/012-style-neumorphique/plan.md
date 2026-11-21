@@ -10,7 +10,11 @@ Supprimé à la livraison : reporter d'abord les décisions utiles dans `spec.md
   - nouvelles couleurs de statut : `--success`, `--success-foreground`, `--info`, `--info-foreground`.
 - **Utilitaires Tailwind** déclarés dans `@theme` : `shadow-raised`, `shadow-inset`, `bg-success`… Les composants les utilisent comme les autres classes, sans CSS propre à chacun.
 - **Composants Helm** (`frontend/libs/ui/`) : on retire `border` et `shadow-xs` des classes de chaque variante et on met à la place une ombre en relief ou en creux. Leur logique, leurs entrées et leur accessibilité ne changent pas.
-- **Glisser-déposer** : on style les classes que le CDK ajoute déjà (`.cdk-drag-preview`, `.cdk-drag-placeholder`, `.cdk-drop-list-receiving`, `.cdk-drag-animating`) dans le `template.scss` du composant. `component.ts` n'est pas modifié.
+- **Glisser-déposer** : on style les classes que le CDK ajoute déjà (`.cdk-drag-preview`, `.cdk-drag-placeholder`, `.cdk-drag-anchor`, `.cdk-drop-list-dragging`, `.cdk-drag-animating`) dans le `template.scss` du composant. `component.ts` n'est pas modifié.
+  - La colonne survolée porte `.cdk-drop-list-dragging` ; `.cdk-drop-list-receiving` est posée sur toutes les colonnes qui peuvent recevoir la tâche.
+  - La trace à l'origine vient de `cdkDropListHasAnchor` : sans elle, la case vide suit la tâche dans la colonne survolée.
+  - Inclinaison et agrandissement par `rotate` / `scale`, car le CDK déplace l'aperçu avec `transform`.
+  - Le dépôt (et l'enregistrement du statut) part à la fin de l'animation de pose (250 ms) : le helper `drag` des tests e2e attend la disparition de l'aperçu.
 - **Réduire les animations** : une seule règle `@media (prefers-reduced-motion: reduce)` dans `styles.css` coupe les transitions et animations.
 - **Écarté** :
   - un thème neumorphique tout fait (Neumorphism UI de Themesberg) : il est écrit pour Bootstrap, alors que l'app utilise Spartan et Tailwind v4 ;
@@ -55,7 +59,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T7 — Couleurs de statut en variables** : remplacer `emerald`, `blue` et `gray` écrits en dur par `success`, `info` et les variables de surface (`components/progress`, `services/user-story-status.ts`, `pages/sprint`, `layout/sidebar`). Mettre à jour `logic.spec.ts` (`bg-emerald-500` devient `bg-success`).
   → vérif : lint + build + `just tests --front`.
   → à regarder : le badge « en cours » du Sprint et une progression à 100 %, en clair et en sombre.
-- [ ] **T8 — Tableau Sprint et glisser-déposer** : colonnes en creux, tâches en relief, et styles des classes CDK (soulevée et inclinée, trace pâle, colonne en creux avec contour bleu, tâche qui se repose) (`pages/sprint/forms/user-story/template.html` et `template.scss`).
+- [x] **T8 — Tableau Sprint et glisser-déposer** : colonnes en creux, tâches en relief, et styles des classes CDK (soulevée et inclinée, trace pâle, colonne en creux avec contour bleu, tâche qui se repose) (`pages/sprint/forms/user-story/template.html` et `template.scss`).
   → vérif : lint + build + parcours navigateur, dont un passage avec « réduire les animations ».
   → à regarder : glisser une tâche d'une colonne à l'autre (R68, R69).
 - [ ] **T9 — Calibrage du mode sombre et du contraste** : ajuster les valeurs de surface et d'ombre, puis mesurer les contrastes des textes (`styles.css`).

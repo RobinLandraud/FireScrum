@@ -1,0 +1,44 @@
+// Drag and drop of a task between columns (neumorphic, spec 012).
+// The CDK adds these classes itself; the preview is a clone appended to <body>,
+// which keeps this component's scoping attribute, so these rules still apply to it.
+
+.task {
+  transition: box-shadow 200ms;
+}
+
+// The column hovered by the dragged task sinks deeper, with a blue outline.
+.column.cdk-drop-list-dragging {
+  box-shadow:
+    inset 6px 6px 14px var(--neu-dark),
+    inset -6px -6px 14px var(--neu-light),
+    inset 0 0 0 2px var(--ring);
+  transition: box-shadow 200ms;
+}
+
+// The task under the pointer lifts, grows slightly and tilts.
+// `rotate` / `scale` rather than `transform`: the CDK moves the preview through `transform`.
+.task.cdk-drag-preview {
+  box-shadow: var(--neu-lift);
+  rotate: -2deg;
+  scale: 1.04;
+  cursor: grabbing;
+}
+
+// On drop, it settles: shadow, tilt and size ease back while the CDK moves it to its place.
+.task.cdk-drag-preview.cdk-drag-animating {
+  box-shadow: var(--neu-raised-sm);
+  rotate: 0deg;
+  scale: 1;
+  transition:
+    transform 250ms cubic-bezier(0, 0, 0.2, 1),
+    box-shadow 250ms,
+    rotate 250ms,
+    scale 250ms;
+}
+
+// Pale empty slot: where the task comes from (anchor) and where it will land (placeholder).
+.task.cdk-drag-anchor,
+.task.cdk-drag-placeholder {
+  opacity: 0.35;
+  box-shadow: none;
+}
