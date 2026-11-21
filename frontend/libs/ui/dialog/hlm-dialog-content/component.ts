@@ -46,8 +46,8 @@ export class HlmDialogContent {
 
 	constructor() {
 		classes(() => [
-			// colors and frame
-			'bg-popover text-popover-foreground border border-border shadow-xl rounded-3xl outline-none',
+			// colors and frame: strongly raised, without border (neumorphic, spec 012)
+			'bg-popover text-popover-foreground shadow-raised-lg rounded-3xl outline-none',
 			// open / close animation
 			'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 duration-100',
 			'data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
