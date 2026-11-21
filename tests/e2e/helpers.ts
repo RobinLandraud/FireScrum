@@ -56,14 +56,19 @@ export const addTaskButton = (page: Page, us: string) =>
 export const expectInColumn = (page: Page, us: string, title: string, label: string) =>
   expect(column(page, us, label).getByRole('button', { name: new RegExp(`^${title}`) })).toBeVisible();
 
-/** Manual drag and drop: the CDK expects progressive mouse moves. */
-export async function drag(page: Page, us: string, title: string, to: string) {
+/** Picks a task up and holds it over a column, without dropping it: the CDK expects progressive mouse moves. */
+export async function hold(page: Page, us: string, title: string, to: string) {
   const from = (await taskCard(page, us, title).boundingBox())!;
   const target = (await column(page, us, to).boundingBox())!;
   await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
   await page.mouse.down();
   await page.mouse.move(from.x + from.width / 2 + 10, from.y + from.height / 2, { steps: 5 });
   await page.mouse.move(target.x + target.width / 2, target.y + target.height / 2, { steps: 15 });
+}
+
+/** Manual drag and drop of a task to a column. */
+export async function drag(page: Page, us: string, title: string, to: string) {
+  await hold(page, us, title, to);
   await page.mouse.up();
   // The drop (and the status save) fires only once the settle animation is over.
   await expect(page.locator('.cdk-drag-preview')).toHaveCount(0);

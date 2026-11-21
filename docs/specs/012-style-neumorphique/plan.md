@@ -13,6 +13,7 @@ Supprimé à la livraison : reporter d'abord les décisions utiles dans `spec.md
 - **Glisser-déposer** : on style les classes que le CDK ajoute déjà (`.cdk-drag-preview`, `.cdk-drag-placeholder`, `.cdk-drag-anchor`, `.cdk-drop-list-dragging`, `.cdk-drag-animating`) dans le `template.scss` du composant. `component.ts` n'est pas modifié.
   - La colonne survolée porte `.cdk-drop-list-dragging` ; `.cdk-drop-list-receiving` est posée sur toutes les colonnes qui peuvent recevoir la tâche.
   - La trace à l'origine vient de `cdkDropListHasAnchor` : sans elle, la case vide suit la tâche dans la colonne survolée.
+    Risque accepté : avec cette option, un dépôt échoue parfois (la tâche revient à sa place, sans message). Mesuré en T10 : 3 échecs sur 60 répétitions de R14 / R15, aucun sur 60 sans l'option. Une trace faite par le composant a été écartée.
   - Inclinaison et agrandissement par `rotate` / `scale`, car le CDK déplace l'aperçu avec `transform`.
   - Le dépôt (et l'enregistrement du statut) part à la fin de l'animation de pose (250 ms) : le helper `drag` des tests e2e attend la disparition de l'aperçu.
 - **Réduire les animations** : une seule règle `@media (prefers-reduced-motion: reduce)` dans `styles.css` coupe les transitions et animations.
@@ -65,7 +66,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T9 — Calibrage du mode sombre et du contraste** : ajuster les valeurs de surface et d'ombre, puis mesurer les contrastes des textes (`styles.css`).
   → vérif : mesures de contraste (outils du navigateur) ≥ 4,5:1, en clair et en sombre.
   → à regarder : chaque page et chaque modal en sombre (R71, R72).
-- [ ] **T10 — Test e2e du glisser-déposer** : vérifier que la tâche change de colonne et que son statut est enregistré après le lâcher (`tests/e2e/…`, ID R68).
+- [x] **T10 — Test e2e du glisser-déposer** : vérifier que la tâche change de colonne et que son statut est enregistré après le lâcher (`tests/e2e/…`, ID R68).
   → vérif : `just tests --grep R68`, puis `just tests` complet (R73).
   → à regarder : le rapport Playwright.
 - [ ] **T11 — Docs** : ajouter R64 à R73 dans `cahier-de-recettes.md` ; dans la spec 008, une ligne qui renvoie vers la 012 ; dans `THIRD-PARTY-NOTICES.md`, préciser ce qui reste de TailAdmin (police, rayons, cadre barre latérale / en-tête).

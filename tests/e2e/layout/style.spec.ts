@@ -1,5 +1,18 @@
 import type { Locator } from '@playwright/test';
-import { test, expect, dialog, nav, card, taskCard, addTaskButton, expectModalSize, type Page } from '../helpers';
+import {
+  test,
+  expect,
+  dialog,
+  nav,
+  card,
+  taskCard,
+  addTaskButton,
+  expectModalSize,
+  column,
+  hold,
+  expectInColumn,
+  type Page,
+} from '../helpers';
 import { US, seedRunningSprint } from '../sprint/seed';
 
 const menuButton = (page: Page) => page.getByRole('button', { name: 'Afficher ou masquer le menu' });
@@ -101,6 +114,38 @@ test('R49 toutes les modals ont la même taille, quel que soit l’onglet', asyn
   await nav(page, 'Features');
   await open('new feature', page.getByRole('button', { name: 'New Feature' }), [/User stories/]);
   await open('feature detail', card(page, 'Authentification'), [/User stories/]);
+});
+
+// Spec 012-style-neumorphique: R68, R69
+test.describe('Sprint drag and drop', () => {
+  test.beforeEach(async ({ page, api }) => {
+    await seedRunningSprint(api);
+    await page.goto('/sprint');
+  });
+
+  test('R68 tâche soulevée et inclinée, trace à l’origine, colonne visée marquée, statut enregistré', async ({ page }) => {
+    await hold(page, US, 'Formulaire de connexion', 'En cours');
+    const preview = page.locator('.cdk-drag-preview');
+    await expect(preview, 'dragged task not tilted').toHaveCSS('rotate', '-2deg');
+    await expect(column(page, US, 'À faire').locator('.cdk-drag-anchor'), 'no trace left at the origin').toHaveCount(1);
+    await expect(column(page, US, 'En cours'), 'hovered column not marked').toHaveClass(/cdk-drop-list-dragging/);
+    await page.mouse.up();
+    await expect(preview).toHaveCount(0);
+    await expectInColumn(page, US, 'Formulaire de connexion', 'En cours');
+    await page.reload();
+    await expectInColumn(page, US, 'Formulaire de connexion', 'En cours');
+  });
+
+  test.describe('reduced motion', () => {
+    test.use({ reducedMotion: 'reduce' });
+
+    test('R69 « réduire les animations » : aucune transition sur les tâches', async ({ page }) => {
+      const duration = await taskCard(page, US, 'Formulaire de connexion').evaluate(
+        (el) => getComputedStyle(el).transitionDuration,
+      );
+      expect(duration.split(',').every((d) => parseFloat(d) === 0), `transition kept (${duration})`).toBe(true);
+    });
+  });
 });
 
 // Spec 006-planning
