@@ -37,7 +37,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T1 — Variables du thème** : surface unique et ombres en clair et en sombre, couleurs de statut, utilitaires `@theme`, règle « réduire les animations » (`styles.css`).
   → vérif : lint + build.
   → à regarder : le diff de `styles.css`. Dans l'app, le fond et les cartes ont la même couleur ; les bordures restent jusqu'à T2–T5.
-- [ ] **T2 — Boutons et badges** : variantes principale, destructive, `outline`, `ghost`, secondaire ; enfoncement au clic (`libs/ui/button`, `libs/ui/badge`).
+- [x] **T2 — Boutons et badges** : variantes principale, destructive, `outline`, `ghost`, secondaire ; enfoncement au clic (`libs/ui/button`, `libs/ui/badge`).
   → vérif : lint + build + parcours navigateur.
   → à regarder : « New Story », « Clôturer le sprint » et les badges de points sur le Sprint (R65).
 - [ ] **T3 — Cartes, onglets, progression** : cartes en relief qui ressortent au survol, barre d'onglets en creux et onglet actif en relief, rail de progression en creux (`libs/ui/card`, `libs/ui/tabs`, `libs/ui/progress`).
