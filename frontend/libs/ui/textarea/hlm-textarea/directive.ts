@@ -15,7 +15,7 @@ export class HlmTextarea {
 			() =>
 				[
 					// size and frame: grows with its content; inset, with a light stroke (spec 012)
-					'flex field-sizing-content min-h-16 w-full rounded-lg border border-border bg-transparent px-4 py-2.5',
+					'flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-4 py-2.5',
 					'shadow-inset outline-none transition-[color,box-shadow]',
 					// text
 					'text-base md:text-sm placeholder:text-muted-foreground',

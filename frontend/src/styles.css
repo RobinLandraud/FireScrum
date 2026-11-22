@@ -99,7 +99,7 @@
   --warning: #f79009;
   --warning-foreground: #fd853a;
   --border: #2f3a4f;
-  --input: #3a465d;
+  --input: #66738c; /* stroke of fields and checkboxes: 3:1 on the surface (WCAG non-text contrast) */
   --ring: #7592ff;
   --sidebar: var(--surface);
   --sidebar-foreground: #d0d5dd;
@@ -165,7 +165,7 @@
   .select {
     height: 2.75rem;
     width: 100%;
-    border: 1px solid var(--border);
+    border: 1px solid var(--input);
     border-radius: var(--radius-lg, 0.5rem);
     background: transparent;
     padding: 0 1rem;

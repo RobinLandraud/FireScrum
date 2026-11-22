@@ -52,7 +52,7 @@ export class HlmCheckbox implements ControlValueAccessor {
 			[
 				// box: inset when empty, raised blue when checked (spec 012)
 				'peer flex size-4 shrink-0 cursor-default items-center justify-center rounded-[4px] border',
-				'border-border shadow-inset-sm transition-shadow outline-none',
+				'border-input shadow-inset-sm transition-shadow outline-none',
 				// checked
 				'data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground',
 				'data-checked:shadow-raised-sm',

@@ -15,7 +15,7 @@ export class HlmInput {
 			() =>
 				[
 					// size and frame: inset, with a light stroke so the field stays visible (spec 012)
-					'h-11 w-full min-w-0 rounded-lg border border-border bg-transparent px-4 py-1 shadow-inset outline-none',
+					'h-11 w-full min-w-0 rounded-lg border border-input bg-transparent px-4 py-1 shadow-inset outline-none',
 					'transition-[color,box-shadow]',
 					// text
 					'text-base md:text-sm placeholder:text-muted-foreground',
