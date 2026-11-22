@@ -2,6 +2,8 @@
 
 **Statut** : Livrée
 
+> Depuis la spec [012](../012-style-neumorphique/spec.md) (style neumorphique), la « zone grise » est une zone creusée dans la surface, et les formulaires « sur fond blanc » sont posés sur la surface. Le comportement décrit ici (taille fixe, listes qui défilent) ne change pas.
+
 ## Contexte
 
 Chaque modal a aujourd'hui sa propre largeur, et sa hauteur suit son contenu : ajouter une tâche, chercher une US ou changer d'onglet fait grandir ou rétrécir la modal sous les yeux de l'utilisateur. On donne à toutes les modals une même grande taille fixe, et chaque liste a sa zone réservée, qui défile au lieu de pousser le reste. Aucune règle métier ne change.
