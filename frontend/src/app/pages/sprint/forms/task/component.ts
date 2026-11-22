@@ -13,7 +13,7 @@ import { toastApiError } from '../../../../services/error';
 import { TaskApi } from '../../../../services/task.api';
 import { TASK_STATUS_LABEL } from '../../../../services/task-status';
 import { ValidationPointApi } from '../../../../services/validation-point.api';
-import { TaskForm } from '../../../backlog/forms/task/form';
+import { TaskForm } from '../../../backlog/forms/task/component';
 
 /**
  * Content of a task modal on the Sprint page.

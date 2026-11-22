@@ -9,8 +9,8 @@ import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmLabelImports } from '@spartan-ng/helm/label';
 import { HlmTextareaImports } from '@spartan-ng/helm/textarea';
 import { firstValueFrom } from 'rxjs';
-import { toastApiError } from '../../../../services/error';
-import { UserStoryApi } from '../../../../services/user-story.api';
+import { toastApiError } from '../../../../../services/error';
+import { UserStoryApi } from '../../../../../services/user-story.api';
 
 const FIBONACCI = [1, 2, 3, 5, 8, 13, 21];
 /** Dropdowns handle strings; converted on submit. `feature: ''` = no feature. */
@@ -21,8 +21,8 @@ const EMPTY = { title: '', description: '', velocity: '1', feature: '' };
   selector: 'app-user-story-form',
   host: { class: 'block' },
   imports: [FormField, HlmButtonImports, HlmInputImports, HlmLabelImports, HlmTextareaImports],
-  templateUrl: './form.html',
-  styleUrl: './form.scss',
+  templateUrl: './template.html',
+  styleUrl: './template.scss',
 })
 export class UserStoryForm {
   private api = inject(UserStoryApi);

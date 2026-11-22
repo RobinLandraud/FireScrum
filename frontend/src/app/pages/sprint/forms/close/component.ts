@@ -22,8 +22,8 @@ function initialChoice(story: SprintUserStoryOut): Choice {
   selector: 'app-close-sprint-form',
   host: { class: 'flex flex-1 flex-col gap-4' },
   imports: [HlmButtonImports, HlmCheckboxImports, HlmDialogImports],
-  templateUrl: './form.html',
-  styleUrl: './form.scss',
+  templateUrl: './template.html',
+  styleUrl: './template.scss',
 })
 export class CloseSprintForm {
   private api = inject(SprintApi);

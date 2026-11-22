@@ -13,8 +13,8 @@ import { firstValueFrom } from 'rxjs';
 import { toastApiError } from '../../../../services/error';
 import { TaskApi } from '../../../../services/task.api';
 import { UserStoryApi } from '../../../../services/user-story.api';
-import { TaskForm } from '../task/form';
-import { UserStoryForm } from './form';
+import { TaskForm } from '../task/component';
+import { UserStoryForm } from './form/component';
 
 /** Row of the task list: `key` = task id (existing US) or draft index (creation). */
 interface TaskRow {

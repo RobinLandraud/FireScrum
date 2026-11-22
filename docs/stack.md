@@ -77,9 +77,10 @@ pages/<page>/             Un dossier par page (backlog, features, planning, spri
 ├── component.ts          Composant de la page
 ├── template.html
 ├── template.scss
-└── forms/<entité>/       Un dossier par entité (ex. user-story, task, sprint)
-    ├── component.ts      Affichage de l'entité  (+ template.html, template.scss)
-    └── form.ts           Formulaire de création (+ form.html, form.scss)
+└── forms/<entité>/       Un dossier par entité (ex. user-story, task, close, launch)
+    ├── component.ts      Modal ou formulaire de l'entité (+ template.html, template.scss)
+    └── form/             Formulaire utilisé par la modal, quand elle en a un
+        └── component.ts  (+ template.html, template.scss)
 ```
 
 Le style passe surtout par les classes Tailwind dans les templates ; les `.scss` servent aux cas particuliers.

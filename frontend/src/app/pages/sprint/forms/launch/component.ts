@@ -16,8 +16,8 @@ import { SprintApi } from '../../../../services/sprint.api';
   selector: 'app-launch-sprint-form',
   host: { class: 'flex flex-1 flex-col gap-4' },
   imports: [FormField, HlmButtonImports, HlmCardImports, HlmCheckboxImports, HlmDialogImports, HlmInputImports],
-  templateUrl: './form.html',
-  styleUrl: './form.scss',
+  templateUrl: './template.html',
+  styleUrl: './template.scss',
 })
 export class LaunchSprintForm {
   private api = inject(SprintApi);

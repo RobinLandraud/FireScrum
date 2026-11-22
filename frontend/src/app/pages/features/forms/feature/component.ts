@@ -15,7 +15,7 @@ import { AppProgress } from '../../../../components/progress/component';
 import { storyProgress } from '../../../../services/progress';
 import { USER_STORY_STATUS } from '../../../../services/user-story-status';
 import { UserStoryApi } from '../../../../services/user-story.api';
-import { FeatureForm } from './form';
+import { FeatureForm } from './form/component';
 
 /**
  * Content of a feature modal, Details and User stories tabs.
