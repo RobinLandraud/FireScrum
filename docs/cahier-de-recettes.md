@@ -79,16 +79,31 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 | R44 | Mode sombre | Premier lancement avec le système en thème sombre | L'app s'ouvre en mode sombre |  | À tester |
 | R45 | Non-régression | Rejouer les recettes R01 à R19 | Toutes passent, sans changement de comportement |  | À tester |
 
+## Style neumorphique
+
+| ID | Fonctionnalité | Scénario | Résultat attendu | Résultat obtenu | Statut |
+|----|----------------|----------|------------------|-----------------|--------|
+| R64 | Surfaces | Ouvrir chaque page en mode clair | Fond et blocs de la même couleur, sans bordure ; les cartes, les boutons et l'onglet actif sont en relief ; les champs, la barre d'onglets, les barres de progression et les colonnes du Sprint sont en creux |  | À tester |
+| R65 | Bouton | Cliquer sur un bouton principal | Il s'enfonce pendant le clic, puis reprend son relief |  | À tester |
+| R66 | Survol | Survoler une carte du Backlog ou une tâche du Sprint | Elle ressort davantage |  | À tester |
+| R67 | Modal et toast | Ouvrir une modal ; faire apparaître un toast | La modal apparaît en relief au-dessus d'un fond assombri ; le toast s'affiche en relief |  | À tester |
+| R68 | Glisser-déposer | Sur le Sprint, saisir une tâche et la glisser vers une autre colonne, puis la lâcher | Pendant le glisser : la tâche se soulève et s'incline, une trace pâle reste à sa place, la colonne survolée se creuse avec un contour bleu ; au lâcher : la tâche se pose dans la nouvelle colonne et son statut est enregistré |  | À tester |
+| R69 | Animations réduites | Activer « réduire les animations » dans le système, puis glisser une tâche | Elle change de colonne sans transition animée |  | À tester |
+| R70 | Focus | Parcourir chaque page à la touche Tab | Le contour bleu du focus est visible sur chaque élément interactif |  | À tester |
+| R71 | Contraste | Mesurer le contraste des textes principaux et secondaires, en clair et en sombre | Au moins 4,5:1 |  | À tester |
+| R72 | Mode sombre | Passer en mode sombre et ouvrir chaque page et chaque modal | Chaque carte, champ et colonne se distingue du fond sans plisser les yeux, et tout est lisible |  | À tester |
+| R73 | Non-régression | Rejouer les recettes R01 à R19 et R40 à R45 | Toutes passent, sans changement de comportement |  | À tester |
+
 ## Modals
 
 | ID | Fonctionnalité | Scénario | Résultat attendu | Résultat obtenu | Statut |
 |----|----------------|----------|------------------|-----------------|--------|
 | R49 | Taille | Sur grand écran, ouvrir chaque modal (nouvelle feature, détail feature, nouvelle US, détail US, tâche du sprint, lancer et clôturer un sprint) et changer d'onglet | Toutes ont la même taille (1024 px × 85 % de l'écran), quel que soit l'onglet |  | À tester |
-| R50 | Tâches de l'US | Dans l'onglet Tasks d'une US, ajouter des tâches jusqu'à dépasser la zone grise | La modal garde sa taille, la liste défile à la molette et avec la barre de droite, le formulaire reste visible en dessous |  | À tester |
-| R51 | US de la feature | Ouvrir une feature avec beaucoup d'US alors qu'il reste beaucoup d'US sans feature, onglet User stories ; puis sans aucune US sans feature | Deux zones grises de même hauteur qui défilent chacune ; sans US sans feature, la liste de la feature prend toute la hauteur |  | À tester |
-| R52 | Clôture | Clôturer un sprint avec beaucoup d'US | Le tableau défile dans la zone grise, son en-tête et le bouton « Clôturer le sprint » restent visibles |  | À tester |
-| R53 | Lancement | Lancer un sprint avec beaucoup d'US acceptées, puis sans aucune | La liste défile dans la zone grise ; sans US, le message s'affiche dans la zone |  | À tester |
-| R54 | Tâche du sprint | Ouvrir une tâche du sprint en cours, puis d'un sprint clos ; cliquer sur la carte « + » | Onglets « Points de validation (n) » (ouvert) et « Details » : formulaire sur fond blanc pour le sprint en cours, description dans la zone grise pour le sprint clos ; à la création, pas d'onglets, zone « Pas encore de points de validation » et formulaire en dessous |  | À tester |
+| R50 | Tâches de l'US | Dans l'onglet Tasks d'une US, ajouter des tâches jusqu'à dépasser la zone en creux | La modal garde sa taille, la liste défile à la molette et avec la barre de droite, le formulaire reste visible en dessous |  | À tester |
+| R51 | US de la feature | Ouvrir une feature avec beaucoup d'US alors qu'il reste beaucoup d'US sans feature, onglet User stories ; puis sans aucune US sans feature | Deux zones en creux de même hauteur qui défilent chacune ; sans US sans feature, la liste de la feature prend toute la hauteur |  | À tester |
+| R52 | Clôture | Clôturer un sprint avec beaucoup d'US | Le tableau défile dans la zone en creux, son en-tête et le bouton « Clôturer le sprint » restent visibles |  | À tester |
+| R53 | Lancement | Lancer un sprint avec beaucoup d'US acceptées, puis sans aucune | La liste défile dans la zone en creux ; sans US, le message s'affiche dans la zone |  | À tester |
+| R54 | Tâche du sprint | Ouvrir une tâche du sprint en cours, puis d'un sprint clos ; cliquer sur la carte « + » | Onglets « Points de validation (n) » (ouvert) et « Details » : formulaire sur la surface pour le sprint en cours, description dans la zone en creux pour le sprint clos ; à la création, pas d'onglets, zone « Pas encore de points de validation » et formulaire en dessous |  | À tester |
 | R55 | Mobile | Sur téléphone, ouvrir la modal d'une US | Elle tient dans la largeur de l'écran ; si le contenu dépasse, la modal défile |  | À tester |
 
 ## Outillage

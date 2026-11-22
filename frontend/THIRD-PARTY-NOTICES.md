@@ -2,8 +2,9 @@
 
 ## TailAdmin Angular
 
-Style (palette, police, rayons, cadre barre latérale / en-tête) repris de
+Police, rayons, bleu de marque et cadre barre latérale / en-tête repris de
 [TailAdmin Angular](https://github.com/tailadmin/free-angular-tailwind-dashboard).
+Le reste de la palette, les bordures et les ombres ont été remplacés par le style neumorphique (spec 012).
 
 ```
 MIT License

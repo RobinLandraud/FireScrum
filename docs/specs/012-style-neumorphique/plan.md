@@ -69,6 +69,6 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T10 — Test e2e du glisser-déposer** : vérifier que la tâche change de colonne et que son statut est enregistré après le lâcher (`tests/e2e/…`, ID R68).
   → vérif : `just tests --grep R68`, puis `just tests` complet (R73).
   → à regarder : le rapport Playwright.
-- [ ] **T11 — Docs** : ajouter R64 à R73 dans `cahier-de-recettes.md` ; dans la spec 008, une ligne qui renvoie vers la 012 ; dans `THIRD-PARTY-NOTICES.md`, préciser ce qui reste de TailAdmin (police, rayons, cadre barre latérale / en-tête).
+- [x] **T11 — Docs** : ajouter R64 à R73 dans `cahier-de-recettes.md` ; dans la spec 008, une ligne qui renvoie vers la 012 ; dans `THIRD-PARTY-NOTICES.md`, préciser ce qui reste de TailAdmin (police, rayons, cadre barre latérale / en-tête).
   → vérif : relecture.
   → à regarder : les trois fichiers.
