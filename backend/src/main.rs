@@ -7,7 +7,7 @@ mod task;
 mod user_story;
 mod validation_point;
 
-use axum::{Json, Router, extract::State, routing::get};
+use axum::{Json, Router, extract::State, http::StatusCode, routing::get};
 use sea_orm::{Database, DatabaseConnection};
 use sea_orm_migration::MigratorTrait;
 use serde_json::{Value, json};
@@ -36,6 +36,13 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
-async fn health(State(db): State<DatabaseConnection>) -> Json<Value> {
-    Json(json!({ "status": "ok", "db": db.ping().await.is_ok() }))
+/// 503 when the database does not answer: the compose healthcheck (`wget --spider`) only reads the status code.
+async fn health(State(db): State<DatabaseConnection>) -> (StatusCode, Json<Value>) {
+    let db_ok = db.ping().await.is_ok();
+    let (code, status) = if db_ok {
+        (StatusCode::OK, "ok")
+    } else {
+        (StatusCode::SERVICE_UNAVAILABLE, "unavailable")
+    };
+    (code, Json(json!({ "status": status, "db": db_ok })))
 }
