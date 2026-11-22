@@ -27,7 +27,10 @@
       "Read(./data/**)",
       "Edit(./**/package.json)",
       "Edit(./.claude/settings.json)",
-      "Edit(./.claude/settings.local.json)"
+      "Edit(./.claude/settings.local.json)",
+      "Edit(./.claude/settings.json)",
+      "Edit(./.claude/settings.local.json)",
+      "Bash(*.config/*)"
     ]
   },
   "hooks": {
