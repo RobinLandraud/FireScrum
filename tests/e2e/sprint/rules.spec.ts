@@ -1,4 +1,4 @@
-import { test, expect, dialog, createStory, closeSprint, type Page } from '../helpers';
+import { test, expect, dialog, launchBox, createStory, closeSprint, type Page } from '../helpers';
 import { US, seedRunningSprint } from './seed';
 
 const launchButton = (page: Page) => dialog(page).getByRole('button', { name: /Lancer le sprint/ });
@@ -9,7 +9,7 @@ test.describe('launch needs a user story', () => {
     await createStory(api, 'Se connecter', { velocity: 5, accepted: true });
     await page.goto('/sprint');
     await page.getByRole('button', { name: 'Nouveau sprint' }).click();
-    await expect(dialog(page).getByRole('checkbox', { name: /Se connecter/ })).toBeVisible();
+    await expect(launchBox(page, 'Se connecter')).toBeVisible();
     await expect(launchButton(page)).toBeDisabled();
   });
 
@@ -18,7 +18,7 @@ test.describe('launch needs a user story', () => {
     await closeSprint(api, sprint.id, { carried: [story.id] });
     await page.goto('/sprint');
     await page.getByRole('button', { name: 'Nouveau sprint' }).click();
-    const box = dialog(page).getByRole('checkbox', { name: new RegExp(US) });
+    const box = launchBox(page, US);
     await expect(box).toBeChecked();
     await box.click();
     await expect(launchButton(page)).toBeDisabled();

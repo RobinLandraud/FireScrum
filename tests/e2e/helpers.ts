@@ -47,6 +47,10 @@ export const expectModalSize = (page: Page, name: string) =>
     )
     .toBe('1024 × 680');
 
+/** Checkbox of a user story in the sprint launch modal (its name quotes the title, so it is matched whole). */
+export const launchBox = (page: Page, title: string) =>
+  dialog(page).getByRole('checkbox', { name: `Embarquer « ${title} »` });
+
 export const progressBar = (page: Page, title: string) =>
   page.getByRole('progressbar', { name: `Avancement de « ${title} »` });
 
