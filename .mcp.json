@@ -27,6 +27,27 @@
         "--browser",
         "chromium"
       ]
+    },
+    "github": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-v",
+        "./.config/github-app.pem:/key.pem:ro",
+        "-e",
+        "GITHUB_APP_ID=5806029",
+        "-e",
+        "GITHUB_APP_INSTALLATION_ID=183069912",
+        "-e",
+        "GITHUB_APP_PRIVATE_KEY_PATH=/key.pem",
+        "-e",
+        "GITHUB_TOOLSETS=issues",
+        "-e",
+        "GITHUB_EXCLUDE_TOOLS=add_issue_comment,update_issue_comment,sub_issue_write",
+        "ghcr.io/github/github-mcp-server:v2.1.0@sha256:f6056fc10bfffcc8c81a6417a2e9ca12808647e8dd6049642a4feaadee0e0f8a"
+      ]
     }
   }
 }
