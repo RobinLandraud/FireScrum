@@ -1,6 +1,6 @@
 # 012 — Style neumorphique
 
-**Statut** : Brouillon
+**Statut** : Livrée
 
 ## Contexte
 
@@ -96,3 +96,11 @@ Scénarios de validation, chacun avec son ID du [cahier de recettes](../../cahie
 - **Couleurs de statut passées en variables de thème** : les verts, bleus et gris écrits en dur dans les écrans suivraient sinon l'ancien style.
 - **Fond assombri conservé sous les modals** : sans lui, une modal de la couleur de la surface se confondrait avec la page.
 - **Trace laissée par la tâche et inclinaison quand on la saisit** : reprises de la maquette, pour qu'on voie d'où vient la tâche et qu'elle a bien été attrapée.
+- **Thème construit à partir des variables de Spartan** (`styles.css`), comme pour la 008, plutôt qu'un thème neumorphique tout fait : ceux qui existent sont écrits pour Bootstrap. Les ombres sont construites à partir de deux couleurs (`--neu-light`, `--neu-dark`) et exposées en utilitaires Tailwind (`shadow-raised`, `shadow-inset`…) : le mode sombre ne redéfinit que ces deux couleurs, et chaque composant Helm reste le seul endroit où il est stylé.
+- **Ombres du mode sombre plus marquées qu'en clair** : sur une surface foncée, la même différence de teinte se voit moins.
+- **Trait des champs et des cases à cocher distinct du trait léger des blocs** (`--input`) : en sombre, il atteint 3:1 sur la surface, sinon une case vide disparaît presque.
+- **Couleurs ajustées pour le contraste AA** : bleu des textes et des badges plus foncé en clair, plus clair en sombre ; rouge `#b42318` en clair, `#fda29b` en sombre, avec un texte foncé sur le bouton destructif en sombre (`--destructive-foreground`). Le statut « En cours » d'une story, orange, passe aussi par une variable (`--warning`).
+- **Trace à l'origine par l'option `cdkDropListHasAnchor` du CDK, risque accepté** : avec elle, un dépôt échoue parfois (la tâche revient à sa place, sans message ; 3 fois sur 60 dans les tests, jamais sans l'option). Une trace affichée par le composant lui-même a été écartée. Si les échecs gênent, c'est la piste à reprendre.
+- **Inclinaison par `rotate` / `scale`, pas `transform`** : le CDK déplace la tâche saisie avec `transform`.
+- **Le statut part à la fin de l'animation de pose (250 ms)** : le CDK ne signale le dépôt qu'à ce moment ; les tests navigateur attendent la fin du dépôt avant de recharger la page.
+- **Une règle globale pour « réduire les animations »** dans `styles.css`, plutôt qu'une par composant : elle couvre aussi les animations des modals et du glisser-déposer.
