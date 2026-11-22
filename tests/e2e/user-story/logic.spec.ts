@@ -147,3 +147,12 @@ test('R46 US : tâches en Terminé sur le total, « En validation » non compté
   await nav(page, 'Sprint');
   await expect(progressBar(page, 'Importer')).toHaveAttribute('aria-valuenow', '50');
 });
+
+// Test helper `card`: a title is matched as plain text, whole (code review, point 9)
+test('card() : titre exact, caractères spéciaux sans effet, pas de confusion avec un titre plus long', async ({ page, api }) => {
+  await createStory(api, 'Se connecter');
+  await createStory(api, 'Se connecter en SSO (v2)');
+  await page.goto('/backlog');
+  await expect(card(page, 'Se connecter'), 'prefix of another title').toHaveCount(1);
+  await expect(card(page, 'Se connecter en SSO (v2)'), 'parentheses in the title').toHaveCount(1);
+});

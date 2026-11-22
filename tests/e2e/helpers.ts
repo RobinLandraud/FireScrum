@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import { test as base, expect } from '../fixtures';
 
 // Shared fixtures and factories; `test` is overridden below with the browser console watch.
@@ -25,7 +25,14 @@ export const test = base.extend<{ errors: string[] }>({
 // ---------- Locators ----------
 
 export const dialog = (page: Page) => page.getByRole('dialog');
-export const card = (page: Page, title: string) => page.getByRole('button', { name: new RegExp(`^${title}`) });
+/**
+ * Button (card, task) in `scope` holding a text exactly equal to `title`. No regex on the accessible name:
+ * any character is safe, and "Se connecter" does not also match "Se connecter en SSO".
+ * The inner locator comes from `page`: Playwright resolves it inside each button.
+ */
+const byTitle = (page: Page, scope: Page | Locator, title: string) =>
+  scope.getByRole('button').filter({ has: page.getByText(title, { exact: true }) });
+export const card = (page: Page, title: string) => byTitle(page, page, title);
 export const nav = (page: Page, name: string) => page.getByRole('navigation').getByRole('link', { name }).click();
 /** All modals have the same size: 1024 × 85% of the height (680 px in the 1280 × 800 window).
  *  Polls until the opening zoom animation ends, otherwise the box is measured mid-zoom. */
@@ -48,13 +55,12 @@ export const progressBar = (page: Page, title: string) =>
 /** The row of a user story on the Sprint page. */
 export const row = (page: Page, us: string) => page.getByRole('region', { name: us });
 export const column = (page: Page, us: string, label: string) => row(page, us).getByLabel(label, { exact: true });
-export const taskCard = (page: Page, us: string, title: string) =>
-  row(page, us).getByRole('button', { name: new RegExp(`^${title}`) });
+export const taskCard = (page: Page, us: string, title: string) => byTitle(page, row(page, us), title);
 export const addTaskButton = (page: Page, us: string) =>
   row(page, us).getByRole('button', { name: `Ajouter une tâche à « ${us} »` });
 
 export const expectInColumn = (page: Page, us: string, title: string, label: string) =>
-  expect(column(page, us, label).getByRole('button', { name: new RegExp(`^${title}`) })).toBeVisible();
+  expect(byTitle(page, column(page, us, label), title)).toBeVisible();
 
 /** Picks a task up and holds it over a column, without dropping it: the CDK expects progressive mouse moves. */
 export async function hold(page: Page, us: string, title: string, to: string) {
