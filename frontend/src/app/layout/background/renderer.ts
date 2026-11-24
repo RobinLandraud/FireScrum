@@ -1,5 +1,5 @@
-import FRAGMENT from './fragment.glsl';
-import VERTEX from './vertex.glsl';
+import FRAGMENT from './shaders/fragment.glsl';
+import VERTEX from './shaders/vertex.glsl';
 
 /** Values drawn in one frame. */
 export interface BackgroundUniforms {
