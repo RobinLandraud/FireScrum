@@ -83,7 +83,7 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 
 | ID | Fonctionnalité | Scénario | Résultat attendu | Résultat obtenu | Statut |
 |----|----------------|----------|------------------|-----------------|--------|
-| R64 | Surfaces | Ouvrir chaque page en mode clair | Fond et blocs de la même couleur, sans bordure ; les cartes, les boutons et l'onglet actif sont en relief ; les champs, la barre d'onglets, les barres de progression et les colonnes du Sprint sont en creux |  | À tester |
+| R64 | Surfaces | Ouvrir chaque page en mode clair | Fond et blocs de la même couleur, sans bordure ; les cartes, les boutons et l'onglet actif sont en relief ; les champs, la barre d'onglets, les barres de progression et les colonnes du Sprint sont en creux ; les tâches du Sprint sont en relief, bleu brillant, avec un texte blanc |  | À tester |
 | R65 | Bouton | Cliquer sur un bouton principal | Il s'enfonce pendant le clic, puis reprend son relief |  | À tester |
 | R66 | Survol | Survoler une carte du Backlog ou une tâche du Sprint | Elle ressort davantage |  | À tester |
 | R67 | Modal et toast | Ouvrir une modal ; faire apparaître un toast | La modal apparaît en relief au-dessus d'un fond assombri ; le toast s'affiche en relief |  | À tester |
@@ -93,6 +93,7 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 | R71 | Contraste | Mesurer le contraste des textes principaux et secondaires, en clair et en sombre | Au moins 4,5:1 |  | À tester |
 | R72 | Mode sombre | Passer en mode sombre et ouvrir chaque page et chaque modal | Chaque carte, champ et colonne se distingue du fond sans plisser les yeux, et tout est lisible |  | À tester |
 | R73 | Non-régression | Rejouer les recettes R01 à R19 et R40 à R45 | Toutes passent, sans changement de comportement |  | À tester |
+| R74 | Sélecteur de vélocité | Dans la modal d'une US, cliquer sur une vélocité, glisser la bille vers une autre, puis utiliser les flèches du clavier ; enregistrer et rouvrir l'US | La bille suit, se cale sur la valeur choisie et l'affiche ; la vélocité est conservée ; sur une US terminée, le sélecteur ne bouge pas |  | À tester |
 
 ## Modals
 

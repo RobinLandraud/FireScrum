@@ -22,6 +22,14 @@ FireScrum a aujourd'hui le look de TailAdmin (spec [008](../008-style-tailadmin/
   - la barre d'onglets, les barres de progression, les colonnes du Sprint ;
   - le lien actif de la barre latérale.
 - **Survol** : une carte ou une tâche cliquable ressort un peu plus.
+- **Exception bleue** : les tâches du Sprint et la bille du sélecteur de vélocité ne sont pas couleur surface. Elles sont bleu brillant (dégradé, lueur bleue, reflet blanc), avec un texte blanc.
+
+### Sélecteur de vélocité
+
+- Dans la modal d'une US, la vélocité ne se choisit plus dans une liste déroulante : les valeurs 1, 2, 3, 5, 8, 13 et 21 sont gravées dans une gouttière en creux, et une bille bleue se place sur la valeur choisie, qu'elle affiche.
+- On choisit une valeur en cliquant dessus, en glissant la bille (souris ou doigt) ou avec les flèches du clavier.
+- Pendant le glisser, la bille suit le pointeur avec un léger retard, attirée par la valeur la plus proche ; au lâcher, elle s'y cale en douceur.
+- Sur une US terminée, le sélecteur est grisé et ne bouge plus.
 
 ### Boutons
 
@@ -75,7 +83,7 @@ FireScrum a aujourd'hui le look de TailAdmin (spec [008](../008-style-tailadmin/
 
 Scénarios de validation, chacun avec son ID du [cahier de recettes](../../cahier-de-recettes.md) (nouveau ou modifié) :
 
-- [ ] **R64** — Ouvrir chaque page en mode clair → fond et blocs de la même couleur, sans bordure. Les cartes, les boutons et l'onglet actif sont en relief ; les champs, la barre d'onglets, les barres de progression et les colonnes du Sprint sont en creux.
+- [ ] **R64** — Ouvrir chaque page en mode clair → fond et blocs de la même couleur, sans bordure. Les cartes, les boutons et l'onglet actif sont en relief ; les champs, la barre d'onglets, les barres de progression et les colonnes du Sprint sont en creux. Les tâches du Sprint sont en relief, bleu brillant, avec un texte blanc.
 - [ ] **R65** — Cliquer sur un bouton principal → il s'enfonce pendant le clic, puis reprend son relief.
 - [ ] **R66** — Survoler une carte du Backlog ou une tâche du Sprint → elle ressort davantage.
 - [ ] **R67** — Ouvrir une modal → elle apparaît en relief au-dessus d'un fond assombri. Un toast s'affiche en relief.
@@ -85,6 +93,7 @@ Scénarios de validation, chacun avec son ID du [cahier de recettes](../../cahie
 - [ ] **R71** — Mesurer le contraste des textes principaux et secondaires, en clair et en sombre → au moins 4,5:1.
 - [ ] **R72** — Passer en mode sombre et ouvrir chaque page et chaque modal → chaque carte, champ et colonne se distingue du fond sans plisser les yeux, et tout est lisible.
 - [ ] **R73** — Rejouer les recettes R01 à R19 et R40 à R45 → elles passent toutes, sans changement de comportement.
+- [ ] **R74** — Dans la modal d'une US, cliquer sur une vélocité, puis glisser la bille vers une autre, puis utiliser les flèches du clavier → la bille suit, se cale sur la valeur choisie et l'affiche. Enregistrer et rouvrir l'US → la vélocité est conservée. Sur une US terminée, le sélecteur ne bouge pas.
 
 ## Décisions
 
@@ -103,4 +112,7 @@ Scénarios de validation, chacun avec son ID du [cahier de recettes](../../cahie
 - **Trace à l'origine par l'option `cdkDropListHasAnchor` du CDK, risque accepté** : avec elle, un dépôt échoue parfois (la tâche revient à sa place, sans message ; 3 fois sur 60 dans les tests, jamais sans l'option). Une trace affichée par le composant lui-même a été écartée. Si les échecs gênent, c'est la piste à reprendre.
 - **Inclinaison par `rotate` / `scale`, pas `transform`** : le CDK déplace la tâche saisie avec `transform`.
 - **Le statut part à la fin de l'animation de pose (250 ms)** : le CDK ne signale le dépôt qu'à ce moment ; les tests navigateur attendent la fin du dépôt avant de recharger la page.
+- **Tâches du Sprint en bleu brillant, comme la bille du sélecteur** : elles sont l'élément qu'on manipule le plus ; en bleu, elles se détachent des colonnes couleur surface. Le reflet clair reste dans le coin pour que le texte blanc garde un contraste de 4,8:1.
+- **Sélecteur de vélocité en boutons radio cachés, pas en curseur `range`** : la vélocité suit Fibonacci, un curseur ne garderait que la position (0 à 6). Les boutons radio gardent la vraie valeur, le clavier et les lecteurs d'écran. C'est un composant réutilisable (`app-step-picker`), qui reçoit ses valeurs en entrée et se branche sur les formulaires comme un champ natif.
+- **Bille aimantée et en retard pendant le glisser** : reprise de l'inspiration (un curseur qui saute de valeur en valeur, la bille qui rattrape), sans perdre le suivi du pointeur. Le pointeur n'est capturé qu'au premier mouvement : un simple clic reste sur la valeur cliquée.
 - **Une règle globale pour « réduire les animations »** dans `styles.css`, plutôt qu'une par composant : elle couvre aussi les animations des modals et du glisser-déposer.

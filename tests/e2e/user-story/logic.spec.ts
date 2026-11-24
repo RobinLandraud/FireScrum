@@ -102,7 +102,7 @@ test.describe('edit and accept', () => {
     await expect(dialog(page).getByLabel('Description', { exact: true })).toHaveValue('Via le fournisseur d’identité');
   });
 
-  test('R03c vélocité : la bille se glisse jusqu’à une autre valeur', async ({ page }) => {
+  test('R74 vélocité : la bille se glisse jusqu’à une autre valeur', async ({ page }) => {
     await openAccepted(page, 'Se connecter');
     const from = await velocity(page, 5).boundingBox();
     const to = await velocity(page, 21).boundingBox();
