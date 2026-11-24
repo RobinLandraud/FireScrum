@@ -22,12 +22,13 @@
   // A drag on a touch screen moves the ball, not the page.
   touch-action: none;
 
-  // While dragged, the ball sticks to the pointer: no easing, until the snap on release.
+  // While dragged, the ball trails the pointer: a short ease-out, restarted on every move,
+  // so it catches up smoothly instead of jumping. The slower snap applies on release.
   &.dragging {
     cursor: grabbing;
 
     .ball {
-      transition: none;
+      transition: left 0.35s cubic-bezier(0.2, 0.8, 0.3, 1);
     }
 
     input {
@@ -134,7 +135,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ball {
+  .ball,
+  .track.dragging .ball {
     transition: none;
   }
 }
