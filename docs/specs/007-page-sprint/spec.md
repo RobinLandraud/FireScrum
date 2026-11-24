@@ -16,7 +16,8 @@ Cette spec regroupe toute la vie d'un sprint sur une seule page : lancement, sui
 - **Vélocité totale** du sprint sélectionné.
 - **Un seul bouton, tout à droite** :
   - « Nouveau sprint » si le dernier sprint est clos, ou s'il n'y a aucun sprint ;
-  - « Clôturer le sprint » si le dernier sprint est en cours.
+  - « Clôturer le sprint » si le dernier sprint est en cours et que c'est lui qui est affiché ;
+  - aucun bouton si on consulte un sprint clos pendant qu'un autre est en cours.
 - **Aucun sprint** : le menu est masqué, la page affiche « Aucun sprint pour l'instant. » et le bouton « Nouveau sprint ».
 
 ### Tableau du sprint sélectionné
@@ -113,7 +114,8 @@ Cette spec regroupe toute la vie d'un sprint sur une seule page : lancement, sui
   - création d'une tâche via la carte « + » ;
   - modification et suppression d'une tâche depuis le tableau ;
   - décochage refusé sur une tâche Terminé ;
-  - US terminée en lecture seule dans le Backlog.
+  - US terminée en lecture seule dans le Backlog ;
+  - R19c : sprint clos consulté pendant qu'un autre est en cours, sans bouton « Clôturer le sprint ».
 
 ## Décisions
 

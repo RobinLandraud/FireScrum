@@ -20,14 +20,17 @@
 
     <div class="ms-auto">
       @if (lastActive()) {
-        <hlm-dialog #closeDialog="hlmDialog">
-          <button hlmDialogTrigger hlmBtn variant="outline">Clôturer le sprint</button>
-          <hlm-dialog-content *hlmDialogPortal="let ctx">
-            @if (detail.value(); as d) {
-              <app-close-sprint-form [sprint]="d" (sprintClosed)="closeDialog.close(); reloadAll()" />
-            }
-          </hlm-dialog-content>
-        </hlm-dialog>
+        <!-- Only on the active sprint itself: the modal closes the displayed sprint. -->
+        @if (!readonly()) {
+          <hlm-dialog #closeDialog="hlmDialog">
+            <button hlmDialogTrigger hlmBtn variant="outline">Clôturer le sprint</button>
+            <hlm-dialog-content *hlmDialogPortal="let ctx">
+              @if (detail.value(); as d) {
+                <app-close-sprint-form [sprint]="d" (sprintClosed)="closeDialog.close(); reloadAll()" />
+              }
+            </hlm-dialog-content>
+          </hlm-dialog>
+        }
       } @else if (sprints.hasValue()) {
         <hlm-dialog #launchDialog="hlmDialog">
           <button hlmDialogTrigger hlmBtn>Nouveau sprint</button>

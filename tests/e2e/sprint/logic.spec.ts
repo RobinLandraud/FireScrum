@@ -166,6 +166,17 @@ test.describe('carried over', () => {
       await sprintMenu(page).selectOption({ label: 'Sprint 2 — en cours' });
       await expectInColumn(page, US, 'Tâche initiale', 'En validation');
     });
+
+    test('R19c sprint clos affiché : pas de « Clôturer le sprint », qui revient sur le sprint en cours', async ({ page }) => {
+      const closeButton = page.getByRole('button', { name: 'Clôturer le sprint' });
+      await expect(closeButton).toBeVisible();
+      await sprintMenu(page).selectOption({ label: 'Sprint 1' });
+      await expectInColumn(page, US, 'Tâche initiale', 'En cours');
+      await expect(closeButton).toHaveCount(0);
+      await expect(page.getByRole('button', { name: 'Nouveau sprint' })).toHaveCount(0);
+      await sprintMenu(page).selectOption({ label: 'Sprint 2 — en cours' });
+      await expect(closeButton).toBeVisible();
+    });
   });
 });
 
