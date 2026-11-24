@@ -1,15 +1,16 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HlmToasterImports } from '@spartan-ng/helm/sonner';
+import { AppBackground } from './layout/background/component';
 import { AppHeader } from './layout/header/component';
 import { AppSidebar } from './layout/sidebar/component';
 import { SidebarService } from './services/sidebar';
 import { ThemeService } from './services/theme';
 
-/** App shell: sidebar, header, page. */
+/** App shell: animated background, sidebar, header, page. */
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HlmToasterImports, AppHeader, AppSidebar],
+  imports: [RouterOutlet, HlmToasterImports, AppBackground, AppHeader, AppSidebar],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

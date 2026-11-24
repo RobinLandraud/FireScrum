@@ -1,0 +1,30 @@
+// Behind the whole app, over the page colour; clicks go through to the elements above.
+:host {
+  --halo-blue: rgb(70 95 255 / 26%);
+  --halo-orange: rgb(247 144 9 / 20%);
+
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+// Dark: a stronger blue, a softer orange, as in the shader.
+:host-context(.dark) {
+  --halo-blue: rgb(70 95 255 / 32%);
+  --halo-orange: rgb(247 144 9 / 14%);
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+// No WebGL: the same halos, still, in CSS.
+:host(.fallback) {
+  background:
+    radial-gradient(640px 420px at 82% 8%, var(--halo-blue), transparent 70%),
+    radial-gradient(560px 400px at 18% 96%, var(--halo-orange), transparent 70%),
+    var(--surface);
+}
