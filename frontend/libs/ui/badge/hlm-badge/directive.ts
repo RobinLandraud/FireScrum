@@ -21,15 +21,16 @@ const badgeVariants = cva(
 	{
 		variants: {
 			variant: {
-				default: 'bg-accent text-accent-foreground [a]:hover:bg-accent/80',
-				secondary: 'bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80',
+				// Neumorphic (spec 012): badges are raised, without border.
+				default: 'bg-accent text-accent-foreground shadow-raised-sm [a]:hover:bg-accent/80',
+				secondary: 'bg-secondary text-secondary-foreground shadow-raised-sm [a]:hover:shadow-raised',
 				destructive: [
 					// colors
-					'bg-destructive/10 text-destructive dark:bg-destructive/20 [a]:hover:bg-destructive/20',
+					'bg-destructive/10 text-destructive shadow-raised-sm dark:bg-destructive/20 [a]:hover:bg-destructive/20',
 					// focus
 					'focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40',
 				],
-				outline: 'border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground',
+				outline: 'text-foreground shadow-raised-sm [a]:hover:shadow-raised [a]:hover:text-muted-foreground',
 				ghost: 'hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50',
 				link: 'text-primary underline-offset-4 hover:underline',
 			},

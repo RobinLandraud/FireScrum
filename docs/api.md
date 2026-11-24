@@ -13,6 +13,7 @@ Toutes les routes sont sous `/api`, en JSON. Les erreurs renvoient `{ "error": "
 
 | Méthode | Route | Corps | Réponse |
 |---------|-------|-------|---------|
+| GET | `/health` | | `{ status: "ok", db: true }` — 503 `{ status: "unavailable", db: false }` si la base ne répond pas (sert au healthcheck de la stack de test) |
 | GET | `/project` | | `Project` |
 | GET | `/features` | | `Feature[]` (avec leurs US, imbriqué) |
 | POST | `/features` | `{ title, description?, user_story_ids?: number[] }` | 201 `Feature` avec ses US, rattachées dans la même transaction — 400 si une US n'existe pas, a déjà une feature ou est terminée |

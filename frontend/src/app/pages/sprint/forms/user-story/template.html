@@ -1,5 +1,5 @@
-<section class="rounded-2xl border bg-card" [attr.aria-label]="story().title">
-  <header class="flex flex-wrap items-center gap-3 border-b px-4 py-2">
+<section class="rounded-2xl bg-card shadow-raised" [attr.aria-label]="story().title">
+  <header class="flex flex-wrap items-center gap-3 px-4 py-2">
     <h2 class="font-medium">{{ story().title }}</h2>
     <span class="text-sm text-muted-foreground">{{ featureTitle() ?? 'Sans feature' }}</span>
     <span hlmBadge variant="outline">{{ story().velocity }} pts</span>
@@ -12,11 +12,12 @@
   <div class="grid grid-cols-4 gap-2 p-2" cdkDropListGroup>
     @for (col of columns; track col.value) {
       <div
-        class="flex min-h-20 flex-col gap-2 rounded-xl bg-muted/60 p-2 dark:bg-gray-950/70"
+        class="column flex min-h-20 flex-col gap-3 rounded-xl bg-muted p-2 shadow-inset"
         cdkDropList
         [cdkDropListData]="col.value"
         [cdkDropListDisabled]="readonly()"
         [cdkDropListSortingDisabled]="true"
+        [cdkDropListHasAnchor]="true"
         (cdkDropListDropped)="drop($event)"
         [attr.aria-label]="col.label"
       >
@@ -27,13 +28,13 @@
             cdkDrag
             [cdkDragData]="task"
             [cdkDragDisabled]="readonly()"
-            class="flex items-center gap-2 rounded-lg border bg-card px-3 py-2 text-left text-sm shadow-xs hover:border-primary/40"
+            class="task flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm"
             (click)="opened.set(task.id)"
           >
             <span class="flex-1">{{ task.title }}</span>
             @if (task.validation_points.length) {
               <span
-                class="text-xs text-muted-foreground"
+                class="text-xs"
                 [attr.aria-label]="checkedCount(task) + ' points cochés sur ' + task.validation_points.length"
               >
                 {{ checkedCount(task) }}/{{ task.validation_points.length }}
@@ -44,7 +45,7 @@
         @if (col.value === 'todo' && !readonly()) {
           <button
             type="button"
-            class="flex items-center justify-center rounded-lg border border-dashed py-2 text-muted-foreground hover:bg-muted"
+            class="flex items-center justify-center rounded-lg py-2 text-muted-foreground shadow-raised-sm transition-[color,box-shadow] hover:text-foreground active:shadow-inset"
             [attr.aria-label]="'Ajouter une tâche à « ' + story().title + ' »'"
             (click)="opened.set('new')"
           >

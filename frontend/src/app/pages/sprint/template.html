@@ -5,14 +5,14 @@
     @if (ordered().length) {
       <select class="select w-64" aria-label="Sprint affiché" (change)="select($event)">
         @for (s of ordered(); track s.id) {
-          <option [value]="'' + s.id" [selected]="s.id === selectedId()" [class]="s.status === 'active' ? 'text-emerald-700 dark:text-emerald-400' : ''">
+          <option [value]="'' + s.id" [selected]="s.id === selectedId()" [class]="s.status === 'active' ? 'text-success-foreground' : ''">
             {{ s.name }}{{ s.status === 'active' ? ' — en cours' : '' }}
           </option>
         }
       </select>
       @if (detail.value(); as d) {
         @if (d.status === 'active') {
-          <span hlmBadge class="bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400">en cours</span>
+          <span hlmBadge class="bg-success/15 text-success-foreground">en cours</span>
         }
         <span class="text-sm text-muted-foreground">{{ d.total_velocity }} pts</span>
       }

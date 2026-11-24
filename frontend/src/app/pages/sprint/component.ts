@@ -8,8 +8,8 @@ import { of } from 'rxjs';
 import { FeatureApi } from '../../services/feature.api';
 import { SprintApi } from '../../services/sprint.api';
 import { UserStoryApi } from '../../services/user-story.api';
-import { CloseSprintForm } from './forms/close/form';
-import { LaunchSprintForm } from './forms/launch/form';
+import { CloseSprintForm } from './forms/close/component';
+import { LaunchSprintForm } from './forms/launch/component';
 import { SprintStory } from './forms/user-story/component';
 
 @Component({

@@ -2,6 +2,8 @@
 
 **Statut** : Livrée
 
+> Le thème (palette, bordures, ombres) est remplacé par le style neumorphique de la spec [012](../012-style-neumorphique/spec.md). La barre latérale, l'en-tête et la bascule clair / sombre restent ceux décrits ici.
+
 ## Contexte
 
 FireScrum a aujourd'hui une simple barre de liens en haut et le style par défaut des composants. On reprend le style du template [TailAdmin Angular](https://github.com/tailadmin/free-angular-tailwind-dashboard) (licence MIT), qui partage la même stack (Angular 22, Tailwind 4, `@spartan-ng/brain`), pour donner à l'app un vrai cadre de tableau de bord et un mode sombre. Aucun comportement métier ne change.

@@ -1,11 +1,11 @@
 <aside
-  class="fixed inset-y-0 start-0 z-50 flex w-[290px] flex-col border-e border-sidebar-border bg-sidebar px-5 text-sidebar-foreground transition-all duration-300 lg:translate-x-0"
+  class="fixed inset-y-0 start-0 z-50 flex w-[290px] flex-col bg-sidebar px-5 text-sidebar-foreground transition-all duration-300 lg:translate-x-0"
   [class.-translate-x-full]="!sidebar.mobileOpen()"
   [class.lg:w-[90px]]="collapsed()"
   [class.lg:px-4]="collapsed()"
 >
   <div class="flex items-center gap-3 py-8" [class.lg:justify-center]="collapsed()">
-    <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+    <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-raised-sm">
       <ng-icon name="matLocalFireDepartmentOutline" size="22" />
     </span>
     <span class="grid leading-tight" [class.lg:sr-only]="collapsed()">
@@ -21,9 +21,9 @@
         <li>
           <a
             [routerLink]="link.path"
-            routerLinkActive="bg-sidebar-accent text-sidebar-accent-foreground"
+            routerLinkActive="bg-sidebar-accent text-sidebar-accent-foreground shadow-inset"
             [routerLinkActiveOptions]="{ exact: false }"
-            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-muted"
+            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-[color,box-shadow] hover:text-foreground"
             [class.lg:justify-center]="collapsed()"
             [attr.title]="collapsed() ? link.label : null"
           >

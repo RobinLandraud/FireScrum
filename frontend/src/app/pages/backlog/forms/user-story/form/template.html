@@ -9,24 +9,15 @@
       <label hlmLabel [for]="idPrefix() + '-description'">Description</label>
       <textarea hlmTextarea [id]="idPrefix() + '-description'" rows="3" [formField]="form.description"></textarea>
     </div>
-    <div class="grid grid-cols-2 gap-4">
-      <div class="grid gap-2">
-        <label hlmLabel [for]="idPrefix() + '-velocity'">Vélocité</label>
-        <select [id]="idPrefix() + '-velocity'" class="select" [formField]="form.velocity">
-          @for (v of fibonacci; track v) {
-            <option [value]="'' + v">{{ v }}</option>
-          }
-        </select>
-      </div>
-      <div class="grid gap-2">
-        <label hlmLabel [for]="idPrefix() + '-feature'">Feature</label>
-        <select [id]="idPrefix() + '-feature'" class="select" [formField]="form.feature">
-          <option value="">Sans feature</option>
-          @for (f of features(); track f.id) {
-            <option [value]="'' + f.id">{{ f.title }}</option>
-          }
-        </select>
-      </div>
+    <app-step-picker label="Vélocité" [values]="fibonacci" [formField]="form.velocity" />
+    <div class="grid gap-2">
+      <label hlmLabel [for]="idPrefix() + '-feature'">Feature</label>
+      <select [id]="idPrefix() + '-feature'" class="select" [formField]="form.feature">
+        <option value="">Sans feature</option>
+        @for (f of features(); track f.id) {
+          <option [value]="'' + f.id">{{ f.title }}</option>
+        }
+      </select>
     </div>
   </fieldset>
   @if (story()?.done) {

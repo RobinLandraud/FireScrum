@@ -7,8 +7,8 @@ import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmLabelImports } from '@spartan-ng/helm/label';
 import { HlmTextareaImports } from '@spartan-ng/helm/textarea';
 import { firstValueFrom } from 'rxjs';
-import { toastApiError } from '../../../../services/error';
-import { FeatureApi } from '../../../../services/feature.api';
+import { toastApiError } from '../../../../../services/error';
+import { FeatureApi } from '../../../../../services/feature.api';
 
 const EMPTY = { title: '', description: '' };
 
@@ -17,8 +17,8 @@ const EMPTY = { title: '', description: '' };
   selector: 'app-feature-form',
   host: { class: 'block' },
   imports: [FormField, HlmButtonImports, HlmInputImports, HlmLabelImports, HlmTextareaImports],
-  templateUrl: './form.html',
-  styleUrl: './form.scss',
+  templateUrl: './template.html',
+  styleUrl: './template.scss',
 })
 export class FeatureForm {
   private api = inject(FeatureApi);

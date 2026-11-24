@@ -31,3 +31,4 @@ Le déroulé (spec → plan → code → livraison) est dans le skill [dstory](.
 | 009 | [Modals de taille fixe et listes qui défilent](009-modals-taille-fixe/spec.md) | Livrée |
 | 010 | [Tests navigateur indépendants et environnements séparés](010-tests-e2e-independants/spec.md) | Livrée |
 | 011 | [Tests de l'API indépendants, au même endroit que les tests navigateur](011-tests-api-playwright/spec.md) | Livrée |
+| 012 | [Style neumorphique](012-style-neumorphique/spec.md) | Livrée |

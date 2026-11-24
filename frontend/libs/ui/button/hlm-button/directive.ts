@@ -28,34 +28,31 @@ export const buttonVariants = cva(
 	{
 		variants: {
 			variant: {
-				default: 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
+				// Neumorphic (spec 012): solid buttons are raised and press in; surface buttons sink on click.
+				default: 'bg-primary text-primary-foreground shadow-raised-sm hover:bg-primary/90 active:shadow-pressed',
 				outline: [
-					// colors
-					'border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted',
-					'aria-expanded:text-foreground',
-					// dark mode
-					'dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
+					// colors: surface colour, raised, no border
+					'bg-background text-foreground shadow-raised-sm hover:shadow-raised',
+					// pressed and open menu
+					'active:shadow-inset aria-expanded:shadow-inset',
 				],
 				secondary: [
 					// colors
-					'bg-secondary text-secondary-foreground',
-					'hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]',
-					// open menu
-					'aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
+					'bg-secondary text-secondary-foreground shadow-raised-sm hover:shadow-raised',
+					// pressed and open menu
+					'active:shadow-inset aria-expanded:shadow-inset',
 				],
 				ghost: [
-					// colors
-					'hover:bg-muted hover:text-foreground dark:hover:bg-muted/50',
-					// open menu
-					'aria-expanded:bg-muted aria-expanded:text-foreground',
+					// colors: flat, raised on hover only
+					'hover:text-foreground hover:shadow-raised-sm',
+					// pressed and open menu
+					'active:shadow-inset aria-expanded:shadow-raised-sm aria-expanded:text-foreground',
 				],
 				destructive: [
 					// colors
-					'bg-destructive/10 text-destructive hover:bg-destructive/20 dark:bg-destructive/20',
-					'dark:hover:bg-destructive/30',
+					'bg-destructive text-destructive-foreground shadow-raised-sm hover:bg-destructive/90 active:shadow-pressed',
 					// focus
-					'focus-visible:border-destructive/40 focus-visible:ring-destructive/20',
-					'dark:focus-visible:ring-destructive/40',
+					'focus-visible:border-destructive/40 focus-visible:ring-destructive/50',
 				],
 				link: 'text-primary underline-offset-4 hover:underline',
 			},

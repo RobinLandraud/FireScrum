@@ -14,16 +14,16 @@ export class HlmInput {
 		classes(
 			() =>
 				[
-					// size and frame
-					'h-11 w-full min-w-0 rounded-lg border border-input bg-transparent px-4 py-1 shadow-xs outline-none',
-					'transition-[color,box-shadow] dark:bg-input/30',
+					// size and frame: inset, with a light stroke so the field stays visible (spec 012)
+					'h-11 w-full min-w-0 rounded-lg border border-input bg-transparent px-4 py-1 shadow-inset outline-none',
+					'transition-[color,box-shadow]',
 					// text
 					'text-base md:text-sm placeholder:text-muted-foreground',
 					// file input
 					'file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium',
 					'file:text-foreground',
 					// focus
-					'focus-visible:border-ring focus-visible:ring-primary/10 focus-visible:ring-3',
+					'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3',
 					// invalid
 					'data-[matches-spartan-invalid=true]:border-destructive data-[matches-spartan-invalid=true]:ring-3',
 					'data-[matches-spartan-invalid=true]:ring-destructive/20',

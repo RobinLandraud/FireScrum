@@ -10,6 +10,7 @@ import {
   addTaskButton,
   expectInColumn,
   expectModalSize,
+  launchBox,
   drag,
   progressBar,
   createStory,
@@ -34,7 +35,7 @@ test.describe('launch', () => {
     await expect(page.getByText("Aucun sprint pour l'instant.")).toBeVisible();
     await expect(sprintMenu(page)).toHaveCount(0);
     await page.getByRole('button', { name: 'Nouveau sprint' }).click();
-    await expect(dialog(page).getByRole('checkbox', { name: /Se connecter/ })).toBeVisible();
+    await expect(launchBox(page, 'Se connecter')).toBeVisible();
     await expect(dialog(page).getByText('Se déconnecter')).toHaveCount(0);
     await expectModalSize(page, 'launch');
   });
@@ -43,7 +44,7 @@ test.describe('launch', () => {
     await createStory(api, 'Se connecter', { velocity: 5, accepted: true });
     await page.goto('/sprint');
     await page.getByRole('button', { name: 'Nouveau sprint' }).click();
-    await dialog(page).getByRole('checkbox', { name: /Se connecter/ }).click();
+    await launchBox(page, 'Se connecter').click();
     await dialog(page).getByLabel('Nom du sprint').fill('Sprint 1');
     await dialog(page).getByRole('button', { name: 'Lancer le sprint (1 US, 5 pts)' }).click();
     await expect(page.getByText('Sprint « Sprint 1 » lancé')).toBeVisible();
@@ -137,7 +138,7 @@ test.describe('carried over', () => {
     await closeSprint(api, sprint.id, { carried: [story.id] });
     await page.goto('/sprint');
     await page.getByRole('button', { name: 'Nouveau sprint' }).click();
-    await expect(dialog(page).getByRole('checkbox', { name: new RegExp(US) })).toBeChecked();
+    await expect(launchBox(page, US)).toBeChecked();
     await dialog(page).getByLabel('Nom du sprint').fill('Sprint 2');
     await dialog(page).getByRole('button', { name: 'Lancer le sprint (1 US, 8 pts)' }).click();
     await expect(dialog(page)).toBeHidden();

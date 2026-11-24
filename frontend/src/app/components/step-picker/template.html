@@ -1,0 +1,22 @@
+<span hlmLabel [id]="id">{{ label() }}</span>
+<!-- Invisible radios over the numbers; the ball slides to the checked one, or follows the pointer when dragged. -->
+<div
+  class="track"
+  role="radiogroup"
+  [attr.aria-labelledby]="id"
+  [style.--count]="values().length"
+  [style.--step]="ballStep()"
+  [class.dragging]="dragStep() !== null"
+  (pointerdown)="dragStart($event)"
+  (pointermove)="dragMove($event)"
+  (pointerup)="dragEnd()"
+  (pointercancel)="dragEnd()"
+>
+  @for (v of values(); track v) {
+    <label class="notch">
+      <input type="radio" [name]="id" [value]="v" [checked]="value() === v" (change)="value.set(v)" />
+      <span>{{ v }}</span>
+    </label>
+  }
+  <span class="ball" aria-hidden="true"><span>{{ value() }}</span></span>
+</div>

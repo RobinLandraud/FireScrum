@@ -16,8 +16,8 @@ const EMPTY = { title: '', description: '', points: '' };
   selector: 'app-task-form',
   host: { class: 'block' },
   imports: [FormField, HlmButtonImports, HlmInputImports, HlmTextareaImports],
-  templateUrl: './form.html',
-  styleUrl: './form.scss',
+  templateUrl: './template.html',
+  styleUrl: './template.scss',
 })
 export class TaskForm {
   readonly task = input<NewTask | null>(null);

@@ -50,12 +50,12 @@ export class HlmCheckbox implements ControlValueAccessor {
 	protected readonly _computedClass = computed(() =>
 		hlm(
 			[
-				// box
+				// box: inset when empty, raised blue when checked (spec 012)
 				'peer flex size-4 shrink-0 cursor-default items-center justify-center rounded-[4px] border',
-				'border-input shadow-xs transition-shadow outline-none dark:bg-input/30',
+				'border-input shadow-inset-sm transition-shadow outline-none',
 				// checked
 				'data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground',
-				'dark:data-checked:bg-primary',
+				'data-checked:shadow-raised-sm',
 				// focus
 				'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3',
 				// invalid

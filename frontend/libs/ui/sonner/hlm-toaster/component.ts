@@ -46,7 +46,8 @@ export class HlmToaster {
 			...options,
 			classes: {
 				...options?.classes,
-				toast: hlm('rounded-2xl!', options?.classes?.toast),
+				// raised, without border (neumorphic, spec 012); `!` beats Sonner's own shadow
+				toast: hlm('rounded-2xl! shadow-raised!', options?.classes?.toast),
 			},
 		};
 	});
@@ -56,7 +57,7 @@ export class HlmToaster {
 		{
 			'--normal-bg': 'var(--popover)',
 			'--normal-text': 'var(--popover-foreground)',
-			'--normal-border': 'var(--border)',
+			'--normal-border': 'transparent',
 			'--border-radius': 'var(--radius)',
 		},
 		{ alias: 'style' },

@@ -9,20 +9,21 @@ import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmLabelImports } from '@spartan-ng/helm/label';
 import { HlmTextareaImports } from '@spartan-ng/helm/textarea';
 import { firstValueFrom } from 'rxjs';
-import { toastApiError } from '../../../../services/error';
-import { UserStoryApi } from '../../../../services/user-story.api';
+import { AppStepPicker } from '../../../../../components/step-picker/component';
+import { toastApiError } from '../../../../../services/error';
+import { UserStoryApi } from '../../../../../services/user-story.api';
 
 const FIBONACCI = [1, 2, 3, 5, 8, 13, 21];
-/** Dropdowns handle strings; converted on submit. `feature: ''` = no feature. */
-const EMPTY = { title: '', description: '', velocity: '1', feature: '' };
+/** The feature dropdown handles strings; converted on submit. `feature: ''` = no feature. */
+const EMPTY = { title: '', description: '', velocity: 1, feature: '' };
 
 /** US details: creation (with the draft tasks `tasks`), or edit if `story` is given. */
 @Component({
   selector: 'app-user-story-form',
   host: { class: 'block' },
-  imports: [FormField, HlmButtonImports, HlmInputImports, HlmLabelImports, HlmTextareaImports],
-  templateUrl: './form.html',
-  styleUrl: './form.scss',
+  imports: [FormField, AppStepPicker, HlmButtonImports, HlmInputImports, HlmLabelImports, HlmTextareaImports],
+  templateUrl: './template.html',
+  styleUrl: './template.scss',
 })
 export class UserStoryForm {
   private api = inject(UserStoryApi);
@@ -42,7 +43,7 @@ export class UserStoryForm {
       ? {
           title: s.title,
           description: s.description,
-          velocity: String(s.velocity),
+          velocity: s.velocity,
           feature: s.feature_id === null ? '' : String(s.feature_id),
         }
       : EMPTY;
@@ -53,7 +54,7 @@ export class UserStoryForm {
     event.preventDefault();
     submit(this.form, async () => {
       const { title, description, velocity, feature } = this.model();
-      const body = { title, description, velocity: Number(velocity), feature_id: feature ? Number(feature) : null };
+      const body = { title, description, velocity, feature_id: feature ? Number(feature) : null };
       const story = this.story();
       try {
         if (story) {

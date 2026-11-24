@@ -48,7 +48,7 @@ Projet
 ### Cadre
 - Barre latérale : logo, nom du projet et les pages (Backlog, Features, Planning, Sprint) avec leur icône. Repliable en colonne d'icônes sur grand écran, ouverte par-dessus la page sur mobile.
 - En-tête : bouton de la barre latérale et bascule clair / sombre (préférence du système au premier lancement, puis choix mémorisé).
-- Style repris du template TailAdmin Angular (MIT).
+- Style neumorphique : fond et blocs de la même couleur, éléments en relief ou en creux. Police, rayons et bleu de marque repris du template TailAdmin Angular (MIT).
 
 ### Page Sprint
 - Le PO lance et termine les sprints depuis cette page : un seul bouton, « Nouveau sprint » ou « Clôturer le sprint » selon l'état du dernier sprint.

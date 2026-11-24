@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import { test as base, expect } from '../fixtures';
 
 // Shared fixtures and factories; `test` is overridden below with the browser console watch.
@@ -25,7 +25,17 @@ export const test = base.extend<{ errors: string[] }>({
 // ---------- Locators ----------
 
 export const dialog = (page: Page) => page.getByRole('dialog');
-export const card = (page: Page, title: string) => page.getByRole('button', { name: new RegExp(`^${title}`) });
+/** Value `v` of the velocity picker of the open modal (exact: "1" must not match "13"). */
+export const velocity = (page: Page, v: number) =>
+  dialog(page).getByRole('radiogroup', { name: 'Vélocité' }).getByRole('radio', { name: String(v), exact: true });
+/**
+ * Button (card, task) in `scope` holding a text exactly equal to `title`. No regex on the accessible name:
+ * any character is safe, and "Se connecter" does not also match "Se connecter en SSO".
+ * The inner locator comes from `page`: Playwright resolves it inside each button.
+ */
+const byTitle = (page: Page, scope: Page | Locator, title: string) =>
+  scope.getByRole('button').filter({ has: page.getByText(title, { exact: true }) });
+export const card = (page: Page, title: string) => byTitle(page, page, title);
 export const nav = (page: Page, name: string) => page.getByRole('navigation').getByRole('link', { name }).click();
 /** All modals have the same size: 1024 × 85% of the height (680 px in the 1280 × 800 window).
  *  Polls until the opening zoom animation ends, otherwise the box is measured mid-zoom. */
@@ -40,6 +50,10 @@ export const expectModalSize = (page: Page, name: string) =>
     )
     .toBe('1024 × 680');
 
+/** Checkbox of a user story in the sprint launch modal (its name quotes the title, so it is matched whole). */
+export const launchBox = (page: Page, title: string) =>
+  dialog(page).getByRole('checkbox', { name: `Embarquer « ${title} »` });
+
 export const progressBar = (page: Page, title: string) =>
   page.getByRole('progressbar', { name: `Avancement de « ${title} »` });
 
@@ -48,21 +62,27 @@ export const progressBar = (page: Page, title: string) =>
 /** The row of a user story on the Sprint page. */
 export const row = (page: Page, us: string) => page.getByRole('region', { name: us });
 export const column = (page: Page, us: string, label: string) => row(page, us).getByLabel(label, { exact: true });
-export const taskCard = (page: Page, us: string, title: string) =>
-  row(page, us).getByRole('button', { name: new RegExp(`^${title}`) });
+export const taskCard = (page: Page, us: string, title: string) => byTitle(page, row(page, us), title);
 export const addTaskButton = (page: Page, us: string) =>
   row(page, us).getByRole('button', { name: `Ajouter une tâche à « ${us} »` });
 
 export const expectInColumn = (page: Page, us: string, title: string, label: string) =>
-  expect(column(page, us, label).getByRole('button', { name: new RegExp(`^${title}`) })).toBeVisible();
+  expect(byTitle(page, column(page, us, label), title)).toBeVisible();
 
-/** Manual drag and drop: the CDK expects progressive mouse moves. */
-export async function drag(page: Page, us: string, title: string, to: string) {
+/** Picks a task up and holds it over a column, without dropping it: the CDK expects progressive mouse moves. */
+export async function hold(page: Page, us: string, title: string, to: string) {
   const from = (await taskCard(page, us, title).boundingBox())!;
   const target = (await column(page, us, to).boundingBox())!;
   await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
   await page.mouse.down();
   await page.mouse.move(from.x + from.width / 2 + 10, from.y + from.height / 2, { steps: 5 });
   await page.mouse.move(target.x + target.width / 2, target.y + target.height / 2, { steps: 15 });
+}
+
+/** Manual drag and drop of a task to a column. */
+export async function drag(page: Page, us: string, title: string, to: string) {
+  await hold(page, us, title, to);
   await page.mouse.up();
+  // The drop (and the status save) fires only once the settle animation is over.
+  await expect(page.locator('.cdk-drag-preview')).toHaveCount(0);
 }

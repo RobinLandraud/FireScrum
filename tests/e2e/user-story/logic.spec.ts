@@ -2,6 +2,7 @@ import {
   test,
   expect,
   dialog,
+  velocity,
   card,
   nav,
   progressBar,
@@ -14,10 +15,10 @@ import {
 } from '../helpers';
 
 /** Creates a user story from the "New Story" modal (a task is required). */
-async function newStory(page: Page, title: string, { velocity = 0, feature = '' } = {}) {
+async function newStory(page: Page, title: string, { velocity: points = 0, feature = '' } = {}) {
   await page.getByRole('button', { name: 'New Story' }).click();
   await dialog(page).getByLabel('Titre').fill(title);
-  if (velocity) await dialog(page).getByLabel('Vélocité').selectOption(String(velocity));
+  if (points) await velocity(page, points).check();
   if (feature) await dialog(page).getByLabel('Feature').selectOption({ label: feature });
   await dialog(page).getByRole('tab', { name: /Tasks/ }).click();
   await dialog(page).getByLabel('Nom de la tâche').fill('Tâche initiale');
@@ -72,7 +73,7 @@ test.describe('edit and accept', () => {
     await openAccepted(page, 'Se connecter');
     await expect(dialog(page).getByRole('tab', { name: 'Details', selected: true })).toBeVisible();
     await expect(dialog(page).getByLabel('Titre')).toHaveValue('Se connecter');
-    await expect(dialog(page).getByLabel('Vélocité')).toHaveValue('5');
+    await expect(velocity(page, 5)).toBeChecked();
     await expect(dialog(page).getByLabel('Feature').locator('option:checked')).toHaveText('Profil');
   });
 
@@ -80,7 +81,7 @@ test.describe('edit and accept', () => {
     await openAccepted(page, 'Se connecter');
     await dialog(page).getByLabel('Titre').fill('Se connecter en SSO');
     await dialog(page).getByLabel('Description', { exact: true }).fill('Via le fournisseur d’identité');
-    await dialog(page).getByLabel('Vélocité').selectOption('8');
+    await velocity(page, 8).check();
     await dialog(page).getByLabel('Feature').selectOption({ label: 'Authentification' });
     await dialog(page).getByRole('button', { name: 'Enregistrer' }).click();
     await expect(page.getByText('US mise à jour')).toBeVisible();
@@ -91,14 +92,31 @@ test.describe('edit and accept', () => {
   test('R03c modifications conservées après rechargement', async ({ page }) => {
     await openAccepted(page, 'Se connecter');
     await dialog(page).getByLabel('Description', { exact: true }).fill('Via le fournisseur d’identité');
-    await dialog(page).getByLabel('Vélocité').selectOption('8');
+    await velocity(page, 8).check();
     await dialog(page).getByRole('button', { name: 'Enregistrer' }).click();
     await expect(dialog(page)).toBeHidden();
     await page.reload();
     await page.getByRole('tab', { name: /Accepted/ }).click();
     await card(page, 'Se connecter').click();
-    await expect(dialog(page).getByLabel('Vélocité')).toHaveValue('8');
+    await expect(velocity(page, 8)).toBeChecked();
     await expect(dialog(page).getByLabel('Description', { exact: true })).toHaveValue('Via le fournisseur d’identité');
+  });
+
+  test('R74 vélocité : la bille se glisse jusqu’à une autre valeur', async ({ page }) => {
+    await openAccepted(page, 'Se connecter');
+    const from = await velocity(page, 5).boundingBox();
+    const to = await velocity(page, 21).boundingBox();
+    if (!from || !to) throw new Error('velocity picker not laid out');
+    await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(to.x + to.width / 2, to.y + to.height / 2, { steps: 10 });
+    await expect(velocity(page, 21)).toBeChecked();
+    await page.mouse.up();
+    await expect(velocity(page, 21)).toBeChecked();
+    await dialog(page).getByRole('button', { name: 'Enregistrer' }).click();
+    await expect(dialog(page)).toBeHidden();
+    await card(page, 'Se connecter').click();
+    await expect(velocity(page, 21)).toBeChecked();
   });
 
   test('R07 Accepter → l’US passe dans Accepted', async ({ page, api }) => {
@@ -142,8 +160,17 @@ test('R46 US : tâches en Terminé sur le total, « En validation » non compté
   await nav(page, 'Backlog');
   await page.getByRole('tab', { name: /Done/ }).click();
   await expect(progressBar(page, 'Se connecter')).toHaveAttribute('aria-valuenow', '100');
-  await expect(progressBar(page, 'Se connecter').locator('[data-slot=progress-indicator]')).toHaveClass(/bg-emerald-500/);
+  await expect(progressBar(page, 'Se connecter').locator('[data-slot=progress-indicator]')).toHaveClass(/bg-success/);
 
   await nav(page, 'Sprint');
   await expect(progressBar(page, 'Importer')).toHaveAttribute('aria-valuenow', '50');
+});
+
+// Test helper `card`: a title is matched as plain text, whole (code review, point 9)
+test('card() : titre exact, caractères spéciaux sans effet, pas de confusion avec un titre plus long', async ({ page, api }) => {
+  await createStory(api, 'Se connecter');
+  await createStory(api, 'Se connecter en SSO (v2)');
+  await page.goto('/backlog');
+  await expect(card(page, 'Se connecter'), 'prefix of another title').toHaveCount(1);
+  await expect(card(page, 'Se connecter en SSO (v2)'), 'parentheses in the title').toHaveCount(1);
 });

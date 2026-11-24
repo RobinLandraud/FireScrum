@@ -2,6 +2,7 @@ import {
   test,
   expect,
   dialog,
+  velocity,
   card,
   createStory,
   startSprint,
@@ -22,7 +23,7 @@ test.describe('tasks of a user story (Backlog)', () => {
     await page.goto('/backlog');
     await card(page, 'Se connecter').click();
     await expect(dialog(page).getByRole('tab', { name: 'Details', selected: true })).toBeVisible();
-    await expect(dialog(page).getByLabel('Vélocité')).toHaveValue('5');
+    await expect(velocity(page, 5)).toBeChecked();
     await dialog(page).getByRole('tab', { name: 'Tasks (1)' }).click();
     await expect(dialog(page).getByText('Tâche initiale')).toBeVisible();
     await taskName(page).fill('Formulaire de login');
