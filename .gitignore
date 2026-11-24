@@ -4,6 +4,9 @@
 data/
 node_modules/
 dist/
+# Local build caches (Angular CLI, Nx)
+.angular/
+.nx/
 tests/report/
 tests/test-results/
 .config/
