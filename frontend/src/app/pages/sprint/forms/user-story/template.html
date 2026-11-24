@@ -28,13 +28,13 @@
             cdkDrag
             [cdkDragData]="task"
             [cdkDragDisabled]="readonly()"
-            class="task flex items-center gap-2 rounded-lg bg-card px-3 py-2 text-left text-sm shadow-raised-sm hover:shadow-raised"
+            class="task flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm"
             (click)="opened.set(task.id)"
           >
             <span class="flex-1">{{ task.title }}</span>
             @if (task.validation_points.length) {
               <span
-                class="text-xs text-muted-foreground"
+                class="text-xs"
                 [attr.aria-label]="checkedCount(task) + ' points cochés sur ' + task.validation_points.length"
               >
                 {{ checkedCount(task) }}/{{ task.validation_points.length }}
