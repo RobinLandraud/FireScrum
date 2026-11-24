@@ -7,8 +7,9 @@
 @import '@fontsource-variable/outfit';
 
 /* Font, radii and brand blue taken from TailAdmin Angular (MIT, see THIRD-PARTY-NOTICES.md).
-   Neumorphic surfaces (spec 012): one surface colour for every block, which rises or sinks
-   through a light and a dark shadow (`--neu-light`, `--neu-dark`). */
+   Neumorphic surfaces (spec 012): blocks rise or sink through a light and a dark shadow (`--neu-light`, `--neu-dark`).
+   Frosted surfaces (spec 013): over the animated background, blocks are translucent (`--card`, `--glass`)
+   and the shadows semi-transparent; overlays (modals, toasts, menus) stay opaque (`--popover`). */
 
 :root {
   color-scheme: light;
@@ -24,7 +25,8 @@
   --surface: #e4e8f0;
   --background: var(--surface);
   --foreground: #1d2939;
-  --card: var(--surface);
+  --card: rgb(228 232 240 / 55%); /* translucent surface, no blur */
+  --glass: rgb(228 232 240 / 60%); /* translucent surface of the frosted panels (`.glass`) */
   --card-foreground: #1d2939;
   --popover: var(--surface);
   --popover-foreground: #1d2939;
@@ -56,8 +58,9 @@
   --sidebar-border: #cfd5e0;
   --sidebar-ring: #465fff;
 
-  --neu-light: #ffffff;
-  --neu-dark: #b8c0d0;
+  /* Semi-transparent: they blend with the animated background behind the blocks. */
+  --neu-light: rgb(255 255 255 / 75%);
+  --neu-dark: rgb(130 142 170 / 45%);
   --neu-raised-sm: 3px 3px 7px var(--neu-dark), -3px -3px 7px var(--neu-light);
   --neu-raised: 6px 6px 14px var(--neu-dark), -6px -6px 14px var(--neu-light);
   --neu-raised-lg: 9px 9px 18px var(--neu-dark), -9px -9px 18px var(--neu-light);
@@ -78,7 +81,8 @@
   --surface: #222a3a;
   --background: var(--surface);
   --foreground: rgb(255 255 255 / 90%);
-  --card: var(--surface);
+  --card: rgb(34 42 58 / 50%);
+  --glass: rgb(34 42 58 / 60%);
   --card-foreground: rgb(255 255 255 / 90%);
   --popover: var(--surface);
   --popover-foreground: rgb(255 255 255 / 90%);
@@ -111,8 +115,10 @@
   --sidebar-ring: #7592ff;
 
   /* Stronger than the light theme's pair, as dark shadows read less on a dark surface. */
-  --neu-light: #313c52;
-  --neu-dark: #121722;
+  --neu-light: rgb(49 60 82 / 45%);
+  --neu-dark: rgb(8 11 18 / 60%);
+  /* Buttons and badges: a stronger light edge, otherwise their relief vanishes on the dark surface. */
+  --neu-raised-sm: 3px 3px 7px rgb(8 11 18 / 70%), -3px -3px 7px rgb(62 76 104 / 60%), inset 1px 1px 0 rgb(255 255 255 / 5%);
   --neu-pressed: inset 3px 3px 7px rgb(0 0 0 / 40%), inset -2px -2px 6px rgb(255 255 255 / 6%);
 }
 
@@ -184,6 +190,22 @@
       background: var(--popover);
       color: var(--popover-foreground);
     }
+  }
+
+  /* Frosted panel (spec 013): the animated background shows through, blurred.
+     Only the large panels (sidebar, mobile bar, page headers, Sprint US rows): blur is costly. */
+  .glass,
+  .page-header {
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+  }
+
+  /* Page header: the title and the page controls in a raised frosted panel, never on the background. */
+  .page-header {
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    box-shadow: var(--neu-raised);
   }
 
   /* List zone in a modal: fills the remaining height and scrolls, inset in the surface.

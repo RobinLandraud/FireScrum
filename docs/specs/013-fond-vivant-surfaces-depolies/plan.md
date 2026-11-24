@@ -101,7 +101,7 @@ Déjà en place, donc sans tâche de code (seulement vérifiés par les tests) :
 
 Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 
-- [ ] **T1 — Variables de surface** : dans `styles.css`, `--card` et `--glass` translucides, classes `.glass` et `.page-header`, ombres semi-transparentes et reflet sombre renforcé. Boutons `outline` et onglet actif en `bg-transparent` (`libs/ui/button`, `libs/ui/tabs`). Sans fond animé, l'appli ne change presque pas, puisque la surface translucide repose encore sur un fond de même couleur.
+- [x] **T1 — Variables de surface** : dans `styles.css`, `--card` et `--glass` translucides, classes `.glass` et `.page-header`, ombres semi-transparentes et reflet sombre renforcé. Boutons `outline` et onglet actif en `bg-transparent` (`libs/ui/button`, `libs/ui/tabs`). Sans fond animé, l'appli ne change presque pas, puisque la surface translucide repose encore sur un fond de même couleur.
   → vérif : `just tests --front` (build et non-régression).
   → à regarder : le diff de `styles.css`, puis l'appli en clair et en sombre, qui doit être quasi identique.
 - [ ] **T2 — Moteur WebGL** : `layout/background/shader.ts` (sources GLSL) et `renderer.ts` (`BackgroundRenderer`, `createBackgroundRenderer`), sans Angular et pas encore monté.
