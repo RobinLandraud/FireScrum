@@ -45,7 +45,7 @@
         @if (col.value === 'todo' && !readonly()) {
           <button
             type="button"
-            class="flex items-center justify-center rounded-lg py-2 text-muted-foreground shadow-raised-sm transition-[color,box-shadow] hover:text-foreground active:shadow-inset"
+            class="order-last flex items-center justify-center rounded-lg py-2 text-muted-foreground shadow-raised-sm transition-[color,box-shadow] hover:text-foreground active:shadow-inset"
             [attr.aria-label]="'Ajouter une tâche à « ' + story().title + ' »'"
             (click)="opened.set('new')"
           >

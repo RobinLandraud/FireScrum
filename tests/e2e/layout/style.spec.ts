@@ -10,6 +10,7 @@ import {
   expectModalSize,
   column,
   hold,
+  drag,
   expectInColumn,
   type Page,
 } from '../helpers';
@@ -134,6 +135,28 @@ test.describe('Sprint drag and drop', () => {
     await expectInColumn(page, US, 'Formulaire de connexion', 'En cours');
     await page.reload();
     await expectInColumn(page, US, 'Formulaire de connexion', 'En cours');
+  });
+
+  // Issue #23: in an empty column, the CDK appends the placeholder at the end of the drop list, after the "+".
+  test('#23 tâche tenue au-dessus de « À faire » vide : l’emplacement reste au-dessus du « + »', async ({ page }) => {
+    for (const title of ['Formulaire de connexion', 'Tâche initiale']) {
+      await drag(page, US, title, 'En cours');
+      await expectInColumn(page, US, title, 'En cours');
+    }
+
+    const add = (await addTaskButton(page, US).boundingBox())!;
+    await hold(page, US, 'Formulaire de connexion', 'À faire');
+    await page.mouse.move(add.x + add.width / 2, add.y + add.height - 2, { steps: 10 });
+    const placeholder = column(page, US, 'À faire').locator('.cdk-drag-placeholder');
+    await expect(placeholder, 'no landing slot in « À faire »').toHaveCount(1);
+    const slot = (await placeholder.boundingBox())!;
+    const plus = (await addTaskButton(page, US).boundingBox())!;
+    expect(slot.y, 'landing slot shown below the « + »').toBeLessThan(plus.y);
+
+    await page.mouse.up();
+    await expect(page.locator('.cdk-drag-preview')).toHaveCount(0);
+    const task = (await taskCard(page, US, 'Formulaire de connexion').boundingBox())!;
+    expect(task.y, 'dropped task below the « + »').toBeLessThan((await addTaskButton(page, US).boundingBox())!.y);
   });
 
   test.describe('reduced motion', () => {
