@@ -67,6 +67,7 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 | R18 | Report d'US | Reporter une US dont une tâche est `En cours` et une autre `Terminé` | Dans le sprint suivant, l'US garde ses tâches avec les mêmes statuts |  | À tester |
 | R19 | Sprints passés | Choisir un sprint clos dans le menu, après avoir fait avancer une de ses US reportée dans le sprint suivant | Les tâches sont affichées telles qu'à la clôture, en lecture seule (ni déplacement, ni modification, ni carte « + »), avec le sort de chaque US |  | À tester |
 | R19b | Photo du sprint clos | Faire avancer une tâche d'une US reportée dans le sprint en cours, puis rouvrir le sprint clos | Le sprint clos montre le statut à la clôture, le sprint en cours le statut actuel |  | À tester |
+| R19c | Bouton de l'en-tête | Pendant un sprint en cours, choisir un sprint clos dans le menu, puis revenir au sprint en cours | Sur le sprint clos, ni « Clôturer le sprint » ni « Nouveau sprint » ; « Clôturer le sprint » revient sur le sprint en cours |  | À tester |
 
 ## Cadre et thème
 
