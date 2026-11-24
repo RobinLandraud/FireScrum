@@ -25,6 +25,9 @@ export const test = base.extend<{ errors: string[] }>({
 // ---------- Locators ----------
 
 export const dialog = (page: Page) => page.getByRole('dialog');
+/** Value `v` of the velocity picker of the open modal (exact: "1" must not match "13"). */
+export const velocity = (page: Page, v: number) =>
+  dialog(page).getByRole('radiogroup', { name: 'Vélocité' }).getByRole('radio', { name: String(v), exact: true });
 /**
  * Button (card, task) in `scope` holding a text exactly equal to `title`. No regex on the accessible name:
  * any character is safe, and "Se connecter" does not also match "Se connecter en SSO".
