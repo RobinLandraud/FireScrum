@@ -19,6 +19,7 @@
             "index": "src/index.html",
             "tsConfig": "tsconfig.json",
             "styles": ["src/styles.css"],
+            "loader": { ".glsl": "text" },
             "outputPath": "dist/firescrum"
           }
         },

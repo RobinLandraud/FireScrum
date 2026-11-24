@@ -9,7 +9,7 @@ Supprimé à la livraison : reporter d'abord les décisions utiles dans `spec.md
 - **Responsabilité unique**, en trois parties :
   - `component.ts` (avec `template.html` et `template.scss`) décide **quand** dessiner : signaux, écouteurs, boucle `requestAnimationFrame`, attribut `data-state`.
   - `renderer.ts` (`BackgroundRenderer`) sait **comment** dessiner en WebGL (`resize`, `draw(uniforms)`, `dispose`), sans rien d'Angular.
-  - `shader.ts` contient les sources GLSL en constantes.
+  - `vertex.glsl` et `fragment.glsl` contiennent les shaders, importés comme du texte (`loader` `.glsl: text` dans `angular.json`, type déclaré dans `src/glsl.d.ts`).
 - **Fonction fabrique** : `createBackgroundRenderer(canvas)` renvoie le moteur, ou `null` sans WebGL ou si le shader ne compile pas. `null` met l'état à `fallback` : le canvas est masqué et le dégradé CSS est posé sur l'hôte.
 - **État calculé** : un `computed` déduit l'état de trois signaux (WebGL disponible, onglet caché, « réduire les animations »).
   - `animating` : la boucle tourne en continu, avec dérive, ondulation, pointeur lissé et fondu de thème de 300 ms.
@@ -41,12 +41,12 @@ classDiagram
     draw(uniforms)
     dispose()
   }
-  class shader_ts {
-    VERTEX
-    FRAGMENT
+  class glsl {
+    vertex.glsl
+    fragment.glsl
   }
   AppBackground --> BackgroundRenderer : createBackgroundRenderer() ou null
-  BackgroundRenderer --> shader_ts : compile
+  BackgroundRenderer --> glsl : compile
 ```
 
 ```mermaid
@@ -87,7 +87,8 @@ Déjà en place, donc sans tâche de code (seulement vérifiés par les tests) :
 - **API** : aucune.
 - **Contrats** : aucun.
 - **Front** :
-  - nouveau composant `layout/background/` ;
+  - nouveau composant `layout/background/`, avec ses shaders `.glsl` ;
+  - `angular.json` (`loader` `.glsl: text`), `tsconfig.json` et `src/glsl.d.ts` (type des imports `.glsl`) ;
   - `app.html` : fond monté, en-tête réservé au mobile ;
   - `layout/sidebar/` : bouton de repli, bouton de thème, dépoli ;
   - `layout/header/` : barre mobile avec le seul bouton menu ;
@@ -104,7 +105,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T1 — Variables de surface** : dans `styles.css`, `--card` et `--glass` translucides, classes `.glass` et `.page-header`, ombres semi-transparentes et reflet sombre renforcé. Boutons `outline` et onglet actif en `bg-transparent` (`libs/ui/button`, `libs/ui/tabs`). Sans fond animé, l'appli ne change presque pas, puisque la surface translucide repose encore sur un fond de même couleur.
   → vérif : `just tests --front` (build et non-régression).
   → à regarder : le diff de `styles.css`, puis l'appli en clair et en sombre, qui doit être quasi identique.
-- [ ] **T2 — Moteur WebGL** : `layout/background/shader.ts` (sources GLSL) et `renderer.ts` (`BackgroundRenderer`, `createBackgroundRenderer`), sans Angular et pas encore monté.
+- [x] **T2 — Moteur WebGL** : `layout/background/vertex.glsl` et `fragment.glsl` (shaders importés comme du texte) et `renderer.ts` (`BackgroundRenderer`, `createBackgroundRenderer`), sans Angular et pas encore monté.
   → vérif : build (`just tests --front`).
   → à regarder : `renderer.ts` et `shader.ts`.
 - [ ] **T3 — Fond animé dans l'appli** : composant `AppBackground` (`component.ts`, `template.html`, `template.scss`), monté dans `app.html`. Il gère l'état `animating`, le suivi lissé du pointeur et le repli CSS. Le fond se voit derrière les pages.
