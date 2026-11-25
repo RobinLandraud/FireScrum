@@ -136,7 +136,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T7 — Tests de la barre** : mise à jour de `tests/e2e/layout/style.spec.ts`. R40, R41 et R42 suivent les nouveaux boutons et libellés, R43 trouve le bouton de thème dans la barre, et un nouveau R80 vérifie l'icône soleil ou lune et le choix conservé.
   → vérif : `just tests --front --grep "R4[0-3]|R80"`.
   → à regarder : le diff des tests.
-- [ ] **T8 — En-têtes de page et Sprint** : `.page-header` sur les en-têtes de Backlog, Features, Planning et Sprint. Sur le Sprint, les lignes d'US passent de `bg-card` à `.glass` et les colonnes de `bg-muted` (opaque) à une surface translucide sans flou.
+- [x] **T8 — En-têtes de page et Sprint** : `.page-header` sur les en-têtes de Backlog, Features, Planning et Sprint. Sur le Sprint, les lignes d'US passent de `bg-card` à `.glass` et les colonnes de `bg-muted` (opaque) à une surface translucide sans flou.
   → vérif : build et parcours navigateur des quatre pages.
   → à regarder : aucun bouton ni champ posé directement sur le fond, et « Clôturer le sprint » en relief, en clair et en sombre.
 - [ ] **T9 — Tests des surfaces** :
