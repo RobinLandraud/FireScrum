@@ -21,7 +21,8 @@ void main() {
   // Square units: halos stay round whatever the window shape.
   vec2 p = vec2(uv.x * aspect, uv.y);
   vec2 pointer = vec2(uPointer.x * aspect, uPointer.y);
-  vec2 lean = pointer - vec2(0.5 * aspect, 0.5);
+  // Same reach up / down as left / right: a sweep across the window moves the halos as many pixels either way.
+  vec2 lean = (uPointer - 0.5) * aspect;
   float t = uTime * 0.12;
 
   // Slight ripple.
