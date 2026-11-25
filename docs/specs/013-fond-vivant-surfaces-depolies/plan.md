@@ -147,7 +147,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 
   → vérif : `just tests --front` (suite complète).
   → à regarder : le fichier de tests et le rapport.
-- [ ] **T10 — Docs** :
+- [x] **T10 — Docs** :
   - `cahier-de-recettes.md` : R40, R41, R42 et R64 modifiées, R75 à R84 ajoutées, R71 rejouée ;
   - spec 012 : note sur les deux règles remplacées par la 013 ;
   - `docs/specs/README.md` : statut de la 013 ;

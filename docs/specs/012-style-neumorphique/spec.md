@@ -2,6 +2,10 @@
 
 **Statut** : Livrée
 
+> Deux règles de cette spec sont remplacées par la spec [013](../013-fond-vivant-surfaces-depolies/spec.md) (fond vivant et surfaces dépolies) :
+> - « le fond et les blocs ont la même couleur » : les blocs sont maintenant translucides, au-dessus d'un fond animé ;
+> - « la barre latérale et l'en-tête gardent le fonctionnement de la spec 008 » : les boutons de repli et de thème sont dans la barre latérale, et l'en-tête n'existe plus que sur mobile.
+
 ## Contexte
 
 FireScrum a aujourd'hui le look de TailAdmin (spec [008](../008-style-tailadmin/spec.md)) : des cartes blanches avec bordures sur un fond gris clair. On le remplace par un style neumorphique, qui donne un rendu plus doux et plus tactile. Le fond et les éléments ont la même couleur ; les éléments sortent de la surface ou s'y creusent grâce à deux ombres, une claire et une foncée. La maquette de référence est [FireScrum Neumorphic Preview](https://claude.ai/artifact/Vsq5Q7hwsY5Yqd4L8uW4q8). Aucun comportement métier ne change.

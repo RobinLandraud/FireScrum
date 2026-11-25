@@ -73,9 +73,9 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 
 | ID | Fonctionnalité | Scénario | Résultat attendu | Résultat obtenu | Statut |
 |----|----------------|----------|------------------|-----------------|--------|
-| R40 | Barre latérale | Ouvrir l'app | Barre latérale avec le logo, le nom du projet et les 4 pages avec leur icône ; la page affichée est surlignée en bleu |  | À tester |
-| R41 | Repli | Sur grand écran, replier la barre latérale puis recharger | Elle reste repliée, en colonne d'icônes, et la navigation marche toujours |  | À tester |
-| R42 | Mobile | Sur mobile, ouvrir la barre avec le bouton de l'en-tête, puis cliquer sur le fond | Elle s'affiche par-dessus la page avec un fond assombri ; le clic sur le fond la referme |  | À tester |
+| R40 | Barre latérale | Ouvrir l'app sur grand écran | Barre latérale avec le logo, le nom du projet, le bouton de repli à côté du titre, les 4 pages avec leur icône (la page affichée en bleu) et le bouton clair / sombre tout en bas ; pas d'en-tête en haut de la page |  | À tester |
+| R41 | Repli | Sur grand écran, replier la barre latérale avec son bouton puis recharger | Elle reste repliée, en colonne d'icônes, avec le bouton sous le logo ; la navigation marche toujours |  | À tester |
+| R42 | Mobile | Sur mobile, ouvrir la barre avec le bouton de la barre du haut, puis cliquer sur le fond | Elle s'affiche par-dessus la page avec un fond assombri, le bouton clair / sombre en bas ; le clic sur le fond (ou son bouton « Fermer le menu ») la referme |  | À tester |
 | R43 | Mode sombre | Passer en mode sombre puis recharger | Toutes les pages et les modals sont sombres et lisibles, le choix est conservé |  | À tester |
 | R44 | Mode sombre | Premier lancement avec le système en thème sombre | L'app s'ouvre en mode sombre |  | À tester |
 | R45 | Non-régression | Rejouer les recettes R01 à R19 | Toutes passent, sans changement de comportement |  | À tester |
@@ -84,7 +84,7 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 
 | ID | Fonctionnalité | Scénario | Résultat attendu | Résultat obtenu | Statut |
 |----|----------------|----------|------------------|-----------------|--------|
-| R64 | Surfaces | Ouvrir chaque page en mode clair | Fond et blocs de la même couleur, sans bordure ; les cartes, les boutons et l'onglet actif sont en relief ; les champs, la barre d'onglets, les barres de progression et les colonnes du Sprint sont en creux ; les tâches du Sprint sont en relief, bleu brillant, avec un texte blanc |  | À tester |
+| R64 | Surfaces | Ouvrir chaque page en mode clair | Blocs sans bordure qui laissent voir le fond animé (flou derrière la barre latérale, les en-têtes de page et les lignes d'US) ; les cartes, les boutons et l'onglet actif sont en relief ; les champs, la barre d'onglets, les barres de progression et les colonnes du Sprint sont en creux ; les tâches du Sprint sont en relief, bleu brillant, avec un texte blanc |  | À tester |
 | R65 | Bouton | Cliquer sur un bouton principal | Il s'enfonce pendant le clic, puis reprend son relief |  | À tester |
 | R66 | Survol | Survoler une carte du Backlog ou une tâche du Sprint | Elle ressort davantage |  | À tester |
 | R67 | Modal et toast | Ouvrir une modal ; faire apparaître un toast | La modal apparaît en relief au-dessus d'un fond assombri ; le toast s'affiche en relief |  | À tester |
@@ -94,6 +94,16 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 | R71 | Contraste | Mesurer le contraste des textes principaux et secondaires, en clair et en sombre | Au moins 4,5:1 |  | À tester |
 | R72 | Mode sombre | Passer en mode sombre et ouvrir chaque page et chaque modal | Chaque carte, champ et colonne se distingue du fond sans plisser les yeux, et tout est lisible |  | À tester |
 | R73 | Non-régression | Rejouer les recettes R01 à R19 et R40 à R45 | Toutes passent, sans changement de comportement |  | À tester |
+| R75 | Fond animé | Déplacer le pointeur dans la fenêtre, puis le sortir | Les halos du fond se décalent vers lui sans à-coup, puis reviennent au centre |  | À tester |
+| R76 | Fond animé | Activer « réduire les animations » dans le système, puis ouvrir l'app | Le fond ne s'anime pas ; il ne bouge qu'au déplacement du pointeur |  | À tester |
+| R77 | Fond animé | Ouvrir l'app dans un navigateur sans WebGL | Un dégradé fixe avec les halos s'affiche, sans erreur, et l'app fonctionne |  | À tester |
+| R78 | Fond animé | Cliquer à travers le fond, le parcourir au clavier et au lecteur d'écran | Le clic atteint l'élément visé ; le fond ne prend jamais le focus et n'est pas annoncé |  | À tester |
+| R79 | Fond animé | Passer à un autre onglet puis revenir | L'animation est en pause pendant l'absence, puis reprend |  | À tester |
+| R80 | Thème | Passer de clair à sombre avec le bouton du bas de la barre latérale, puis recharger | Le fond change en douceur, l'icône passe de la lune au soleil, le choix est conservé |  | À tester |
+| R81 | En-têtes de page | Ouvrir Backlog, Features, Planning et Sprint | Le titre et les commandes de chaque page sont dans un panneau ; aucun bouton ni champ n'est posé directement sur le fond |  | À tester |
+| R82 | Relief | Sur le Sprint, en clair puis en sombre | Les badges « X pts » et « en cours » sont en relief, sans bordure ; « Clôturer le sprint », le « + » et les boutons de la barre latérale ont un relief visible |  | À tester |
+| R83 | Centrage | Sur un grand écran, déplier puis replier la barre latérale | Le contenu reste centré dans l'espace restant |  | À tester |
+| R84 | Modal et toast | Ouvrir une modal, faire apparaître un toast | Ils sont opaques, en relief, et le fond ne se voit pas à travers |  | À tester |
 | R74 | Sélecteur de vélocité | Dans la modal d'une US, cliquer sur une vélocité, glisser la bille vers une autre, puis utiliser les flèches du clavier ; enregistrer et rouvrir l'US | La bille suit, se cale sur la valeur choisie et l'affiche ; la vélocité est conservée ; sur une US terminée, le sélecteur ne bouge pas |  | À tester |
 
 ## Modals
