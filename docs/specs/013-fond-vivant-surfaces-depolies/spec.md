@@ -1,6 +1,6 @@
 # 013 — Fond vivant et surfaces dépolies
 
-**Statut** : Validée
+**Statut** : Livrée
 
 ## Contexte
 
@@ -105,3 +105,16 @@ Scénarios de validation, chacun avec son ID du [cahier de recettes](../../cahie
 - **Préférence « réduire les animations » du système respectée, sans réglage dans l'app** : le mouvement continu gêne les personnes sensibles. Un espace de réglages viendra plus tard.
 - **Même suivi du pointeur pour souris, doigt et stylet** : un seul comportement, sans cas particulier par appareil.
 - **Sillage fluide plutôt que par points** (ajouté après T10) : une traînée qui s'étale comme de l'encre donne un rendu plus organique ; elle demande une seconde passe de rendu, au quart de la résolution.
+
+Décisions de réalisation (reprises du plan à la livraison) :
+
+- **Fond en trois parties** (`src/app/layout/background/`) : le composant décide *quand* dessiner (signaux, écouteurs, boucle, `data-state`), `renderer.ts` sait *comment* dessiner en WebGL sans rien d'Angular, et les shaders sont des fichiers `.glsl` dans `shaders/`, importés comme du texte (`loader` `.glsl: text` dans `angular.json`, type dans `src/glsl.d.ts`). Chacun se lit et se corrige seul.
+- **WebGL brut plutôt qu'une bibliothèque 3D** : deux quads plein écran ne justifient pas une dépendance comme Three.js.
+- **Fabrique qui renvoie `null`** : `createBackgroundRenderer` renvoie `null` sans WebGL ou si un shader ne compile pas, et le composant passe en repli CSS. C'est un cas prévu, pas une erreur ; un shader qui ne compile pas donne donc un fond fixe sans message (`data-state="fallback"` le signale).
+- **État calculé plutôt que le pattern State** : un `computed` déduit `animating`, `still`, `paused` ou `fallback` de trois signaux (WebGL, onglet caché, « réduire les animations »), et un `effect` lance ou arrête la boucle. Les états ne portent aucune logique propre. L'état est exposé par `data-state`, lu par les tests.
+- **Pointeur dans une simple variable, pas un signal** : jusqu'à 120 événements par seconde, sans rien à afficher dans Angular ; la boucle le lit à chaque image.
+- **Surfaces par variables CSS** : `--surface`, `--background` et `--popover` restent opaques (modals, toasts, menus) ; `--card` devient translucide ; `--glass` et la classe `.glass` (flou) servent aux grands panneaux ; `.page-header` est une classe CSS, comme `.select` et `.list-zone`, plutôt qu'un composant sans logique.
+- **Boutons `outline`, onglet actif et lien actif de la barre transparents** (`bg-transparent`, `--sidebar-accent: transparent`) : posés dans un panneau translucide, ils prennent sa surface au lieu d'y faire une plaque opaque.
+- **Sillage en RGBA 8 bits** : le champ de courant tient dans des textures 8 bits, sans extension de texture flottante, donc sur tout navigateur WebGL 1. Il s'efface avec une part **linéaire** en plus de la part proportionnelle : sans elle, l'arrondi 8 bits figeait les petites valeurs et la traînée ne disparaissait jamais.
+- **Pinceau le long du segment parcouru** : le sillage est peint entre la position précédente et la position actuelle du curseur, et non à un seul point. La traînée reste continue quelle que soit la cadence d'affichage ; une sortie de la fenêtre ne crée pas de pic.
+- **WebGL coupé dans les tests e2e** (option `webgl` de `tests/e2e/helpers.ts`, réactivée dans les tests du fond) : sans GPU, le navigateur de test calcule le fond avec le processeur et ralentissait toute la suite (×3 à ×5). Émuler « réduire les animations » partout a été écarté : ça a révélé que le glisser-déposer du Sprint ignore parfois un dépôt avec cette préférence, un défaut antérieur suivi dans le ticket #26.
