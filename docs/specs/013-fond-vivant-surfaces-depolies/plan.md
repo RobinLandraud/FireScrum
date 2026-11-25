@@ -139,7 +139,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T8 — En-têtes de page et Sprint** : `.page-header` sur les en-têtes de Backlog, Features, Planning et Sprint. Sur le Sprint, les lignes d'US passent de `bg-card` à `.glass` et les colonnes de `bg-muted` (opaque) à une surface translucide sans flou.
   → vérif : build et parcours navigateur des quatre pages.
   → à regarder : aucun bouton ni champ posé directement sur le fond, et « Clôturer le sprint » en relief, en clair et en sombre.
-- [ ] **T9 — Tests des surfaces** :
+- [x] **T9 — Tests des surfaces** :
   - R81 : chaque en-tête de page est un `.page-header` qui contient les commandes de la page.
   - R82 : badges et boutons en relief (`box-shadow` non vide), sans bordure.
   - R83 : contenu centré, barre dépliée puis repliée.
