@@ -16,34 +16,63 @@ import {
 } from '../helpers';
 import { US, seedRunningSprint } from '../sprint/seed';
 
-const menuButton = (page: Page) => page.getByRole('button', { name: 'Afficher ou masquer le menu' });
-const sidebarWidth = async (page: Page) => (await page.locator('app-sidebar aside').boundingBox())!.width;
+const sidebar = (page: Page) => page.locator('app-sidebar aside');
+/** Sidebar buttons (spec 013): collapse / expand toggle next to the title, theme toggle at the bottom. */
+const sidebarButton = (page: Page, name: string) => sidebar(page).getByRole('button', { name });
+const sidebarWidth = async (page: Page) => (await sidebar(page).boundingBox())!.width;
 const isDark = (page: Page) => page.evaluate(() => document.documentElement.classList.contains('dark'));
 
-// Spec 008-style-tailadmin: R40, R41, R43
+// Spec 008-style-tailadmin and 013-fond-vivant-surfaces-depolies: R40, R41, R43, R80
 test.describe('sidebar and theme', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/backlog');
   });
 
-  test('R40 barre latérale : logo, nom du projet, 4 pages avec icône, page active en bleu', async ({ page }) => {
-    const sidebar = page.getByRole('navigation', { name: 'Navigation principale' });
+  test('R40 barre latérale : logo, nom du projet, repli à côté du titre, 4 pages, thème en bas, pas d’en-tête', async ({
+    page,
+  }) => {
+    const links = page.getByRole('navigation', { name: 'Navigation principale' });
     for (const name of ['Backlog', 'Features', 'Planning', 'Sprint'])
-      await expect(sidebar.getByRole('link', { name })).toBeVisible();
-    await expect(sidebar.locator('ng-icon')).toHaveCount(4);
-    await expect(page.locator('app-sidebar').getByText('FireScrum').first()).toBeVisible();
-    await expect(sidebar.getByRole('link', { name: 'Backlog' })).toHaveClass(/bg-sidebar-accent/);
+      await expect(links.getByRole('link', { name })).toBeVisible();
+    await expect(links.locator('ng-icon')).toHaveCount(4);
+    const title = sidebar(page).getByText('FireScrum').first();
+    await expect(title).toBeVisible();
+    await expect(links.getByRole('link', { name: 'Backlog' })).toHaveClass(/bg-sidebar-accent/);
+
+    // Collapse toggle on the title's line; theme toggle below the links.
+    const toggle = (await sidebarButton(page, 'Réduire le menu').boundingBox())!;
+    const titleBox = (await title.boundingBox())!;
+    expect(Math.abs(toggle.y + toggle.height / 2 - (titleBox.y + titleBox.height)), 'toggle not next to the title').toBeLessThan(30);
+    const theme = (await sidebarButton(page, 'Passer en mode sombre').boundingBox())!;
+    const linksBox = (await links.boundingBox())!;
+    expect(theme.y, 'theme toggle not below the links').toBeGreaterThan(linksBox.y + linksBox.height);
+    await expect(page.getByRole('banner'), 'top header shown on a large screen').toBeHidden();
   });
 
-  test('R41 grand écran : barre repliée en icônes, conservée après rechargement', async ({ page }) => {
-    await menuButton(page).click();
+  test('R41 grand écran : barre repliée en icônes, bouton sous le logo, conservée après rechargement', async ({ page }) => {
+    await sidebarButton(page, 'Réduire le menu').click();
     await expect.poll(() => sidebarWidth(page), { message: 'sidebar not collapsed' }).toBeLessThan(120);
     await page.reload();
     await expect.poll(() => sidebarWidth(page), { message: 'collapse not kept' }).toBeLessThan(120);
+    const expand = sidebarButton(page, 'Déplier le menu');
+    const logo = (await sidebar(page).locator('ng-icon[name="matLocalFireDepartmentOutline"]').boundingBox())!;
+    expect((await expand.boundingBox())!.y, 'toggle not under the logo').toBeGreaterThan(logo.y + logo.height);
     await nav(page, 'Features');
     await expect(page.getByRole('heading', { name: 'Features' })).toBeVisible();
-    await menuButton(page).click();
+    await expand.click();
     await expect.poll(() => sidebarWidth(page), { message: 'sidebar not expanded' }).toBeGreaterThan(200);
+  });
+
+  test('R80 thème depuis le bas de la barre : icône lune puis soleil, choix conservé', async ({ page }) => {
+    const icon = (name: string) => sidebarButton(page, name).locator('ng-icon').innerHTML();
+    const moon = await icon('Passer en mode sombre');
+    await sidebarButton(page, 'Passer en mode sombre').click();
+    await expect.poll(() => isDark(page)).toBe(true);
+    const sun = await icon('Passer en mode clair');
+    expect(sun, 'same icon in light and dark').not.toBe(moon);
+    await page.reload();
+    await expect.poll(() => isDark(page), { message: 'dark mode not kept' }).toBe(true);
+    await expect(sidebarButton(page, 'Passer en mode clair')).toBeVisible();
   });
 
   test('R43 mode sombre : pages et modals sombres, choix conservé', async ({ page }) => {
@@ -62,21 +91,28 @@ test.describe('sidebar and theme', () => {
   });
 });
 
-// Spec 008-style-tailadmin: R42
+// Spec 008-style-tailadmin and 013-fond-vivant-surfaces-depolies: R42
 test.describe('phone', () => {
   test.use({ viewport: { width: 390, height: 780 } });
 
-  test('R42 mobile : barre ouverte par-dessus la page, refermée par le fond', async ({ page }) => {
+  test('R42 mobile : barre ouverte par le bouton du haut, thème en bas, refermée par le fond ou son bouton', async ({
+    page,
+  }) => {
     await page.goto('/backlog');
     const isOpen = async () => {
-      const box = (await page.locator('app-sidebar aside').boundingBox())!;
+      const box = (await sidebar(page).boundingBox())!;
       return box.x + box.width > 0;
     };
+    const openButton = page.getByRole('banner').getByRole('button', { name: 'Ouvrir le menu' });
     await expect.poll(isOpen, { message: 'sidebar visible on load' }).toBe(false);
-    await menuButton(page).click();
+    await openButton.click();
     await expect.poll(isOpen, { message: 'sidebar not opened' }).toBe(true);
+    await expect(sidebarButton(page, 'Passer en mode sombre'), 'no theme toggle in the open sidebar').toBeVisible();
     await page.mouse.click(360, 400);
     await expect.poll(isOpen, { message: 'sidebar not closed by the backdrop' }).toBe(false);
+    await openButton.click();
+    await sidebarButton(page, 'Fermer le menu').click();
+    await expect.poll(isOpen, { message: 'sidebar not closed by its button' }).toBe(false);
   });
 });
 
