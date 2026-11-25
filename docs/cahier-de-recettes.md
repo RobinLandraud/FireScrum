@@ -94,7 +94,7 @@ Pas d'utilisateurs dans ce lot : toutes les actions sont possibles pour tout le 
 | R71 | Contraste | Mesurer le contraste des textes principaux et secondaires, en clair et en sombre | Au moins 4,5:1 |  | À tester |
 | R72 | Mode sombre | Passer en mode sombre et ouvrir chaque page et chaque modal | Chaque carte, champ et colonne se distingue du fond sans plisser les yeux, et tout est lisible |  | À tester |
 | R73 | Non-régression | Rejouer les recettes R01 à R19 et R40 à R45 | Toutes passent, sans changement de comportement |  | À tester |
-| R75 | Fond animé | Déplacer le pointeur dans la fenêtre, puis le sortir | Les halos du fond se décalent vers lui sans à-coup, puis reviennent au centre |  | À tester |
+| R75 | Fond animé | Déplacer le pointeur dans la fenêtre, puis le sortir | Les halos du fond se décalent nettement vers lui sans à-coup, une traînée déformée s'étale derrière lui puis s'efface ; à la sortie, les halos reviennent au centre |  | À tester |
 | R76 | Fond animé | Activer « réduire les animations » dans le système, puis ouvrir l'app | Le fond ne s'anime pas ; il ne bouge qu'au déplacement du pointeur |  | À tester |
 | R77 | Fond animé | Ouvrir l'app dans un navigateur sans WebGL | Un dégradé fixe avec les halos s'affiche, sans erreur, et l'app fonctionne |  | À tester |
 | R78 | Fond animé | Cliquer à travers le fond, le parcourir au clavier et au lecteur d'écran | Le clic atteint l'élément visé ; le fond ne prend jamais le focus et n'est pas annoncé |  | À tester |

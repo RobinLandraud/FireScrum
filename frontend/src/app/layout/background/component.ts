@@ -26,7 +26,7 @@ export type BackgroundState = 'animating' | 'still' | 'paused' | 'fallback';
 /** Highest device pixel ratio drawn: the halos are blurry anyway, more pixels would only cost. */
 const MAX_PIXEL_RATIO = 1.5;
 /** Share of the remaining distance the halos cover towards the pointer per 60 Hz frame. */
-const POINTER_EASING = 0.05;
+const POINTER_EASING = 0.08;
 /** Duration of the light / dark fade, in seconds. */
 const THEME_FADE = 0.3;
 /** Longest step between two frames, in seconds: no jump after a slow frame. */
@@ -79,6 +79,10 @@ export class AppBackground {
   /** Where the pointer is, and where the halos are on their way to it (0..1 from the bottom left). */
   private pointerTarget: [number, number] = [...CENTRE];
   private pointer: [number, number] = [...CENTRE];
+  /** Real pointer position for the trail, its position at the previous frame, and whether it is in the window. */
+  private cursor: [number, number] = [...CENTRE];
+  private previousCursor: [number, number] = [...CENTRE];
+  private cursorInside = false;
 
   constructor() {
     afterNextRender(() => this.start());
@@ -133,6 +137,8 @@ export class AppBackground {
       this.lastTime = performance.now();
       this.frame = this.document.defaultView!.requestAnimationFrame(this.tick);
     } else if (state === 'still') {
+      // Still: no trail, it would keep moving on its own.
+      this.renderer.clearTrail();
       this.requestStillFrame();
     }
   }
@@ -149,7 +155,7 @@ export class AppBackground {
       this.frame = 0;
       this.pointer = [...this.pointerTarget];
       this.dark = this.darkTarget();
-      this.draw(0);
+      this.draw(0, 0, [0, 0]);
     });
   }
 
@@ -172,12 +178,17 @@ export class AppBackground {
   private onPointerMove = (event: PointerEvent) => {
     const view = this.document.defaultView!;
     this.pointerTarget = [event.clientX / view.innerWidth, 1 - event.clientY / view.innerHeight];
+    this.cursor = [...this.pointerTarget];
+    // Coming back into the window: no jump from where it left, so no burst in the trail.
+    if (!this.cursorInside) this.previousCursor = [...this.cursor];
+    this.cursorInside = true;
     if (this.state() === 'still') this.requestStillFrame();
   };
 
-  /** The pointer left the window: the halos go back to the centre. */
+  /** The pointer left the window: the halos go back to the centre, the trail stops being painted. */
   private onPointerLeave = () => {
     this.pointerTarget = [...CENTRE];
+    this.cursorInside = false;
     if (this.state() === 'still') this.requestStillFrame();
   };
 
@@ -194,11 +205,19 @@ export class AppBackground {
     // Theme fade: a linear move towards the target, over THEME_FADE seconds.
     const gap = this.darkTarget() - this.dark;
     this.dark += Math.sign(gap) * Math.min(Math.abs(gap), step / THEME_FADE);
-    this.draw(this.elapsed);
+    // Pointer velocity for the trail (none outside the window); painted along the segment since the last frame.
+    const velocity: [number, number] =
+      this.cursorInside && step > 0
+        ? [(this.cursor[0] - this.previousCursor[0]) / step, (this.cursor[1] - this.previousCursor[1]) / step]
+        : [0, 0];
+    const previousCursor = this.previousCursor;
+    this.previousCursor = [...this.cursor];
+    this.draw(this.elapsed, step, velocity, previousCursor);
     this.frame = this.document.defaultView!.requestAnimationFrame(this.tick);
   };
 
-  private draw(time: number) {
-    this.renderer?.draw({ pointer: this.pointer, time, dark: this.dark });
+  /** `step` = 0: no trail step (still background). */
+  private draw(time: number, step: number, velocity: readonly [number, number], previousCursor = this.cursor) {
+    this.renderer?.draw({ pointer: this.pointer, cursor: this.cursor, previousCursor, velocity, step, time, dark: this.dark });
   }
 }

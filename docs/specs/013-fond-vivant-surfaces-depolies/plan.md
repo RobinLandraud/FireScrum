@@ -155,3 +155,12 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 
   → vérif : relecture.
   → à regarder : les diffs de `docs/`.
+- [ ] **T11 — Effet du pointeur plus marqué et sillage fluide** (demandé après T10) :
+  - halos qui suivent environ 2× plus, lissage plus rapide, lueur environ 3× plus forte ;
+  - nouveau shader `shaders/trail.glsl` : un champ de courant au quart de la résolution, en deux textures RGBA 8 bits qui alternent (ping-pong). À chaque image, il est emporté par son propre courant, diffuse un peu, s'estompe (environ 1 s) et reçoit un coup de pinceau à la position du curseur, dans le sens de son mouvement ;
+  - `fragment.glsl` lit ce champ pour déformer le fond et l'éclaircir le long de la traînée ;
+  - `renderer.ts` gère la seconde passe ; `component.ts` calcule la vitesse du curseur, sans pic quand il sort de la fenêtre ou y revient ;
+  - en `still`, pas de traînée.
+
+  → vérif : shaders compilés dans Chromium, build, suite e2e, captures pendant un mouvement.
+  → à regarder : bouger la souris sur n'importe quelle page, en clair et en sombre.

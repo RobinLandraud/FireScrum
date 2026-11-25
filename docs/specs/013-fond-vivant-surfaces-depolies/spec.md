@@ -13,7 +13,8 @@ Cette spec remplace deux règles de la 012 : « même couleur de surface pour le
 ### Fond animé
 
 - Derrière toute l'application, un fond plein écran montre trois halos doux sur la couleur de surface du thème : bleu de marque, orange et lavande.
-- Les halos dérivent lentement, et ils se décalent vers le pointeur (souris, doigt ou stylet) avec un mouvement lissé, sans à-coup. Une légère lueur suit le pointeur.
+- Les halos dérivent lentement, et ils se décalent nettement vers le pointeur (souris, doigt ou stylet) avec un mouvement lissé, sans à-coup. Une lueur suit le pointeur.
+- Derrière le pointeur en mouvement, le fond se déforme et laisse une traînée qui s'étale comme de l'encre dans l'eau, puis s'efface en une seconde environ.
 - Quand le pointeur quitte la fenêtre, les halos reviennent au centre.
 - **Clair** : surface `#e4e8f0`. **Sombre** : surface `#222a3a`, avec un halo bleu plus présent et un orange plus discret.
 - Au changement de thème, le fond passe d'une couleur à l'autre en douceur (300 ms environ).
@@ -57,7 +58,7 @@ Sur chaque page, le titre et les commandes de la page sont regroupés dans un pa
 
 ### Cas particuliers
 
-- **« Réduire les animations » activé dans le système** : le fond ne s'anime pas. Il est dessiné fixe et ne bouge qu'au déplacement du pointeur, et le changement de thème est immédiat.
+- **« Réduire les animations » activé dans le système** : le fond ne s'anime pas. Il est dessiné fixe et ne bouge qu'au déplacement du pointeur, sans traînée, et le changement de thème est immédiat.
 - **Pas de WebGL, ou fond impossible à afficher** : un dégradé fixe avec les mêmes halos s'affiche à la place, et l'application fonctionne normalement.
 - **Onglet caché** : l'animation se met en pause, puis reprend quand l'onglet revient.
 
@@ -82,7 +83,7 @@ Scénarios de validation, chacun avec son ID du [cahier de recettes](../../cahie
 - [ ] **R41** (modifiée) — Sur grand écran, replier la barre avec son bouton, puis recharger → elle reste repliée en colonne d'icônes, avec le bouton sous le logo ; la navigation fonctionne.
 - [ ] **R42** (modifiée) — Sur mobile, ouvrir la barre avec le bouton de la barre du haut, puis cliquer sur le fond → elle s'affiche par-dessus la page, puis se ferme ; le bouton clair / sombre est en bas de la barre ouverte.
 - [ ] **R64** (modifiée) — Ouvrir chaque page en mode clair → les blocs neumorphiques (sans bordure) laissent voir le fond animé ; la barre latérale, les en-têtes et les lignes d'US le montrent flou.
-- [ ] **R75** — Déplacer le pointeur dans la fenêtre, puis le sortir → les halos se décalent vers lui sans à-coup, puis reviennent au centre.
+- [ ] **R75** — Déplacer le pointeur dans la fenêtre, puis le sortir → les halos se décalent nettement vers lui sans à-coup, une traînée déformée s'étale derrière lui puis s'efface ; à la sortie, les halos reviennent au centre.
 - [ ] **R76** — Activer « réduire les animations » dans le système, puis ouvrir l'app → le fond ne s'anime pas, et il ne bouge qu'au déplacement du pointeur.
 - [ ] **R77** — Ouvrir l'app dans un navigateur sans WebGL → un dégradé fixe avec les halos s'affiche, sans erreur, et l'app fonctionne.
 - [ ] **R78** — Cliquer à travers le fond, puis le parcourir au clavier et au lecteur d'écran → le clic atteint l'élément visé ; le fond ne prend jamais le focus et n'est pas annoncé.
@@ -103,3 +104,4 @@ Scénarios de validation, chacun avec son ID du [cahier de recettes](../../cahie
 - **Bouton clair / sombre en bas de la barre latérale, sur toutes les tailles d'écran** : la barre regroupe les commandes de l'application, et la barre mobile ne garde que le bouton du menu.
 - **Préférence « réduire les animations » du système respectée, sans réglage dans l'app** : le mouvement continu gêne les personnes sensibles. Un espace de réglages viendra plus tard.
 - **Même suivi du pointeur pour souris, doigt et stylet** : un seul comportement, sans cas particulier par appareil.
+- **Sillage fluide plutôt que par points** (ajouté après T10) : une traînée qui s'étale comme de l'encre donne un rendu plus organique ; elle demande une seconde passe de rendu, au quart de la résolution.
