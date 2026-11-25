@@ -15,7 +15,7 @@ export class SidebarService {
   /** Mobile: opened over the page (never remembered). */
   readonly mobileOpen = signal(false);
 
-  /** Header button: collapses / expands on large screens, opens / closes on mobile. */
+  /** Sidebar and mobile bar buttons: collapses / expands on large screens, opens / closes on mobile. */
   toggle() {
     if (this.document.defaultView?.matchMedia(DESKTOP).matches) {
       this.collapsed.update((c) => !c);

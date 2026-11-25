@@ -37,8 +37,8 @@ export class HlmTabsTrigger {
 			'group-data-[variant=line]/tabs-list:data-active:bg-transparent',
 			'dark:group-data-[variant=line]/tabs-list:data-active:border-transparent',
 			'dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent',
-			// active tab
-			'data-active:bg-background data-active:text-accent-foreground',
+			// active tab: transparent, takes the surface of its panel (spec 013)
+			'data-active:bg-transparent data-active:text-accent-foreground',
 			// underline of the line variant
 			'after:absolute after:bg-foreground after:opacity-0 after:transition-opacity',
 			'group-data-[variant=line]/tabs-list:data-active:after:opacity-100',

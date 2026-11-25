@@ -23,7 +23,7 @@
       "@spartan-ng/helm/tabs": ["./libs/ui/tabs/index.ts"]
     }
   },
-  "files": ["src/main.ts"],
+  "files": ["src/main.ts", "src/glsl.d.ts"],
   "angularCompilerOptions": {
     "strictTemplates": true
   }

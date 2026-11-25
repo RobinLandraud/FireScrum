@@ -31,8 +31,8 @@ export const buttonVariants = cva(
 				// Neumorphic (spec 012): solid buttons are raised and press in; surface buttons sink on click.
 				default: 'bg-primary text-primary-foreground shadow-raised-sm hover:bg-primary/90 active:shadow-pressed',
 				outline: [
-					// colors: surface colour, raised, no border
-					'bg-background text-foreground shadow-raised-sm hover:shadow-raised',
+					// colors: transparent (takes the surface of its panel, spec 013), raised, no border
+					'bg-transparent text-foreground shadow-raised-sm hover:shadow-raised',
 					// pressed and open menu
 					'active:shadow-inset aria-expanded:shadow-inset',
 				],

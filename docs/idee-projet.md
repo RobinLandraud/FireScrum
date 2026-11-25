@@ -46,9 +46,8 @@ Projet
 - Il se met à jour automatiquement quand une US associée passe à 100 % (ou en repart).
 
 ### Cadre
-- Barre latérale : logo, nom du projet et les pages (Backlog, Features, Planning, Sprint) avec leur icône. Repliable en colonne d'icônes sur grand écran, ouverte par-dessus la page sur mobile.
-- En-tête : bouton de la barre latérale et bascule clair / sombre (préférence du système au premier lancement, puis choix mémorisé).
-- Style neumorphique : fond et blocs de la même couleur, éléments en relief ou en creux. Police, rayons et bleu de marque repris du template TailAdmin Angular (MIT).
+- Barre latérale : logo, nom du projet, bouton de repli, les pages (Backlog, Features, Planning, Sprint) avec leur icône, et tout en bas la bascule clair / sombre (préférence du système au premier lancement, puis choix mémorisé). Repliable en colonne d'icônes sur grand écran, ouverte par-dessus la page sur mobile depuis une barre en haut qui ne porte que le bouton du menu.
+- Style neumorphique : éléments en relief ou en creux, sur des surfaces dépolies au-dessus d'un fond animé (halos qui suivent le pointeur, fixes avec « réduire les animations »). Police, rayons et bleu de marque repris du template TailAdmin Angular (MIT).
 
 ### Page Sprint
 - Le PO lance et termine les sprints depuis cette page : un seul bouton, « Nouveau sprint » ou « Clôturer le sprint » selon l'état du dernier sprint.

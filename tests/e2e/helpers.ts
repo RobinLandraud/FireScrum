@@ -5,8 +5,26 @@ import { test as base, expect } from '../fixtures';
 export * from '../fixtures';
 export { type Page };
 
-/** Every e2e spec imports `test` from here: shared fixtures, plus the browser console watched. */
-export const test = base.extend<{ errors: string[] }>({
+/**
+ * Every e2e spec imports `test` from here: shared fixtures, plus the browser console watched.
+ * WebGL is off by default: the animated background (spec 013) shows its still CSS fallback, as the test
+ * browser has no GPU and would draw it with the CPU, slowing every test down. Its own tests opt in with
+ * `test.use({ webgl: true })`.
+ */
+export const test = base.extend<{ errors: string[]; webgl: boolean }>({
+  webgl: [false, { option: true }],
+  page: async ({ page, webgl }, use) => {
+    if (!webgl)
+      await page.addInitScript(() => {
+        const getContext = HTMLCanvasElement.prototype.getContext as (this: HTMLCanvasElement, ...args: unknown[]) => unknown;
+        Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+          value(this: HTMLCanvasElement, type: string, ...rest: unknown[]) {
+            return type.includes('webgl') ? null : getContext.call(this, type, ...rest);
+          },
+        });
+      });
+    await use(page);
+  },
   // Unexpected JS or console errors fail the test. 400/404/409 are triggered on purpose by some tests.
   errors: [
     async ({ page }, use) => {
