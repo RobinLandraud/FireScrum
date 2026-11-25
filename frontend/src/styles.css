@@ -53,7 +53,7 @@
   --sidebar-foreground: #344054;
   --sidebar-primary: #465fff;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--surface);
+  --sidebar-accent: transparent; /* active link: sinks into the frosted sidebar, takes its surface (spec 013) */
   --sidebar-accent-foreground: #3141d1;
   --sidebar-border: #cfd5e0;
   --sidebar-ring: #465fff;
@@ -109,7 +109,7 @@
   --sidebar-foreground: #d0d5dd;
   --sidebar-primary: #465fff;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--surface);
+  --sidebar-accent: transparent;
   --sidebar-accent-foreground: #8ea6ff;
   --sidebar-border: #2f3a4f;
   --sidebar-ring: #7592ff;

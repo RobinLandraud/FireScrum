@@ -123,7 +123,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 
   → vérif : `just tests --front --grep "R7[6-9]"`.
   → à regarder : le fichier de tests.
-- [ ] **T6 — Barre latérale et barre mobile** :
+- [x] **T6 — Barre latérale et barre mobile** :
   - barre latérale en `.glass` ;
   - bouton de repli à côté du titre, sous le logo quand elle est repliée (« Réduire le menu » / « Déplier le menu ») ;
   - sur mobile, ce même bouton ferme la barre ;

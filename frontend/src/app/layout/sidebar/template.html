@@ -1,17 +1,28 @@
 <aside
-  class="fixed inset-y-0 start-0 z-50 flex w-[290px] flex-col bg-sidebar px-5 text-sidebar-foreground transition-all duration-300 lg:translate-x-0"
+  class="glass fixed inset-y-0 start-0 z-50 flex w-[290px] flex-col px-5 text-sidebar-foreground shadow-raised transition-all duration-300 lg:translate-x-0"
   [class.-translate-x-full]="!sidebar.mobileOpen()"
+  [class.max-lg:shadow-none]="!sidebar.mobileOpen()"
   [class.lg:w-[90px]]="collapsed()"
   [class.lg:px-4]="collapsed()"
 >
-  <div class="flex items-center gap-3 py-8" [class.lg:justify-center]="collapsed()">
+  <!-- Collapsed: the toggle goes under the logo. -->
+  <div class="flex items-center gap-3 py-8" [class.lg:flex-col]="collapsed()">
     <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-raised-sm">
       <ng-icon name="matLocalFireDepartmentOutline" size="22" />
     </span>
-    <span class="grid leading-tight" [class.lg:sr-only]="collapsed()">
+    <span class="grid min-w-0 flex-1 leading-tight" [class.lg:sr-only]="collapsed()">
       <span class="text-lg font-semibold text-foreground">FireScrum</span>
       <span class="text-xs text-muted-foreground">{{ project.value()?.name }}</span>
     </span>
+    <button
+      type="button"
+      class="inline-flex size-10 shrink-0 items-center justify-center rounded-[10px] text-muted-foreground shadow-raised-sm transition-[color,box-shadow] hover:text-foreground active:shadow-inset"
+      [attr.aria-label]="toggleLabel()"
+      [attr.aria-expanded]="sidebar.mobileOpen() || !collapsed()"
+      (click)="sidebar.toggle()"
+    >
+      <ng-icon [name]="collapsed() ? 'matKeyboardDoubleArrowRightOutline' : 'matKeyboardDoubleArrowLeftOutline'" size="20" />
+    </button>
   </div>
 
   <nav aria-label="Navigation principale">
@@ -34,6 +45,18 @@
       }
     </ul>
   </nav>
+
+  <!-- Light / dark toggle: at the very bottom, apart from the links, on every screen size. -->
+  <div class="mt-auto flex py-6" [class.lg:justify-center]="collapsed()">
+    <button
+      type="button"
+      class="inline-flex size-10 items-center justify-center rounded-full text-muted-foreground shadow-raised-sm transition-[color,box-shadow] hover:text-foreground active:shadow-inset"
+      [attr.aria-label]="theme.theme() === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'"
+      (click)="theme.toggle()"
+    >
+      <ng-icon [name]="theme.theme() === 'dark' ? 'matLightModeOutline' : 'matDarkModeOutline'" size="20" />
+    </button>
+  </div>
 </aside>
 
 @if (sidebar.mobileOpen()) {

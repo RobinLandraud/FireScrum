@@ -6,6 +6,10 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   matCalendarMonthOutline,
   matCategoryOutline,
+  matDarkModeOutline,
+  matKeyboardDoubleArrowLeftOutline,
+  matKeyboardDoubleArrowRightOutline,
+  matLightModeOutline,
   matLocalFireDepartmentOutline,
   matViewKanbanOutline,
   matViewListOutline,
@@ -13,9 +17,10 @@ import {
 import { filter } from 'rxjs';
 import { ProjectApi } from '../../services/project.api';
 import { SidebarService } from '../../services/sidebar';
+import { ThemeService } from '../../services/theme';
 
 /**
- * Sidebar: logo, project name and navigation.
+ * Sidebar: logo, project name, collapse toggle, navigation and light / dark toggle (spec 013).
  * Large screen: fixed, collapsible into an icon column. Mobile: hidden, opened over the page.
  */
 @Component({
@@ -25,6 +30,10 @@ import { SidebarService } from '../../services/sidebar';
     provideIcons({
       matCalendarMonthOutline,
       matCategoryOutline,
+      matDarkModeOutline,
+      matKeyboardDoubleArrowLeftOutline,
+      matKeyboardDoubleArrowRightOutline,
+      matLightModeOutline,
       matLocalFireDepartmentOutline,
       matViewKanbanOutline,
       matViewListOutline,
@@ -34,6 +43,7 @@ import { SidebarService } from '../../services/sidebar';
 })
 export class AppSidebar {
   protected sidebar = inject(SidebarService);
+  protected theme = inject(ThemeService);
   private projectApi = inject(ProjectApi);
   protected project = rxResource({ stream: () => this.projectApi.get() });
 
@@ -47,6 +57,12 @@ export class AppSidebar {
 
   /** Collapsed: only on large screens, and never when it is open on mobile. */
   protected collapsed = computed(() => this.sidebar.collapsed() && !this.sidebar.mobileOpen());
+
+  /** The same button collapses / expands on large screens and closes the sidebar opened on mobile. */
+  protected toggleLabel = computed(() => {
+    if (this.sidebar.mobileOpen()) return 'Fermer le menu';
+    return this.collapsed() ? 'Déplier le menu' : 'Réduire le menu';
+  });
 
   constructor() {
     // On mobile, changing page closes the sidebar.

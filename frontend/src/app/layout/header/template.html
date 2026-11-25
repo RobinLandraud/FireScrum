@@ -1,20 +1,12 @@
-<header class="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 bg-card px-4 lg:px-6">
+<!-- Mobile only (spec 013): the menu button, in a frosted bar so it never sits on the animated background. -->
+<header class="glass sticky top-0 z-30 flex h-16 items-center px-4 shadow-raised lg:hidden">
   <button
     type="button"
     class="inline-flex size-10 items-center justify-center rounded-[10px] text-muted-foreground shadow-raised-sm transition-[color,box-shadow] hover:text-foreground active:shadow-inset"
-    aria-label="Afficher ou masquer le menu"
+    aria-label="Ouvrir le menu"
     [attr.aria-expanded]="sidebar.mobileOpen()"
     (click)="sidebar.toggle()"
   >
     <ng-icon name="matMenuOutline" size="20" />
-  </button>
-
-  <button
-    type="button"
-    class="inline-flex size-10 items-center justify-center rounded-full text-muted-foreground shadow-raised-sm transition-[color,box-shadow] hover:text-foreground active:shadow-inset"
-    [attr.aria-label]="theme.theme() === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'"
-    (click)="theme.toggle()"
-  >
-    <ng-icon [name]="theme.theme() === 'dark' ? 'matLightModeOutline' : 'matDarkModeOutline'" size="20" />
   </button>
 </header>
