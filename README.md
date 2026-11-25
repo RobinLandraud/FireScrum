@@ -159,3 +159,11 @@ just tests              # tous les tests, sur une stack à part
 - [Fonctionnalités livrées](docs/specs/README.md)
 - [Cahier de recettes](docs/cahier-de-recettes.md)
 - [Documentation technique](docs/stack.md)
+
+## 📄 Licence
+
+FireScrum est distribué sous la licence [PolyForm Noncommercial 1.0.0](LICENSE.md) : vous pouvez l'utiliser, le modifier et le partager librement pour tout usage **non commercial** (personnel, éducatif, associatif, recherche, service public).
+
+Tout usage **commercial**, y compris en interne dans une entreprise, demande une licence commerciale accordée par l'auteur : ouvrez une issue sur ce dépôt pour en discuter.
+
+Les composants tiers repris dans le projet gardent leur propre licence (voir [THIRD-PARTY-NOTICES.md](frontend/THIRD-PARTY-NOTICES.md)).
