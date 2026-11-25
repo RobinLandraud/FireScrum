@@ -111,7 +111,7 @@ Courtes, dans l'ordre : le code s'arrête après chaque tâche pour validation.
 - [x] **T3 — Fond animé dans l'appli** : composant `AppBackground` (`component.ts`, `template.html`, `template.scss`), monté dans `app.html`. Il gère l'état `animating`, le suivi lissé du pointeur, l'état `still` (« réduire les animations », suivi en direct) et le repli CSS. Le fond se voit derrière les pages. Les tests e2e coupent WebGL par défaut (option `webgl` dans `tests/e2e/helpers.ts`) : sans GPU, le fond calculé par le processeur ralentissait tous les tests (×3 à ×5).
   → vérif : build et parcours navigateur.
   → à regarder : n'importe quelle page en clair et en sombre (fond animé, halos qui suivent la souris).
-- [ ] **T4 — États du fond** : `computed` de l'état (`animating`, `still`, `paused`, `fallback`), signal `hidden`, fondu de thème de 300 ms, attribut `data-state`.
+- [x] **T4 — États du fond** : `computed` de l'état (`animating`, `still`, `paused`, `fallback`), signal `hidden`, fondu de thème de 300 ms, attribut `data-state`.
   → vérif : build et parcours navigateur (« réduire les animations » émulé dans DevTools, onglet caché).
   → à regarder : `data-state` dans DevTools, qui change selon ces cas.
 - [ ] **T5 — Tests du fond** : nouveau `tests/e2e/layout/background.spec.ts`, avec `test.use({ webgl: true })` (sauf R77).
